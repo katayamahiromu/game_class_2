@@ -85,6 +85,12 @@ void SceneGame::Finalize()
 		player = nullptr;
 	}
 
+	if (back != nullptr)
+	{
+		delete back;
+		back = nullptr;
+	}
+
 	if (cameraController != nullptr)
 	{
 		delete cameraController;
