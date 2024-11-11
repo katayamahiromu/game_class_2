@@ -1,7 +1,6 @@
 #pragma once
 
 #include"Graphics/Shader.h"
-#include"Graphics/Model.h"
 #include"Character.h"
 #include"EnemyManeger.h"
 #include"Collision.h"
@@ -94,7 +93,6 @@ private:
 	//復活ステート更新処理
 	void UpdateReviveState(float elapsedTime);
 private:
-	Model* model = nullptr;
 	float moveSpeed = 5.0f;
 	float turnSpeed = DirectX::XMConvertToRadians(720);
 	float JumpSpeed = 20.0f;

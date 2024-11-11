@@ -17,7 +17,7 @@ Player::Player() {
 	//インスタンスポインタ取得
 	instace = this;
 
-	model = new Model("Data/Model/Jammo/Jammo.mdl");
+	model = std::make_unique<Model>("Data/Model/Jammo/Jammo.mdl");
 	//モデルが大きいのでスケーリング
 	scale.x = scale.y = scale.z = 0.01f;
 
@@ -30,7 +30,6 @@ Player::Player() {
 
 //デストラクタ
 Player::~Player() {
-	delete model;
 	delete hitEffect;
 }
 

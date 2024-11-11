@@ -1,5 +1,7 @@
 #pragma once
 #include<DirectXMath.h>
+#include"Graphics/Model.h"
+#include<memory>
 
 //キャラクター
 class Character
@@ -43,6 +45,8 @@ public:
 	int GetHealth() const { return health; }
 	//最大健康状態を取得
 	int GetMaxhealth() const { return maxHealth; }
+
+	Model* GetModel() { return model.get(); }
 protected:
 	DirectX::XMFLOAT3   position = { 0,0,0 };
 	DirectX::XMFLOAT3   angle = { 0,0,0 };
@@ -95,4 +99,5 @@ protected:
 		DirectX::XMFLOAT3 min;
 	};
 
+	std::unique_ptr<Model>model;
 };

@@ -108,8 +108,6 @@ private:
 		Anime_Dizzy,
 		Anime_Die
 	};
-private:
-	Model* model = nullptr;
 protected:
 	//Ž€–S‚µ‚½Žž‚ÉŒÄ‚Î‚ê‚é
 	void OnDead()override;
