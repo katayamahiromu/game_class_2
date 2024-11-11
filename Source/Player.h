@@ -5,7 +5,6 @@
 #include"Character.h"
 #include"EnemyManeger.h"
 #include"Collision.h"
-#include"ProjectileManager.h"
 #include"Effect.h"
 
 //プレイヤー
@@ -35,10 +34,6 @@ public:
 	bool InputJump();
 	//着地した時に呼ばれる
 	void OnLanding()override;
-	//弾丸入力処理
-	void InputProjectile();
-	//弾丸と敵の衝突判定
-	void CollisionProjectilesVsEnemies();
 	//攻撃入力処理
 	bool InputAttack();
 	//ノードとエネミーの衝突処理
@@ -105,7 +100,6 @@ private:
 	float JumpSpeed = 20.0f;
 	int jumpCount = 0;
 	int jumpLimit = 2;
-	ProjectileManager projectileManager;
 	Effect* hitEffect = nullptr;
 	float leftHandRadius = 0.4f;
 	bool attackCollisionFlag = false;
