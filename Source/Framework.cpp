@@ -9,7 +9,7 @@
 #include"SceneManager.h"
 
 // 垂直同期間隔設定
-static const int syncInterval = 0;
+static const int syncInterval = 1;
 
 // コンストラクタ
 Framework::Framework(HWND hWnd)
