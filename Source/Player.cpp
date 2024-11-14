@@ -550,5 +550,5 @@ void Player::Playback(Character* character)
 	character->SetPositon(keep_position[playback_count]);
 	playback_count++;
 	if (playback_count > MAX_KEEP_TRANSFORM) playback_count = 0;
-	//if (keep_position[playback_count].x == ENOUGTH.x)playback_count = 0;
+	if (keep_position[playback_count].x == ENOUGTH.x)playback_count = 0;
 }

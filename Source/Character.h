@@ -48,7 +48,6 @@ public:
 
 	Model* GetModel() { return model.get(); }
 
-	bool isXYMode = false; // XY移動モードフラグ
 
 	void ToggleMoveMode() { isXYMode = !isXYMode; } // 移動モードの切り替え
 
@@ -57,6 +56,7 @@ public:
 	DirectX::XMFLOAT4X4& GetTransform() {return transform; }
 
 protected:
+	bool isXYMode = false; // XY移動モードフラグ
 	DirectX::XMFLOAT3   position = { 0,0,0 };
 	DirectX::XMFLOAT3   angle = { 0,0,0 };
 	DirectX::XMFLOAT3   scale = { 1,1,1 };

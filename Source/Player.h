@@ -151,5 +151,5 @@ private:
 	int playback_count = 0;
 
 	//‰½‚à“ü‚Á‚Ä‚È‚¢
-	DirectX::XMFLOAT3 ENOUGTH = {NULL,NULL,NULL};
+	DirectX::XMFLOAT3 ENOUGTH = {FLT_MAX,FLT_MAX,FLT_MAX};
 };

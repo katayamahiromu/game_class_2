@@ -16,3 +16,13 @@ float Mathf::RandomRange(float min, float max)
     // min‚©‚çmax‚Ì”ÍˆÍ‚Ìƒ‰ƒ“ƒ_ƒ€‚È’l‚ðŒvŽZ‚µ‚Ä•Ô‚·
     return min + (max - min) * random01;
 }
+
+DirectX::XMFLOAT3 Leap(DirectX::XMFLOAT3 a, DirectX::XMFLOAT3 b, float t)
+{
+    DirectX::XMVECTOR A = DirectX::XMLoadFloat3(&a);
+    DirectX::XMVECTOR B = DirectX::XMLoadFloat3(&b);
+
+    DirectX::XMFLOAT3 result;
+    DirectX::XMStoreFloat3(&result, DirectX::XMVectorLerp(A, B, t));
+    return result;
+}
