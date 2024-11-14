@@ -33,7 +33,7 @@ void SceneGame::Initialize()
 	Graphics& graphics = Graphics::Instance();
 	Camera& camera = Camera::Instance();
 	camera.SetLookAt(
-		DirectX::XMFLOAT3(0, 10, -10),
+		DirectX::XMFLOAT3(0, 1, -10),
 		DirectX::XMFLOAT3(0, 0, 0),
 		DirectX::XMFLOAT3(0, 1, 0)
 	);
@@ -110,7 +110,7 @@ void SceneGame::Update(float elapsedTime)
 	DirectX::XMFLOAT3 target = player->GetPosition();
 	target.y += 0.5f;
 	cameraController->SetTarget(target);
-	cameraController->TPS_Update(elapsedTime);
+	//cameraController->TPS_Update(elapsedTime);
 	EnemeyManager::Instance().Update(elapsedTime);
 	//エフェクト更新処理
 	EffectManager::Instace().Update(elapsedTime);

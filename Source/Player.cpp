@@ -76,6 +76,24 @@ void Player::Update(float elapsedTime) {
 	model->UpdateAnimation(elapsedTime);
 	//モデル行列を更新
 	model->UpdateTransform(transform);
+
+	GamePad& gamePad = Input::Instance().GetGamePad();
+	if (gamePad.GetButtonDown() & GamePad::BTN_B)
+	{
+		ToggleMoveMode();
+
+		hitEffect->Play(position);
+	}
+
+	if (isXYMode)
+	{
+		angle.x = DirectX::XMConvertToRadians(-90);
+	}
+	else
+	{
+		angle.x = 0;
+	}
+
 }
 
 //移動入力処理
@@ -83,11 +101,11 @@ bool Player::InputMove(float elapsedTime) {
 	//進行ベクトル取得
 	DirectX::XMFLOAT3 moveVec = GetMoveVec();
 	//移動処理
-	Move(moveVec.x, moveVec.z, moveSpeed);
+	Move(moveVec.x, moveVec.y, moveSpeed); // XY平面で移動
 	//旋回処理
-	Turn(elapsedTime, moveVec.x, moveVec.z, turnSpeed);
+	Turn(elapsedTime, moveVec.x, moveVec.y, turnSpeed); // XY平面で旋回
 
-	return (moveVec.x != 0.0f || moveVec.z != 0.0f) ? true : false;
+	return (moveVec.x != 0.0f || moveVec.y != 0.0f);
 }
 
 //描画処理
@@ -123,50 +141,37 @@ void Player::DrawDebugGui() {
 //スティック入力値から移動ベクトルを取得
 DirectX::XMFLOAT3 Player::GetMoveVec() const
 {
-	//入力情報を取得 
+	 // 入力情報を取得
 	GamePad& gamePad = Input::Instance().GetGamePad();
 	float ax = gamePad.GetAxisLX();
-	float ay = gamePad.GetAxisLY();
+	float ay = gamePad.GetAxisLY() * -1.0f;
 
-	//カメラ方向とスティックの入力値によって進行方向を計算する
+	// カメラ方向とスティックの入力値で進行方向を計算
 	Camera& camera = Camera::Instance();
 	const DirectX::XMFLOAT3& cameraRight = camera.GetRight();
 	const DirectX::XMFLOAT3& cameraFront = camera.GetFront();
 
-	//移動ベクトルはXZ平面に水平なベクトルになるようにする
-
-	//カメラ右方向ベクトルをXZ単位ベクトルに変換
+	// XY平面での移動ベクトル計算
 	float cameraRightX = cameraRight.x;
-	float cameraRightZ = cameraRight.z;
-	float cameraRightLength = sqrtf(cameraRightX * cameraRightX + cameraRightZ * cameraRightZ);
-
-	if(cameraRightLength > 0.0f)
-	{
-		//単位ベクトル化
+	float cameraRightY = cameraRight.y;
+	float cameraRightLength = sqrtf(cameraRightX * cameraRightX + cameraRightY * cameraRightY);
+	if (cameraRightLength > 0.0f) {
 		cameraRightX /= cameraRightLength;
-		cameraRightZ /= cameraRightLength;
+		cameraRightY /= cameraRightLength;
 	}
 
-	//カメラ前方向ベクトルをXZ単位ベクトルに変換
 	float cameraFrontX = cameraFront.x;
-	float cameraFrontZ = cameraFront.z;
-	float cameraFrontLength = sqrtf(cameraFrontX * cameraFrontX + cameraFrontZ * cameraFrontZ);
-
-	if (cameraFrontLength > 0.0f)
-	{
-		//単位ベクトル化
+	float cameraFrontY = cameraFront.y;
+	float cameraFrontLength = sqrtf(cameraFrontX * cameraFrontX + cameraFrontY * cameraFrontY);
+	if (cameraFrontLength > 0.0f) {
 		cameraFrontX /= cameraFrontLength;
-		cameraFrontZ /= cameraFrontLength;
+		cameraFrontY /= cameraFrontLength;
 	}
 
-	//ステックの水平入力値をカメラ右方向に反映し、
-	//ステックの垂直入力値をカメラ前方向に反映し、
-	//進行ベクトルを計算する
 	DirectX::XMFLOAT3 vec;
 	vec.x = cameraFrontX * ay + cameraRightX * ax;
-	vec.z = cameraFrontZ * ay + cameraRightZ * ax;
-	//Y方向は移動しない
-	vec.y = 0.0f;
+	vec.y = cameraFrontY * ay + cameraRightY * ax;
+	vec.z = 0.0f;  // Z方向は移動しない
 
 	return vec;
 }
@@ -193,44 +198,47 @@ void Player::DrawDebugPrimitive() {
 }
 
 void Player::CollisionPlayerVsEnemies() {
-	EnemeyManager& enemyManager = EnemeyManager::Instance();
-	//全ての敵と総当たりで衝突処理
-	int enemyCount = enemyManager.GetEnemyCount();
-	for (int i = 0;i < enemyCount;++i) {
-		Enemy* enemy = enemyManager.GetEnemy(i);
-		DirectX::XMFLOAT3 outPosition;
+	//EnemeyManager& enemyManager = EnemeyManager::Instance();
+	////全ての敵と総当たりで衝突処理
+	//int enemyCount = enemyManager.GetEnemyCount();
+	//for (int i = 0;i < enemyCount;++i) {
+	//	Enemy* enemy = enemyManager.GetEnemy(i);
+	//	DirectX::XMFLOAT3 outPosition;
 
-		//衝突判定
-		if (Collision::IntersectCylinderVsCylinder(
-			position,
-			radius,
-			height,
-			enemy->GetPosition(),
-			enemy->GetRadius(),
-			enemy->GetHeight(),
-			outPosition
-		)) {
-			float closs = (position.y * enemy->GetPosition().z) - (position.z * enemy->GetPosition().y);
-			if (closs > 0.0f) {
-				enemy->ApplyDamage(1,0.5f);
-				Junp(JumpSpeed * 0.5);
-			}
-			else {
-				SetPositon(outPosition);
-			}
-		}
-	};
+	//	//衝突判定
+	//	if (Collision::IntersectCylinderVsCylinder(
+	//		position,
+	//		radius,
+	//		height,
+	//		enemy->GetPosition(),
+	//		enemy->GetRadius(),
+	//		enemy->GetHeight(),
+	//		outPosition
+	//	)) {
+	//		float closs = (position.y * enemy->GetPosition().z) - (position.z * enemy->GetPosition().y);
+	//		if (closs > 0.0f) {
+	//			enemy->ApplyDamage(1,0.5f);
+	//			Junp(JumpSpeed * 0.5);
+	//		}
+	//		else {
+	//			SetPositon(outPosition);
+	//		}
+	//	}
+	//};
 }
 
 //ジャンプ入力処理
 bool Player::InputJump() {
 	GamePad& gamePad = Input::Instance().GetGamePad();
-	if (gamePad.GetButtonDown() & GamePad::BTN_A) {
-		jumpCount++;
-		if(jumpCount < jumpLimit) Junp(JumpSpeed);
-		if (isGround) {
-			jumpCount = 0;
-			return true;
+	if (!isXYMode)
+	{
+		if (gamePad.GetButtonDown() & GamePad::BTN_A) {
+			jumpCount++;
+			if (jumpCount < jumpLimit) Junp(JumpSpeed);
+			if (isGround) {
+				jumpCount = 0;
+				return true;
+			}
 		}
 	}
 	return false;
@@ -413,35 +421,35 @@ void Player::UpdateAttackState(float elapsedTime)
 //ノードと敵の衝突処理
 void Player::CollisionNodeVsEnemies(const char* nodeName, float nodeRadius)
 {
-	//ノード取得
-	Model::Node* node = model->FindNode(nodeName);
+	////ノード取得
+	//Model::Node* node = model->FindNode(nodeName);
 
-	//ノード位置取得
-	DirectX::XMFLOAT3 nodePosition;
-	nodePosition.x = node->worldTransform._41;
-	nodePosition.y = node->worldTransform._42;
-	nodePosition.z = node->worldTransform._43;
+	////ノード位置取得
+	//DirectX::XMFLOAT3 nodePosition;
+	//nodePosition.x = node->worldTransform._41;
+	//nodePosition.y = node->worldTransform._42;
+	//nodePosition.z = node->worldTransform._43;
 
-	//指定のノードと全ての敵を総当たりで衝突判定
-	EnemeyManager& enemyManager = EnemeyManager::Instance();
-	int enemyCount = enemyManager.GetEnemyCount();
-	for (int i = 0;i < enemyCount;++i) {
-		Enemy* enemy = enemyManager.GetEnemy(i);
+	////指定のノードと全ての敵を総当たりで衝突判定
+	//EnemeyManager& enemyManager = EnemeyManager::Instance();
+	//int enemyCount = enemyManager.GetEnemyCount();
+	//for (int i = 0;i < enemyCount;++i) {
+	//	Enemy* enemy = enemyManager.GetEnemy(i);
 
-		//衝突判定
-		DirectX::XMFLOAT3 outPosition;
-		if (Collision::IntersctSphereVsCylinder(
-			nodePosition,
-			nodeRadius,
-			enemy->GetPosition(),
-			enemy->GetRadius(),
-			enemy->GetHeight(),
-			outPosition)
-			)
-		{
-			enemy->SetPositon(outPosition);
-		}
-	}
+	//	//衝突判定
+	//	DirectX::XMFLOAT3 outPosition;
+	//	if (Collision::IntersctSphereVsCylinder(
+	//		nodePosition,
+	//		nodeRadius,
+	//		enemy->GetPosition(),
+	//		enemy->GetRadius(),
+	//		enemy->GetHeight(),
+	//		outPosition)
+	//		)
+	//	{
+	//		enemy->SetPositon(outPosition);
+	//	}
+	//}
 }
 
 //ダメージステートへの遷移

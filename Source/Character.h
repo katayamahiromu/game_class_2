@@ -47,6 +47,11 @@ public:
 	int GetMaxhealth() const { return maxHealth; }
 
 	Model* GetModel() { return model.get(); }
+
+	bool isXYMode = false; // XY移動モードフラグ
+
+	void ToggleMoveMode() { isXYMode = !isXYMode; } // 移動モードの切り替え
+
 protected:
 	DirectX::XMFLOAT3   position = { 0,0,0 };
 	DirectX::XMFLOAT3   angle = { 0,0,0 };
@@ -79,6 +84,7 @@ private:
 	void UpdateHorizontalVelocity(float elapsedFrame);
 	//水平移動更新処理
 	void UpdateHorizontalMove(float elapsedTime);
+
 protected:
 	bool isGround = false;
 	int health = 5;
