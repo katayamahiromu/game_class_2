@@ -429,3 +429,21 @@ void EnemySlime::UpdateDeathState(float elapsedTime)
 		Destroy();
 	}
 }
+
+void EnemySlime::DebugGui()
+{
+	ImGui::SetNextWindowPos(ImVec2(10, 10), ImGuiCond_FirstUseEver);
+	ImGui::SetNextWindowSize(ImVec2(300, 300), ImGuiCond_FirstUseEver);
+	if (ImGui::Begin("ENEMY", nullptr, ImGuiTreeNodeFlags_DefaultOpen)) {
+		//トランスフォーム
+		if (ImGui::CollapsingHeader("ColorGrading", ImGuiTreeNodeFlags_DefaultOpen))
+		{
+			ColorGradingData data = GetModel()->GetColorGrading();
+			ImGui::SliderFloat("hueShift", &data.hueShift, 0.0f, +360.0f);
+			ImGui::SliderFloat("saturation", &data.saturation, 0.0f, +2.0f);
+			ImGui::SliderFloat("brightness", &data.brightness, 0.0f, +2.0f);
+			GetModel()->SetColorGrading(data);
+		}
+	}
+	ImGui::End();
+}

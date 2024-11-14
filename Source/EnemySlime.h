@@ -20,6 +20,8 @@ public:
 
 	//“ê’£‚èİ’è
 	void SetTerritory(const DirectX::XMFLOAT3& origin, float range);
+
+	void DebugGui() override;
 private:
 	//ƒvƒŒƒCƒ„[õ“G
 	bool SearchPlayer();
