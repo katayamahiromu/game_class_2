@@ -14,6 +14,7 @@ public:
 	virtual void Render(ID3D11DeviceContext* dc, Shader* sheder) = 0;
 	//デバッグプリミティブ描画
 	virtual void DrawDebugPrimitive();
+	virtual void DebugGui() = 0;
 	//破棄
 	void Destroy();
 };

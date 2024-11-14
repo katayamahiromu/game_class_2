@@ -64,12 +64,29 @@ void Player::Update(float elapsedTime) {
 		break;
 	}
 
+	//デバック用
+	{
+		if (GetAsyncKeyState('M') & 0x8000)
+		{
+			InitRecording();
+			IsRecording = true;
+		}
+
+		if (IsRecording) Recording(EnemeyManager::Instance().GetEnemy(0)->GetPosition());
+		if (GetAsyncKeyState('N') & 0x8000)
+		{
+			IsPlayback = true;
+			IsRecording = false;
+		}
+		if (IsPlayback)Playback(EnemeyManager::Instance().GetEnemy(0));
+	}
+
 	//速力更新
 	UpdateVelocity(elapsedTime);
 	//無敵時間更新
 	UpdateInvinciblTImer(elapsedTime);
 	//プレイヤーと敵との衝突判定
-	CollisionPlayerVsEnemies();
+	if (!IsPlayback) CollisionPlayerVsEnemies();
 	//オブジェクト行列を更新
 	UpdateTranceform();
 	//モデルアニメーションを更新
@@ -115,6 +132,12 @@ void Player::DrawDebugGui() {
 			angle.z = DirectX::XMConvertToRadians(a.z);
 			//スケール
 			ImGui::InputFloat3("Scale", &scale.x);
+
+			ColorGradingData data = EnemeyManager::Instance().GetEnemy(0)->GetModel()->GetColorGrading();
+			ImGui::SliderFloat("hueShift", &data.hueShift, 0.0f, +360.0f);
+			ImGui::SliderFloat("saturation", &data.saturation, 0.0f, +2.0f);
+			ImGui::SliderFloat("brightness", &data.brightness, 0.0f, +2.0f);
+			EnemeyManager::Instance().GetEnemy(0)->GetModel()->SetColorGrading(data);
 		}
 	}
 	ImGui::End();
@@ -210,14 +233,7 @@ void Player::CollisionPlayerVsEnemies() {
 			enemy->GetHeight(),
 			outPosition
 		)) {
-			float closs = (position.y * enemy->GetPosition().z) - (position.z * enemy->GetPosition().y);
-			if (closs > 0.0f) {
-				enemy->ApplyDamage(1,0.5f);
-				Junp(JumpSpeed * 0.5);
-			}
-			else {
-				SetPositon(outPosition);
-			}
+			enemy->SetPositon(outPosition);
 		}
 	};
 }
@@ -504,4 +520,27 @@ void Player::UpdateReviveState(float elapsedTime)
 	{
 		TransitiomIdleState();
 	}
+}
+
+void Player::InitRecording()
+{
+	//配列全部をNULLで初期化
+	for (int i = 0;i < MAX_KEEP_TRANSFORM;++i)keep_position[i] = ENOUGTH;
+	playback_count = 0;
+}
+
+void Player::Recording(DirectX::XMFLOAT3 position)
+{
+	//配列を全部一つずつずらす
+	for (int i = MAX_KEEP_TRANSFORM - 1;i > 0;--i) keep_position[i] = keep_position[i - 1];
+	keep_position[0] = position;
+}
+
+void Player::Playback(Character* character)
+{
+	//配列の後ろから再生
+	character->SetPositon(keep_position[playback_count]);
+	playback_count++;
+	if (playback_count > MAX_KEEP_TRANSFORM) playback_count = 0;
+	//if (keep_position[playback_count].x == ENOUGTH.x)playback_count = 0;
 }
