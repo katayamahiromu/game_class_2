@@ -21,3 +21,11 @@ cbuffer CbSubset : register(b2)
 {
 	float4				materialColor;
 };
+
+cbuffer CBColorGrading : register(b3)
+{
+	float hueShift; //F‘Š’²®
+	float saturation; //Ê“x’²®
+	float brightness; //–¾“x’²®
+	float dummy;
+};

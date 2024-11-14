@@ -4,6 +4,7 @@
 #include <vector>
 #include <DirectXMath.h>
 #include "Graphics/ModelResource.h"
+#include"RenderContext.h"
 
 // モデル
 class Model
@@ -51,6 +52,12 @@ public:
 
 	void Stop_Anime() { anime_stop = true; }
 	void Restart_Anime() { anime_stop = false; }
+
+	//カラーグランディング
+	void SetColorGrading(ColorGradingData cgd) { colorGradingData = cgd; }
+	const ColorGradingData& GetColorGrading() const { return colorGradingData; }
+private:
+	ColorGradingData colorGradingData;
 private:
 	std::shared_ptr<ModelResource>	resource;
 	std::vector<Node>				nodes;

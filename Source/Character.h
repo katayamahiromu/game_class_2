@@ -1,5 +1,7 @@
 #pragma once
 #include<DirectXMath.h>
+#include"Graphics/Model.h"
+#include<memory>
 
 //キャラクター
 class Character
@@ -43,6 +45,17 @@ public:
 	int GetHealth() const { return health; }
 	//最大健康状態を取得
 	int GetMaxhealth() const { return maxHealth; }
+
+	Model* GetModel() { return model.get(); }
+
+	bool isXYMode = false; // XY移動モードフラグ
+
+	void ToggleMoveMode() { isXYMode = !isXYMode; } // 移動モードの切り替え
+
+
+	void SetTransform(DirectX::XMFLOAT4X4 trans) { transform = trans; }
+	DirectX::XMFLOAT4X4& GetTransform() {return transform; }
+
 protected:
 	DirectX::XMFLOAT3   position = { 0,0,0 };
 	DirectX::XMFLOAT3   angle = { 0,0,0 };
@@ -75,6 +88,7 @@ private:
 	void UpdateHorizontalVelocity(float elapsedFrame);
 	//水平移動更新処理
 	void UpdateHorizontalMove(float elapsedTime);
+
 protected:
 	bool isGround = false;
 	int health = 5;
@@ -95,4 +109,5 @@ protected:
 		DirectX::XMFLOAT3 min;
 	};
 
+	std::unique_ptr<Model>model;
 };

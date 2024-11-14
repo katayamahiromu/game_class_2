@@ -33,7 +33,7 @@ void SceneGame::Initialize()
 	Graphics& graphics = Graphics::Instance();
 	Camera& camera = Camera::Instance();
 	camera.SetLookAt(
-		DirectX::XMFLOAT3(0, 10, -10),
+		DirectX::XMFLOAT3(0, 1, -10),
 		DirectX::XMFLOAT3(0, 0, 0),
 		DirectX::XMFLOAT3(0, 1, 0)
 	);
@@ -45,7 +45,7 @@ void SceneGame::Initialize()
 	);
 	//エネミー初期化
 #if 1
-	for (int i = 0;i < 2;++i) {
+	for (int i = 0;i < 1;++i) {
 		EnemySlime* slime = new EnemySlime;
 		slime->SetPositon(DirectX::XMFLOAT3(i * 2.0f, 0, 5));
 		slime->SetTerritory(slime->GetPosition(), 10.0f);
@@ -85,6 +85,12 @@ void SceneGame::Finalize()
 		player = nullptr;
 	}
 
+	if (back != nullptr)
+	{
+		delete back;
+		back = nullptr;
+	}
+
 	if (cameraController != nullptr)
 	{
 		delete cameraController;
@@ -104,7 +110,7 @@ void SceneGame::Update(float elapsedTime)
 	DirectX::XMFLOAT3 target = player->GetPosition();
 	target.y += 0.5f;
 	cameraController->SetTarget(target);
-	cameraController->TPS_Update(elapsedTime);
+	//cameraController->Update(elapsedTime);
 	EnemeyManager::Instance().Update(elapsedTime);
 	//エフェクト更新処理
 	EffectManager::Instace().Update(elapsedTime);
@@ -181,6 +187,7 @@ void SceneGame::Render()
 	// 2DデバッグGUI描画
 	{
 		player->DrawDebugGui();
+		//EnemeyManager::Instance().GetEnemy(0)->DebugGui();
 	}
 #endif
 }

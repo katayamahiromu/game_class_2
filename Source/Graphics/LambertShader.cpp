@@ -87,6 +87,11 @@ LambertShader::LambertShader(ID3D11Device* device)
 
 		hr = device->CreateBuffer(&desc, 0, subsetConstantBuffer.GetAddressOf());
 		_ASSERT_EXPR(SUCCEEDED(hr), HRTrace(hr));
+
+		//カラーグランディング用
+		desc.ByteWidth = sizeof(ColorGradingData);
+		hr = device->CreateBuffer(&desc, 0, colorGrandingConstantBuffer.GetAddressOf());
+		_ASSERT_EXPR(SUCCEEDED(hr), HRTrace(hr));
 	}
 
 	// ブレンドステート
@@ -173,7 +178,8 @@ void LambertShader::Begin(ID3D11DeviceContext* dc, const RenderContext& rc)
 	{
 		sceneConstantBuffer.Get(),
 		meshConstantBuffer.Get(),
-		subsetConstantBuffer.Get()
+		subsetConstantBuffer.Get(),
+		colorGrandingConstantBuffer.Get(),
 	};
 	dc->VSSetConstantBuffers(0, ARRAYSIZE(constantBuffers), constantBuffers);
 	dc->PSSetConstantBuffers(0, ARRAYSIZE(constantBuffers), constantBuffers);
@@ -198,6 +204,13 @@ void LambertShader::Begin(ID3D11DeviceContext* dc, const RenderContext& rc)
 // 描画
 void LambertShader::Draw(ID3D11DeviceContext* dc, const Model* model)
 {
+	/*ColorGradingData cbColorGranding = model->GetColorGrading();
+	cbColorGranding.hueShift = model.colorGrandingData.hueShift;
+	cbColorGranding.saturation = rc.colorGrandingData.saturation;
+	cbColorGranding.brightness = rc.colorGrandingData.brightness;*/
+
+	dc->UpdateSubresource(colorGrandingConstantBuffer.Get(), 0, 0, &model->GetColorGrading(), 0, 0);
+
 	const ModelResource* resource = model->GetResource();
 	const std::vector<Model::Node>& nodes = model->GetNodes();
 

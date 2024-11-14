@@ -131,8 +131,11 @@ void Character::UpdateInvinciblTImer(float elapsedTime)
 //垂直速力更新処理
 void Character::UpdateVerticalVelocity(float elapsedFrame)
 {
-	//重力処理
-	velocity.y += gravity * elapsedFrame;;
+	if (!isXYMode)
+	{
+		//重力処理
+		velocity.y += gravity * elapsedFrame;;
+	}
 }
 
 //垂直移動更新処理
@@ -214,7 +217,7 @@ void Character::UpdateHorizontalVelocity(float elapsedFrame)
 {
 	//XZ平面の速力を減速する
 	//三平方で長さを取ろう
-	float length = sqrtf((velocity.x * velocity.x) + (velocity.z * velocity.z));
+	float length = sqrtf((velocity.x * velocity.x) + (velocity.y * velocity.y));
 	if (length > 0.0f) 
 	{
 		//摩擦力
@@ -227,16 +230,16 @@ void Character::UpdateHorizontalVelocity(float elapsedFrame)
 		{
 			//単位ベクトル化
 			float vx = velocity.x / length;
-			float vz = velocity.z / length;
+			float vz = velocity.y / length;
 			//単位ベクトル化した速力を摩擦力分スケーリングした値を速力から引く
 			velocity.x -= vx * friction;
-			velocity.z -= vz * friction;
+			velocity.y -= vz * friction;
 		}
 		//横方向の速力が摩擦力以下になったので速力を無効化
 		else
 		{
 			velocity.x = 0;
-			velocity.z = 0;
+			velocity.y = 0;
 		}
 	}
 
@@ -253,15 +256,15 @@ void Character::UpdateHorizontalVelocity(float elapsedFrame)
 			if (!IsGround()) acceleration -= this->airControl;
 			//移動ベクトルによる加速処理
 			velocity.x += moveVecX * acceleration;
-			velocity.z += moveVecZ * acceleration;
+			velocity.y += moveVecZ * acceleration;
 
 			//最大速度制限
-			float length = sqrtf((velocity.x * velocity.x) + (velocity.z * velocity.z));
+			float length = sqrtf((velocity.x * velocity.x) + (velocity.y * velocity.y));
 			if (length > maxMoveSpeed)
 			{
 				//最大速度を超えたら速度を単位ベクトル（１）に最大速度をかけて整える
 				velocity.x *= maxMoveSpeed / length;
-				velocity.z *= maxMoveSpeed / length;
+				velocity.y *= maxMoveSpeed / length;
 			}
 		}
 
@@ -280,12 +283,12 @@ void Character::UpdateHorizontalVelocity(float elapsedFrame)
 void Character::UpdateHorizontalMove(float elapsedTime)
 {
 	//水平速力計算
-	float velocityLengthXZ = sqrtf(velocity.x * velocity.x + velocity.z * velocity.z);
+	float velocityLengthXZ = sqrtf(velocity.x * velocity.x + velocity.y * velocity.y);
 	if (velocityLengthXZ > 0.0f)
 	{
 		//水平移動
 		float mx = velocity.x * elapsedTime;
-		float mz = velocity.z * elapsedTime;
+		float mz = velocity.y * elapsedTime;
 
 		//レイの開始位置と終点位置
 		DirectX::XMFLOAT3 start = { position.x,position.y + stepOffset,position.z };
@@ -320,7 +323,10 @@ void Character::UpdateHorizontalMove(float elapsedTime)
 		{
 			//移動
 			position.x += mx;
-			position.z += mz;
+			if (isXYMode)
+			{
+				position.y += mz;
+			}
 		}
 
 	}
