@@ -19,7 +19,7 @@ Player::Player() {
 
 	model = std::make_unique<Model>("Data/Model/Jammo/Jammo.mdl");
 	//モデルが大きいのでスケーリング
-	scale.x = scale.y = scale.z = 0.01f;
+	scale.x = scale.y = scale.z = 0.0075f;
 
 	//ヒットエフェクト読み込み
 	hitEffect = new Effect("Data/Effect/Hit.efk");
@@ -104,13 +104,14 @@ void Player::Update(float elapsedTime) {
 
 	if (isXYMode)
 	{
-		angle.x = DirectX::XMConvertToRadians(-90);
+		angle.x = DirectX::XMConvertToRadians(90);
 	}
 	else
 	{
 		angle.x = 0;
 	}
 
+	position.z = 1.502f;
 }
 
 //移動入力処理
@@ -120,7 +121,7 @@ bool Player::InputMove(float elapsedTime) {
 	//移動処理
 	Move(moveVec.x, moveVec.y, moveSpeed); // XY平面で移動
 	//旋回処理
-	Turn(elapsedTime, moveVec.x, moveVec.y, turnSpeed); // XY平面で旋回
+	Turn(elapsedTime, moveVec.x, moveVec.y * -1.0f, turnSpeed); // XY平面で旋回
 
 	return (moveVec.x != 0.0f || moveVec.y != 0.0f);
 }
@@ -166,34 +167,34 @@ DirectX::XMFLOAT3 Player::GetMoveVec() const
 {
 	 // 入力情報を取得
 	GamePad& gamePad = Input::Instance().GetGamePad();
-	float ax = gamePad.GetAxisLX();
-	float ay = gamePad.GetAxisLY() * -1.0f;
+	float ax = gamePad.GetAxisLX() * - 1;
+	float ay = gamePad.GetAxisLY();
 
-	// カメラ方向とスティックの入力値で進行方向を計算
-	Camera& camera = Camera::Instance();
-	const DirectX::XMFLOAT3& cameraRight = camera.GetRight();
-	const DirectX::XMFLOAT3& cameraFront = camera.GetFront();
+	//// カメラ方向とスティックの入力値で進行方向を計算
+	//Camera& camera = Camera::Instance();
+	//const DirectX::XMFLOAT3& cameraRight = camera.GetRight();
+	//const DirectX::XMFLOAT3& cameraFront = camera.GetFront();
 
-	// XY平面での移動ベクトル計算
-	float cameraRightX = cameraRight.x;
-	float cameraRightY = cameraRight.y;
-	float cameraRightLength = sqrtf(cameraRightX * cameraRightX + cameraRightY * cameraRightY);
-	if (cameraRightLength > 0.0f) {
-		cameraRightX /= cameraRightLength;
-		cameraRightY /= cameraRightLength;
-	}
+	//// XY平面での移動ベクトル計算
+	//float cameraRightX = cameraRight.x;
+	//float cameraRightY = cameraRight.y;
+	//float cameraRightLength = sqrtf(cameraRightX * cameraRightX + cameraRightY * cameraRightY);
+	//if (cameraRightLength > 0.0f) {
+	//	cameraRightX /= cameraRightLength;
+	//	cameraRightY /= cameraRightLength;
+	//}
 
-	float cameraFrontX = cameraFront.x;
-	float cameraFrontY = cameraFront.y;
-	float cameraFrontLength = sqrtf(cameraFrontX * cameraFrontX + cameraFrontY * cameraFrontY);
-	if (cameraFrontLength > 0.0f) {
-		cameraFrontX /= cameraFrontLength;
-		cameraFrontY /= cameraFrontLength;
-	}
+	//float cameraFrontX = cameraFront.x;
+	//float cameraFrontY = cameraFront.y;
+	//float cameraFrontLength = sqrtf(cameraFrontX * cameraFrontX + cameraFrontY * cameraFrontY);
+	//if (cameraFrontLength > 0.0f) {
+	//	cameraFrontX /= cameraFrontLength;
+	//	cameraFrontY /= cameraFrontLength;
+	//}
 
 	DirectX::XMFLOAT3 vec;
-	vec.x = cameraFrontX * ay + cameraRightX * ax;
-	vec.y = cameraFrontY * ay + cameraRightY * ax;
+	vec.x = /*cameraFrontX * ay + cameraRightX * */ax;
+	vec.y = /*cameraFrontY * ay + cameraRightY * */ay;
 	vec.z = 0.0f;  // Z方向は移動しない
 
 	return vec;

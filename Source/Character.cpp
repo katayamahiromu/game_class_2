@@ -12,7 +12,7 @@ void Character::UpdateTranceform() {
 	DirectX::XMMATRIX Y = DirectX::XMMatrixRotationY(angle.y);
 	DirectX::XMMATRIX Z = DirectX::XMMatrixRotationZ(angle.z);
 	DirectX::XMMATRIX R = Y * X * Z;
-
+	
 	//位置行列を作成
 	DirectX::XMMATRIX T = DirectX::XMMatrixTranslation(position.x, position.y, position.z);
 	//３つの行列を組み合わせ、ワールド行列を作成

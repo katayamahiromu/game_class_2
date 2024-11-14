@@ -9,7 +9,7 @@ void CameraController::Update(float elapsedTime)
 	GamePad& gamePad = Input::Instance().GetGamePad();
 	float ax = gamePad.GetAxisRX();
 	float ay = gamePad.GetAxisRY();
-	////カメラの回転速度
+	//////カメラの回転速度
 	//float speed = rollspeed * elapsedTime;
 
 	////スティックの入力値にあわせてX軸とY軸を回転
