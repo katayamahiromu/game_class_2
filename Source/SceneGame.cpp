@@ -26,6 +26,8 @@ void SceneGame::Initialize()
 	//stageManager.Register(stageMoveFloor);
 
 	player = new Player;
+
+	player->SetPositon(DirectX::XMFLOAT3(16.035f, 1.233f, 1.502f));
 	//カメラコントローラー初期化
 	cameraController = new CameraController;
 
@@ -110,7 +112,7 @@ void SceneGame::Update(float elapsedTime)
 	DirectX::XMFLOAT3 target = player->GetPosition();
 	target.y += 0.5f;
 	cameraController->SetTarget(target);
-	//cameraController->Update(elapsedTime);
+	cameraController->Update(elapsedTime);
 	EnemeyManager::Instance().Update(elapsedTime);
 	//エフェクト更新処理
 	EffectManager::Instace().Update(elapsedTime);

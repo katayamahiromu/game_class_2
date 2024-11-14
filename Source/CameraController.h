@@ -18,7 +18,7 @@ public:
 	//void TPS_Update(float elapsedTiem);
 private:
 	DirectX::XMFLOAT3 target = { 0,0,0 };
-	DirectX::XMFLOAT3 angle  = { 0,0,0 };
+	DirectX::XMFLOAT3 angle  = { 0,DirectX::XMConvertToRadians(180),0};
 	float rollspeed = DirectX::XMConvertToRadians(90);
 	float range     = 10.0f;
 
