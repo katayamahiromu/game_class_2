@@ -48,7 +48,7 @@ public:
 
 	Model* GetModel() { return model.get(); }
 
-	bool isXYMode = false; // XY移動モードフラグ
+	bool isXYMode = false; // XY移動モードフラグですよ
 
 	void ToggleMoveMode() { isXYMode = !isXYMode; } // 移動モードの切り替え
 
