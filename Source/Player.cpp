@@ -214,7 +214,7 @@ void Player::CollisionPlayerVsEnemies() {
 			float closs = (position.y * enemy->GetPosition().z) - (position.z * enemy->GetPosition().y);
 			if (closs > 0.0f) {
 				enemy->ApplyDamage(1,0.5f);
-				Junp(JumpSpeed * 0.5);
+				Junp(JumpSpeed * 0.5f);
 			}
 			else {
 				SetPositon(outPosition);

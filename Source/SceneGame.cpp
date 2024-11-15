@@ -230,7 +230,7 @@ void SceneGame::RenderEnemyGauge(
 		DirectX::XMStoreFloat3(&pos, ScreenPosition);
 		gauge->Render(dc,
 			pos.x - 50.0f * 0.5f, pos.y - 10.0f,
-			10.0f * enemy->GetHealth(), enemy->GetMaxhealth(),
+			10.0f * enemy->GetHealth(), static_cast<float>(enemy->GetMaxhealth()),
 			0.0f, 0.0f,
 			0.0f, 0.0f,
 			0.0f,
