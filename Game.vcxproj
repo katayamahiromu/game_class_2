@@ -129,6 +129,7 @@
     <ClInclude Include="Source\EnemySlime.h" />
     <ClInclude Include="Source\Framework.h" />
     <ClInclude Include="Source\Graphics\DebugRenderer.h" />
+    <ClInclude Include="Source\Graphics\framebuffer.h" />
     <ClInclude Include="Source\Graphics\Graphics.h" />
     <ClInclude Include="Source\Graphics\ImGuiRenderer.h" />
     <ClInclude Include="Source\Graphics\LambertShader.h" />
@@ -178,6 +179,7 @@
     <ClCompile Include="Source\EnemySlime.cpp" />
     <ClCompile Include="Source\Framework.cpp" />
     <ClCompile Include="Source\Graphics\DebugRenderer.cpp" />
+    <ClCompile Include="Source\Graphics\framebuffer.cpp" />
     <ClCompile Include="Source\Graphics\Graphics.cpp" />
     <ClCompile Include="Source\Graphics\ImGuiRenderer.cpp" />
     <ClCompile Include="Source\Graphics\LambertShader.cpp" />
@@ -203,6 +205,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="HLSL\Debug.hlsli" />
+    <None Include="HLSL\FilterFunctions.hlsli" />
     <None Include="HLSL\ImGui.hlsli" />
     <None Include="HLSL\Lambert.hlsli" />
     <None Include="HLSL\Line.hlsli" />

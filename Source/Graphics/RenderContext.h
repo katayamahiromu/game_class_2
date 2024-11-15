@@ -2,14 +2,13 @@
 #include<d3d11.h>
 #include <DirectXMath.h>
 
-struct Test
+//色調補正情報
+struct ColorGradingData
 {
-	ID3D11ShaderResourceView* base_color;
-	ID3D11ShaderResourceView* height;
-	ID3D11ShaderResourceView* metallic;
-	ID3D11ShaderResourceView* MixedAo;
-	ID3D11ShaderResourceView* normal;
-	ID3D11ShaderResourceView* roughness;
+	float hueShift = 0;// 色相調整
+	float saturation = 1;// 彩度調整
+	float brightness = 1;// 明度調整
+	float dummy = 0;
 };
 
 // レンダーコンテキスト
@@ -19,6 +18,5 @@ struct RenderContext
 	DirectX::XMFLOAT4X4		projection;
 	DirectX::XMFLOAT4		lightDirection;
 
-	//test用のやつ
-	Test test;
+	ColorGradingData colorGradingData;
 };

@@ -2,6 +2,7 @@
 #include "Graphics/Model.h"
 #include<stdio.h>
 #include"../ResourceManager.h"
+#include"Misc.h"
 
 // コンストラクタ
 Model::Model(const char* filename)

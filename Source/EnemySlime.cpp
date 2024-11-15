@@ -5,7 +5,7 @@
 
 //コンストラクタ
 EnemySlime::EnemySlime() {
-	model = new Model("Data/Model/Slime/Slime.mdl");
+	model = std::make_unique<Model>("Data/Model/Slime/Slime.mdl");
 
 	//モデルが大きいのでスケーリング
 	scale.x = scale.y = scale.z = 0.01f;
@@ -18,7 +18,6 @@ EnemySlime::EnemySlime() {
 
 //デストラクタ
 EnemySlime::~EnemySlime() {
-	delete model;
 }
 
 //更新処理
@@ -63,7 +62,7 @@ void EnemySlime::Update(float elapsedTime)
 
 //描画処理
 void EnemySlime::Render(ID3D11DeviceContext* dc, Shader* shader) {
-	shader->Draw(dc, model);
+	shader->Draw(dc, model.get());
 }
 
 //ダメージを受けた時に呼ばれる
@@ -429,4 +428,22 @@ void EnemySlime::UpdateDeathState(float elapsedTime)
 	{
 		Destroy();
 	}
+}
+
+void EnemySlime::DebugGui()
+{
+	ImGui::SetNextWindowPos(ImVec2(10, 10), ImGuiCond_FirstUseEver);
+	ImGui::SetNextWindowSize(ImVec2(300, 300), ImGuiCond_FirstUseEver);
+	if (ImGui::Begin("ENEMY", nullptr, ImGuiTreeNodeFlags_DefaultOpen)) {
+		//トランスフォーム
+		if (ImGui::CollapsingHeader("ColorGrading", ImGuiTreeNodeFlags_DefaultOpen))
+		{
+			ColorGradingData data = GetModel()->GetColorGrading();
+			ImGui::SliderFloat("hueShift", &data.hueShift, 0.0f, +360.0f);
+			ImGui::SliderFloat("saturation", &data.saturation, 0.0f, +2.0f);
+			ImGui::SliderFloat("brightness", &data.brightness, 0.0f, +2.0f);
+			GetModel()->SetColorGrading(data);
+		}
+	}
+	ImGui::End();
 }

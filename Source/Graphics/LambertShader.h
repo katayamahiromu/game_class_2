@@ -33,6 +33,8 @@ private:
 		DirectX::XMFLOAT4	materialColor;
 	};
 
+	Microsoft::WRL::ComPtr<ID3D11Buffer> colorGrandingConstantBuffer;
+
 
 	Microsoft::WRL::ComPtr<ID3D11Buffer>			sceneConstantBuffer;
 	Microsoft::WRL::ComPtr<ID3D11Buffer>			meshConstantBuffer;

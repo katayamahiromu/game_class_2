@@ -192,6 +192,9 @@
     <ClInclude Include="Source\SceneTitle.h">
       <Filter>Source\Scene</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Graphics\framebuffer.h">
+      <Filter>Source\Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="External\imgui\imgui.cpp">
@@ -320,6 +323,9 @@
     <ClCompile Include="Source\StageMoveFloor.cpp">
       <Filter>Source\Stage</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Graphics\framebuffer.cpp">
+      <Filter>Source\Graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="HLSL\Debug.hlsli">
@@ -338,6 +344,9 @@
       <Filter>HLSL</Filter>
     </None>
     <None Include="HLSL\test.hlsli">
+      <Filter>HLSL</Filter>
+    </None>
+    <None Include="HLSL\FilterFunctions.hlsli">
       <Filter>HLSL</Filter>
     </None>
   </ItemGroup>

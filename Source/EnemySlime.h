@@ -20,6 +20,8 @@ public:
 
 	//“ê’£‚èİ’è
 	void SetTerritory(const DirectX::XMFLOAT3& origin, float range);
+
+	void DebugGui() override;
 private:
 	//ƒvƒŒƒCƒ„[õ“G
 	bool SearchPlayer();
@@ -108,8 +110,6 @@ private:
 		Anime_Dizzy,
 		Anime_Die
 	};
-private:
-	Model* model = nullptr;
 protected:
 	//€–S‚µ‚½‚ÉŒÄ‚Î‚ê‚é
 	void OnDead()override;
