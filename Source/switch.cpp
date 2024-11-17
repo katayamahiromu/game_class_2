@@ -47,6 +47,7 @@ void Switch::SwitchVsEnemy()
 			DirectX::XMFLOAT3(0,0,0)
 		))
 		{
+			//‰Ÿ‚µ‚½Š´‚ðo‚·‚½‚ß‚É–ˆƒtƒŒ[ƒ€¬‚³‚­‚µ‚Ä‚¢‚­
 			scale.y *= 0.9;
 		}
 		else
