@@ -27,7 +27,7 @@ void SceneGame::Initialize()
 
 	player = new Player;
 
-	player->SetPositon(DirectX::XMFLOAT3(16.035f, 1.233f, 1.502f));
+	player->SetPositon(DirectX::XMFLOAT3(16.035f, 5.233f, 1.502f));
 	//カメラコントローラー初期化
 	cameraController = new CameraController;
 
@@ -64,6 +64,10 @@ void SceneGame::Initialize()
 	//ゲージスプライト
 	gauge = new Sprite();
 	back = new Sprite("Data/Sprite/back.png");
+
+	//カメラコントローラー更新処理
+	DirectX::XMFLOAT3 target = { 0.256f,9.133f,1.502f };
+	cameraController->SetTarget(target);
 #endif
 }
 
@@ -108,12 +112,8 @@ void SceneGame::Update(float elapsedTime)
 #if true
 	StageManager::Instance().Update(elapsedTime);
 	player->Update(elapsedTime);
-	//カメラコントローラー更新処理
-	DirectX::XMFLOAT3 target = player->GetPosition();
-	target.y += 0.5f;
-	cameraController->SetTarget(target);
-	cameraController->Update(elapsedTime);
 	EnemeyManager::Instance().Update(elapsedTime);
+	cameraController->Update(elapsedTime);
 	//エフェクト更新処理
 	EffectManager::Instace().Update(elapsedTime);
 #endif
@@ -183,7 +183,7 @@ void SceneGame::Render()
 
 	// 2Dスプライト描画
 	{
-		RenderEnemyGauge(dc, rc.view, rc.projection);
+		//RenderEnemyGauge(dc, rc.view, rc.projection);
 	}
 
 	// 2DデバッグGUI描画
