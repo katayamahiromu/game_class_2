@@ -9,6 +9,7 @@
 #include"StageMain.h"
 #include"StageMoveFloor.h"
 #include"Goal.h"
+#include"switch.h"
 
 
 // ‰Šú‰»
@@ -23,6 +24,10 @@ void SceneGame::Initialize()
 	DirectX::XMFLOAT3 pos ={ -16.018f, 2.229f, 1.502f };
 	Goal* goal = new Goal(pos);
 	stageManager.Register(goal);
+
+	pos = { 10.0f,1.232f,1.502f };
+	Switch* swi = new Switch(pos);
+	stageManager.Register(swi);
 
 	//StageMoveFloor* stageMoveFloor = new StageMoveFloor();
 	//stageMoveFloor->SetStartPoint(DirectX::XMFLOAT3(0, 1, 3));

@@ -2,6 +2,9 @@
 
 #include"Graphics/Shader.h"
 #include"Collision.h"
+#include"Player.h"
+#include"SceneManager.h"
+#include"SceneTitle.h"
 
 //ステージ
 class Stage
@@ -18,7 +21,21 @@ public:
 
 	//レイキャスト
 	virtual bool RayCast(const DirectX::XMFLOAT3& start, const DirectX::XMFLOAT3& end, HitResult& hit) = 0;
-
+protected:
+	void PlayerVsStage()
+	{
+		Player& player = Player::Instance();
+		if (Collision::IntersectSphereVsSphere(
+			position,
+			radius,
+			player.GetPosition(),
+			player.GetRadius(),
+			DirectX::XMFLOAT3(0, 0, 0)
+		))
+		{
+			SceneManager::instance().ChengeScene(new SceneTitle);
+		}
+	};
 protected:
 	struct CollisionMesh
 	{
@@ -39,4 +56,7 @@ protected:
 	};
 
 	CollisionMesh collisionMesh;
+
+	DirectX::XMFLOAT3 position = { 0,0,0 };
+	float radius = 1.0;
 };
