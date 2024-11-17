@@ -195,6 +195,9 @@
     <ClInclude Include="Source\Graphics\framebuffer.h">
       <Filter>Source\Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Goal.h">
+      <Filter>Source\Stage</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="External\imgui\imgui.cpp">
@@ -325,6 +328,9 @@
     </ClCompile>
     <ClCompile Include="Source\Graphics\framebuffer.cpp">
       <Filter>Source\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Goal.cpp">
+      <Filter>Source\Stage</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -15,7 +15,7 @@ void SceneTitle::Initialize()
 	Cdur->Set_Submix_voice(test->Get_Submix_Voice());
 	test->SetVolum(1.0f);
 	test->equalizer();
-	Cdur->Play(false);
+	//Cdur->Play(false);
 }
 
 //I—¹‰»
