@@ -112,6 +112,27 @@ void Player::Update(float elapsedTime) {
 	}
 
 	position.z = 1.502f;
+
+	if (position.y > 16.3f)
+	{
+		position.y = 16.3f;
+		velocity.y = 0.0f;
+	}
+	if (position.y < 1.233f)
+	{
+		position.y = 1.233f;
+		velocity.y = 0.0f;
+	}
+	if (position.x > 16.004f)
+	{
+		position.x = 16.004f;
+		velocity.x = 0.0f;
+	}
+	if (position.x < -16.004f)
+	{
+		position.x = -16.004f;
+		velocity.x = 0.0f;
+	}
 }
 
 //ˆÚ“®“ü—Íˆ—
