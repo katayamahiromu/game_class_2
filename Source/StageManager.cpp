@@ -3,9 +3,32 @@
 //更新処理
 void StageManager::Update(float elapsedTime)
 {
+	//更新処理
 	for (Stage* stage : stages) {
 		stage->Update(elapsedTime);
 	}
+
+	//破棄処理
+	for (Stage* stage : removes)
+	{
+		std::vector<Stage*>::iterator it = std::find(stages.begin(), stages.end(), stage);
+		if (it != stages.end())
+		{
+			stages.erase(it);
+		}
+		//ステージの破棄
+		delete stage;
+	}
+
+	//Update内で増えた奴を登録
+	for (Stage* stage_add : add)
+	{
+		Register(stage_add);
+	}
+	//破棄リストをクリア
+	removes.clear();
+	//追加リストをクリア
+	add.clear();
 }
 
 //描画処理
@@ -47,4 +70,16 @@ bool StageManager::RayCast(const DirectX::XMFLOAT3& start, const DirectX::XMFLOA
 		}
 	}
 	return result;
+}
+
+//ステージ削除
+void StageManager::Remove(Stage*stage)
+{
+	removes.insert(stage);
+}
+
+//配列の追加
+void StageManager::RegisterAdd(Stage* stage)
+{
+	add.push_back(stage);
 }

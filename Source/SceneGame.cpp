@@ -21,11 +21,7 @@ void SceneGame::Initialize()
 	StageMain* stageMain = new StageMain();
 	stageManager.Register(stageMain);
 
-	DirectX::XMFLOAT3 pos ={ -16.018f, 2.229f, 1.502f };
-	Goal* goal = new Goal(pos);
-	stageManager.Register(goal);
-
-	pos = { 10.0f,1.232f,1.502f };
+	DirectX::XMFLOAT3 pos = { 10.0f,1.232f,1.502f };
 	Switch* swi = new Switch(pos);
 	stageManager.Register(swi);
 

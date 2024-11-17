@@ -1,36 +1,48 @@
-#pragma once
+ï»¿#pragma once
 
 #include<vector>
 #include"Stage.h"
+#include<set>
 
-//ƒXƒe[ƒWƒ}ƒl[ƒWƒƒ[
+//ã‚¹ãƒ†ãƒ¼ã‚¸ãƒãƒãƒ¼ã‚¸ãƒ£ãƒ¼
 class StageManager
 {
 private:
 	StageManager() {};
 	~StageManager() {};
 public:
-	//—Bˆê‚ÌƒCƒ“ƒXƒ^ƒ“ƒXæ“¾
+	//å”¯ä¸€ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹å–å¾—
 	static StageManager& Instance()
 	{
 		static StageManager instance;
 		return instance;
 	}
 
-	//XVˆ—
+	//æ›´æ–°å‡¦ç†
 	void Update(float elapsedTime);
 
-	//•`‰æˆ—
+	//æç”»å‡¦ç†
 	void Render(ID3D11DeviceContext* dc, Shader* shader);
 
-	//ƒXƒe[ƒW“o˜^
+	//ã‚¹ãƒ†ãƒ¼ã‚¸ç™»éŒ²
 	void Register(Stage* stage);
 
-	//ƒXƒe[ƒW‘Síœ
+	//ã‚¹ãƒ†ãƒ¼ã‚¸å‰Šé™¤
+	void Remove(Stage* stage);
+
+	//ã‚¹ãƒ†ãƒ¼ã‚¸å…¨å‰Šé™¤
 	void Clear();
 
-	//ƒŒƒCƒLƒƒƒXƒg
+	//ãƒ¬ã‚¤ã‚­ãƒ£ã‚¹ãƒˆ
 	bool RayCast(const DirectX::XMFLOAT3& start, const DirectX::XMFLOAT3& end, HitResult& hit);
+
+	//é…åˆ—ã®è¿½åŠ 
+	void RegisterAdd(Stage* stage);
+
+	//å¾Œã§æ¶ˆã™â™¡ é…åˆ—ã‚’å–å¾—
+	std::vector<Stage*> GetArray() { return stages; }
 private:
 	std::vector<Stage*>stages;
+	std::set<Stage*>removes;
+	std::vector<Stage*>add;
 };

@@ -15,4 +15,5 @@ public:
 private:
 	//今はエネミーでやってますが後で変更します
 	void SwitchVsEnemy();
+	bool IsGoal = false;
 };
