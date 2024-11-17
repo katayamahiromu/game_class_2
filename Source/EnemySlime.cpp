@@ -2,6 +2,7 @@
 #include"Graphics/Graphics.h"
 #include"Mathf.h"
 #include"Player.h"
+#include"Input/Input.h"
 
 //コンストラクタ
 EnemySlime::EnemySlime() {
@@ -58,6 +59,46 @@ void EnemySlime::Update(float elapsedTime)
 	//オブジェクト行列を更新
 	UpdateTranceform();
 	model->UpdateTransform(transform);
+
+	GamePad& gamePad = Input::Instance().GetGamePad();
+	if (gamePad.GetButtonDown() & GamePad::BTN_B)
+	{
+		ToggleMoveMode();
+
+		//hitEffect->Play(position);
+	}
+
+	if (isXYMode)
+	{
+		angle.x = DirectX::XMConvertToRadians(90);
+	}
+	else
+	{
+		angle.x = 0;
+	}
+
+	position.z = 1.502f;
+
+	if (position.y > 16.3f)
+	{
+		position.y = 16.3f;
+		velocity.y = 0.0f;
+	}
+	if (position.y < 1.233f)
+	{
+		position.y = 1.233f;
+		velocity.y = 0.0f;
+	}
+	if (position.x > 16.004f)
+	{
+		position.x = 16.004f;
+		velocity.x = 0.0f;
+	}
+	if (position.x < -16.004f)
+	{
+		position.x = -16.004f;
+		velocity.x = 0.0f;
+	}
 }
 
 //描画処理

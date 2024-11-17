@@ -452,7 +452,7 @@ void Player::UpdateAttackState(float elapsedTime)
 	attackCollisionFlag = (animationTime > 0.3 && animationTime < 0.4) ? true : false;
 	if (attackCollisionFlag) {
 		//左手ノードとエネミーの衝突判定
-		CollisionNodeVsEnemies("mixamorig:LeftHand", leftHandRadius);
+		//CollisionNodeVsEnemies("mixamorig:LeftHand", leftHandRadius);
 	}
 }
 

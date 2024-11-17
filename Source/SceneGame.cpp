@@ -49,7 +49,7 @@ void SceneGame::Initialize()
 #if 1
 	for (int i = 0;i < 1;++i) {
 		EnemySlime* slime = new EnemySlime;
-		slime->SetPositon(DirectX::XMFLOAT3(i * 2.0f, 0, 5));
+		slime->SetPositon(DirectX::XMFLOAT3(i * 2.0f, 10, 5));
 		slime->SetTerritory(slime->GetPosition(), 10.0f);
 		EnemeyManager::Instance().Register(slime);
 	}
