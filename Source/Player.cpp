@@ -251,7 +251,7 @@ void Player::CollisionPlayerVsEnemies() {
 		DirectX::XMFLOAT3 outPosition;
 
 		//Õ“Ë”»’è
-		if (Collision::IntersectCylinderVsCylinder(
+		/*if (Collision::IntersectCylinderVsCylinder(
 			position,
 			radius,
 			height,
@@ -260,6 +260,17 @@ void Player::CollisionPlayerVsEnemies() {
 			enemy->GetHeight(),
 			outPosition
 		)) {
+			enemy->SetPositon(outPosition);
+		}*/
+
+		if(Collision::IntersectSphereVsSphere(
+			position,
+			radius,
+			enemy->GetPosition(),
+			enemy->GetRadius(),
+			outPosition
+		))
+		{
 			enemy->SetPositon(outPosition);
 		}
 	};

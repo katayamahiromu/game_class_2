@@ -25,7 +25,7 @@ void Character::UpdateTranceform() {
 void Character::Move(float vx, float vz, float speed) {
 	//横方向ベクトルを設定
 	moveVecX = vx;
-	moveVecZ = vz;
+	moveVecY = vz;
 	//最大速度設定
 	maxMoveSpeed = speed;
 }
@@ -247,7 +247,7 @@ void Character::UpdateHorizontalVelocity(float elapsedFrame)
 	if (length <= maxMoveSpeed)
 	{
 		//移動ベクトルがゼロベクトルでないなら加速する
-		float moveVecLength = sqrtf((moveVecX * moveVecX) + (moveVecZ * moveVecZ));
+		float moveVecLength = sqrtf((moveVecX * moveVecX) + (moveVecY * moveVecY));
 		if(moveVecLength > 0.0f)
 		{
 			//加速力
@@ -256,7 +256,7 @@ void Character::UpdateHorizontalVelocity(float elapsedFrame)
 			if (!IsGround()) acceleration -= this->airControl;
 			//移動ベクトルによる加速処理
 			velocity.x += moveVecX * acceleration;
-			velocity.y += moveVecZ * acceleration;
+			velocity.y += moveVecY * acceleration;
 
 			//最大速度制限
 			float length = sqrtf((velocity.x * velocity.x) + (velocity.y * velocity.y));
@@ -276,7 +276,7 @@ void Character::UpdateHorizontalVelocity(float elapsedFrame)
 	}
 	//移動ベクトルをリセット
 	moveVecX = 0.0f;
-	moveVecZ = 0.0f;
+	moveVecY = 0.0f;
 }
 
 //水平移動更新処理

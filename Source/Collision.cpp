@@ -64,6 +64,40 @@ bool Collision::IntersectCylinderVsCylinder(
 	return true;
 }
 
+////トップビュー状態の円柱と円柱の交差判定
+//bool Collision::IntersectCylinderVsCylinderTopView(
+//	const DirectX::XMFLOAT3& positionA, 
+//	float radiusA, 
+//	float heightA, 
+//	const DirectX::XMFLOAT3& positionB, 
+//	float radiusB, 
+//	float heightB, 
+//	DirectX::XMFLOAT3& outPositionB)
+//{
+//	if (positionA.z > positionB.z + heightB) {
+//		return false;
+//	}
+//	if (positionA.z + heightA < positionB.z) {
+//		return false;
+//	}
+//	//XY平面での範囲チェック
+//	float vx = positionB.x - positionA.x;
+//	float vy = positionB.y - positionA.y;
+//	float dis = sqrtf(vx * vx + vy * vy);
+//	float range = radiusA + radiusB;
+//	if (range < dis) {
+//		return false;
+//	}
+//
+//	//AがBを押し出す
+//	vx = vx / dis * range;
+//	vy = vy / dis * range;
+//	outPositionB.x = positionA.x + vx;
+//	outPositionB.y = positionB.y + vy;
+//	outPositionB.z = positionA.z;
+//	return true;
+//}
+
 bool  Collision::IntersctSphereVsCylinder(
 	const DirectX::XMFLOAT3& spherePosition,
 	float sphereRadius,

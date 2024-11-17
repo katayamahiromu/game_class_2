@@ -98,7 +98,7 @@ protected:
 	float acceleration = 1.0f;
 	float maxMoveSpeed = 5.0f;
 	float moveVecX = 0.0f;
-	float moveVecZ = 0.0f;
+	float moveVecY = 0.0f;
 	float airControl = 0.3f;
 	float stepOffset = 1.0f;
 	float slopeRate = 1.0f;
