@@ -4,11 +4,11 @@
 #include"StageManager.h"
 #include"Goal.h"
 
-Switch::Switch(DirectX::XMFLOAT3 Position)
+Switch::Switch(/*DirectX::XMFLOAT3 Position*/)
 {
 	model = std::make_unique<Model>("Data/Model/switch/swtich.mdl");
 	//‚½‚¾‚ÌÝŒvƒ~ƒX‚Å‚·Œã‚Å’¼‚µ‚Ü‚·
-	Character::position = Position;
+	//Character::position = Position;
 	scale.x = scale.y = scale.z = 0.01f;
 	UpdateTranceform();
 	model->UpdateTransform(transform);

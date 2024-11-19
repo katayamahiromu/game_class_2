@@ -1,4 +1,5 @@
 #include "Graphics/Graphics.h"
+#include "SceneManager.h"
 #include "SceneGame.h"
 #include"Camera.h"
 #include"EnemyManeger.h"
@@ -16,22 +17,66 @@
 void SceneGame::Initialize()
 {
 #if true
-	//ステージ初期化
+	select = SceneManager::instance().select;
 	StageManager& stageManager = StageManager::Instance();
+	
+	// プレイヤー初期化
+	player = new Player;
+
+	// スイッチ初期化
+	Switch* swi = new Switch;
+	stageManager.Register(swi);
+
+	//ステージ初期化
 	StageMain* stageMain = new StageMain();
 	stageManager.Register(stageMain);
 
-	DirectX::XMFLOAT3 pos = { 10.0f,1.232f,1.502f };
-	Switch* swi = new Switch(pos);
-	stageManager.Register(swi);
-
 	//StageMoveFloor* stageMoveFloor = new StageMoveFloor();
-	//stageMoveFloor->SetStartPoint(DirectX::XMFLOAT3(0, 1, 3));
-	//stageMoveFloor->SetGoalPoint(DirectX::XMFLOAT3(10, 2, 3));
-	//stageMoveFloor->SetTorque(DirectX::XMFLOAT3(0, 1.0f, 0));
 	//stageManager.Register(stageMoveFloor);
 
-	player = new Player;
+	switch (select)
+	{
+		// ステージ1
+	case 0:
+		switchPos = { 10.0f,1.232f,1.502f };
+		swi->SetPositon(switchPos);
+		
+		
+		//stageMoveFloor->SetStartPoint(DirectX::XMFLOAT3(0, 1, 3));
+		//stageMoveFloor->SetGoalPoint(DirectX::XMFLOAT3(10, 2, 3));
+		//stageMoveFloor->SetTorque(DirectX::XMFLOAT3(0, 1.0f, 0));
+		
+		player->SetPositon(DirectX::XMFLOAT3(16.035f, 5.233f, 1.502f));
+
+		//エネミー初期化
+		for (int i = 0; i < 1; ++i) {
+			EnemySlime* slime = new EnemySlime;
+			slime->SetPositon(DirectX::XMFLOAT3(i * 2.0f, 10, 5));
+			slime->SetTerritory(slime->GetPosition(), 10.0f);
+			EnemeyManager::Instance().Register(slime);
+		}
+
+		break;
+
+		// ステージ２
+	case 1:
+		switchPos = { 10.0f,1.232f,1.502f };
+		swi->SetPositon(switchPos);
+
+		//StageMoveFloor* stageMoveFloor = new StageMoveFloor();
+		//stageMoveFloor->SetStartPoint(DirectX::XMFLOAT3(0, 1, 3));
+		//stageMoveFloor->SetGoalPoint(DirectX::XMFLOAT3(10, 2, 3));
+		//stageMoveFloor->SetTorque(DirectX::XMFLOAT3(0, 1.0f, 0));
+		//stageManager.Register(stageMoveFloor);
+		player->SetPositon(DirectX::XMFLOAT3(16.035f, 5.233f, 1.502f));
+
+		//エネミー初期化
+		for (int i = 0; i < 1; ++i) {
+			EnemySlime* slime = new EnemySlime;
+			slime->SetPositon(DirectX::XMFLOAT3(i * 2.0f, 10, 5));
+			slime->SetTerritory(slime->GetPosition(), 10.0f);
+			EnemeyManager::Instance().Register(slime);
+		}
 
 	player->SetPosition(DirectX::XMFLOAT3(16.035f, 5.233f, 1.502f));
 	//カメラコントローラー初期化
@@ -55,7 +100,7 @@ void SceneGame::Initialize()
 #if 1
 	for (int i = 0;i < 1;++i) {
 		EnemySlime* slime = new EnemySlime;
-		slime->SetPosition(DirectX::XMFLOAT3(i * 2.0f, 10, 5));
+		slime->SetPositon(DirectX::XMFLOAT3(i * 2.0f, 10, 5));
 		slime->SetTerritory(slime->GetPosition(), 10.0f);
 		EnemeyManager::Instance().Register(slime);
 	}
@@ -299,7 +344,7 @@ void SceneGame::RenderEnemyGauge(
 		if (StageManager::Instance().RayCast(worldPosition, WorldEnd, hit))
 		{
 			EnemySlime* slime = new EnemySlime;
-			slime->SetPosition(hit.position);
+			slime->SetPositon(hit.position);
 			EnemeyManager::Instance().Register(slime);
 		}
 		

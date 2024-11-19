@@ -1,6 +1,6 @@
 #include"Graphics/Graphics.h"
 #include"SceneTitle.h"
-#include"SceneGame.h"
+#include"SceneStageSelect.h"
 #include"SceneManager.h"
 #include"Input/Input.h"
 #include"SceneLoading.h"
@@ -42,7 +42,7 @@ void SceneTitle::Update(float elapsedTime)
 		| GamePad::BTN_Y
 		;
 	if (gamePad.GetButtonDown() & anyButton) {
-		SceneManager::instance().ChengeScene(new SceneLoading(new SceneGame));
+		SceneManager::instance().ChengeScene(new SceneLoading(new SceneStageSelect));
 		//SceneManager::instance().ChengeScene(new SceneGame);
 	}
 }

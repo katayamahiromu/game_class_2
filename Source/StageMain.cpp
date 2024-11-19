@@ -1,7 +1,22 @@
 #include"StageMain.h"
+#include "SceneManager.h"
 
 StageMain::StageMain() {
-	model = new Model("Data/Model/ExampleStage/äzâè.mdl");
+
+	select = SceneManager::instance().select;
+
+	switch (select)
+	{
+	case 0:
+		model = new Model("Data/Model/ExampleStage/äzâè.mdl");
+		break;
+	case 1:
+		model = new Model("Data/Model/ExampleStage/ExampleStage.mdl");
+		break;
+	}
+
+	//model = new Model("Data/Model/ExampleStage/äzâè.mdl");
+	
 
 	//DirectX::XMVECTOR VolumeMin = DirectX::XMVectorReplicate(FLT_MAX);
 	//DirectX::XMVECTOR VolumeMax = DirectX::XMVectorReplicate(-FLT_MAX);
