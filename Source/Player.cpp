@@ -118,19 +118,20 @@ void Player::Update(float elapsedTime) {
 		position.y = 16.3f;
 		velocity.y = 0.0f;
 	}
-	if (position.y < 1.233f)
+	if (position.y < 1.3f)
 	{
-		position.y = 1.233f;
+		jumpCount = 0;
+		position.y = 1.3f;
 		velocity.y = 0.0f;
 	}
-	if (position.x > 16.004f)
+	if (position.x > 16.0f)
 	{
-		position.x = 16.004f;
+		position.x = 16.00f;
 		velocity.x = 0.0f;
 	}
-	if (position.x < -16.004f)
+	if (position.x < -16.0f)
 	{
-		position.x = -16.004f;
+		position.x = -16.0f;
 		velocity.x = 0.0f;
 	}
 }

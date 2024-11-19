@@ -201,6 +201,9 @@
     <ClInclude Include="Source\switch.h">
       <Filter>Source\Stage</Filter>
     </ClInclude>
+    <ClInclude Include="Source\SceneStageSelect.h">
+      <Filter>Source\Scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="External\imgui\imgui.cpp">
@@ -337,6 +340,9 @@
     </ClCompile>
     <ClCompile Include="Source\switch.cpp">
       <Filter>Source\Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SceneStageSelect.cpp">
+      <Filter>Source\Scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

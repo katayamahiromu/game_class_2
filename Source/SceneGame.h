@@ -35,4 +35,9 @@ private:
 	CameraController* cameraController = nullptr;
 	Sprite* gauge = nullptr;
 	Sprite* back = nullptr;
+
+	// スイッチの位置
+	DirectX::XMFLOAT3 switchPos;
+
+	int select = 0;
 };

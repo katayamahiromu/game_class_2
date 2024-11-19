@@ -23,6 +23,8 @@ public:
 	void Clear();
 	//ƒV[ƒ“Ø‚è‘Ö‚¦
 	void ChengeScene(Scene* scene);
+
+	int select = 0;
 private:
 	Scene* currentScene = nullptr;
 	Scene* nextScene = nullptr;
