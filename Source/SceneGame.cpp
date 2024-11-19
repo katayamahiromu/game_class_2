@@ -33,7 +33,7 @@ void SceneGame::Initialize()
 
 	player = new Player;
 
-	player->SetPositon(DirectX::XMFLOAT3(16.035f, 5.233f, 1.502f));
+	player->SetPosition(DirectX::XMFLOAT3(16.035f, 5.233f, 1.502f));
 	//カメラコントローラー初期化
 	cameraController = new CameraController;
 
@@ -55,7 +55,7 @@ void SceneGame::Initialize()
 #if 1
 	for (int i = 0;i < 1;++i) {
 		EnemySlime* slime = new EnemySlime;
-		slime->SetPositon(DirectX::XMFLOAT3(i * 2.0f, 10, 5));
+		slime->SetPosition(DirectX::XMFLOAT3(i * 2.0f, 10, 5));
 		slime->SetTerritory(slime->GetPosition(), 10.0f);
 		EnemeyManager::Instance().Register(slime);
 	}
@@ -299,7 +299,7 @@ void SceneGame::RenderEnemyGauge(
 		if (StageManager::Instance().RayCast(worldPosition, WorldEnd, hit))
 		{
 			EnemySlime* slime = new EnemySlime;
-			slime->SetPositon(hit.position);
+			slime->SetPosition(hit.position);
 			EnemeyManager::Instance().Register(slime);
 		}
 		

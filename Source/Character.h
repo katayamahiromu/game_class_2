@@ -14,7 +14,7 @@ public:
 	//ˆÊ’uî•ñæ“¾
 	const DirectX::XMFLOAT3& GetPosition() const { return position; }
 	//ˆÊ’uİ’è
-	void SetPositon(const DirectX::XMFLOAT3& position) { this->position = position; }
+	void SetPosition(const DirectX::XMFLOAT3& position) { this->position = position; }
 	//‰ñ“]æ“¾
 	const DirectX::XMFLOAT3& GetAngle() const { return angle; }
 	//‰ñ“]İ’è
@@ -102,12 +102,6 @@ protected:
 	float airControl = 0.3f;
 	float stepOffset = 1.0f;
 	float slopeRate = 1.0f;
-
-	struct AABB
-	{
-		DirectX::XMFLOAT3 max;
-		DirectX::XMFLOAT3 min;
-	};
 
 	std::unique_ptr<Model>model;
 };

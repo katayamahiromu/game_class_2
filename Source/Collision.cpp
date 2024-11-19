@@ -127,6 +127,62 @@ bool  Collision::IntersctSphereVsCylinder(
 	return true;
 }
 
+//四角形と四角形の交差判定
+bool Collision::IntersectCubeVsCube(
+	const DirectX::XMFLOAT3& positionA,
+	float radiusA,
+	float heightA,
+	const DirectX::XMFLOAT3& positionB,
+	float radiusB,
+	float heightB,
+	DirectX::XMFLOAT3& outPositionB
+)
+{
+	DirectX::BoundingBox a;
+	//Boxの中心
+	a.Center = positionA;
+	//中心から範囲
+	a.Extents = { radiusA,heightA,radiusA };
+
+	DirectX::BoundingBox b;
+	b.Center = positionB;
+	b.Extents = { radiusB,heightB,radiusB };
+
+	if (a.Intersects(b))
+	{
+		// 各軸の重なり量を計算
+		float overlapX = (a.Extents.x + b.Extents.x) - std::abs(a.Center.x - b.Center.x);
+		float overlapY = (a.Extents.y + b.Extents.y) - std::abs(a.Center.y - b.Center.y);
+		float overlapZ = (a.Extents.z + b.Extents.z) - std::abs(a.Center.z - b.Center.z);
+
+		//球と違ってどれかの軸のみを移動するため重なりが一番少ない軸を選択
+		DirectX::XMFLOAT3 correctionVector = { 0.0f, 0.0f, 0.0f };
+		if (overlapX < overlapY && overlapX < overlapZ)
+		{
+			// X軸方向に押し出し
+			correctionVector.x = (a.Center.x < b.Center.x ? overlapX : -overlapX);
+		}
+		else if (overlapY < overlapZ)
+		{
+			// Y軸方向に押し出し
+			correctionVector.y = (a.Center.y < b.Center.y ? overlapY : -overlapY);
+		}
+		else
+		{
+			// Z軸方向に押し出し
+			correctionVector.z = (a.Center.z < b.Center.z ? overlapZ : -overlapZ);
+		}
+
+		// Bの位置を修正
+		outPositionB.x = positionB.x + correctionVector.x;
+		outPositionB.y = positionB.y + correctionVector.y;
+		outPositionB.z = positionB.z + correctionVector.z;
+
+		return true; // 衝突した
+	}
+	return false;
+}
+
 //レイとモデルの交差判定
 bool Collision::InterserctRayVsModel(
 	const DirectX::XMFLOAT3& start,

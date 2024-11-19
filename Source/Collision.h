@@ -37,6 +37,17 @@ public:
 		DirectX::XMFLOAT3& outPositionB
 	);
 
+	//四角形と四角形の交差判定
+	static bool IntersectCubeVsCube(
+		const DirectX::XMFLOAT3& positionA,
+		float radiusA,
+		float heightA,
+		const DirectX::XMFLOAT3& positionB,
+		float radiusB,
+		float heightB,
+		DirectX::XMFLOAT3& outPositionB
+	);
+
 	////トップビュー状態の円柱と円柱の交差判定
 	//static bool IntersectCylinderVsCylinderTopView(
 	//	const DirectX::XMFLOAT3& positionA,

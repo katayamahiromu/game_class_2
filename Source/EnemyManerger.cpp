@@ -81,7 +81,7 @@ void EnemeyManager::CollisionEnemyVsEnemy() {
              outPosition))
             {
                 // ‰Ÿ‚µo‚µŒã‚ÌˆÊ’u’²®
-                enemy2->SetPositon(outPosition);
+                enemy2->SetPosition(outPosition);
             }
         }
     }

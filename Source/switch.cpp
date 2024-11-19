@@ -66,7 +66,9 @@ void Switch::SwitchVsEnemy()
 			scale.y = 0.01f;
 			if (IsGoal)
 			{
+				//配列を丸々取得
 				std::vector<Stage*>Array= StageManager::Instance().GetArray();
+				//配列の最後はおそらくゴールなので最後を削除
 				StageManager::Instance().Remove(Array.at(Array.size() - 1));
 				IsGoal = false;
 			}
