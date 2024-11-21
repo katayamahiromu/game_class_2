@@ -17,7 +17,6 @@ public:
 		static StageManager instance;
 		return instance;
 	}
-
 	//更新処理
 	void Update(float elapsedTime);
 
@@ -45,7 +44,7 @@ public:
 	//後で消す♡ 配列を取得
 	std::vector<Stage*> GetArray() { return stages; }
 
-	int GetGoalCount() { return goalCount; }
+	void ClearIsGoalFlag() { IsGoal = false; }
 	void SetGoalCount(int count) { goalCount = count; }
 	void PushCountPlus() { pushCount++; }
 	void ClearPushCount() { pushCount = 0; }

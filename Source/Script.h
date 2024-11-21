@@ -29,16 +29,17 @@ char* filename[] =
 };
 
 //使いたいステージ
-enum 
+enum STAGE_NUM
 {
 	PICTURE_FRAME = 0,
 	EXAMPLE,
 	STAGETWO,
 };
 
-StageScript script[] =
+const StageScript script[] =
 {
 	//1~5
+	{{16.035f, 5.233f, 1.502f},{16.018f, 2.229f, 1.502f},{-16.0f, 1.3f, 1.502f},1,filename[PICTURE_FRAME]},
 	{{16.035f, 5.233f, 1.502f},{-16.018f, 2.229f, 1.502f},{10.0f, 1.3f, 1.502f},1,filename[PICTURE_FRAME]},
 	{{16.035f, 5.233f, 1.502f},{-16.018f, 2.229f, 1.502f},{10.0f, 1.3f, 1.502f},1,filename[EXAMPLE]},
 };

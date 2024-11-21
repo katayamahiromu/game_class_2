@@ -22,6 +22,7 @@ void SceneGame::Initialize()
 	// プレイヤー初期化
 	player = std::make_unique<Player>(script[select].PlayerPos);
 	//ステージ初期化
+	stageManager.ClearIsGoalFlag();
 	stageManager.SetGoalCount(script[select].pushSwitchCount);
 	stageManager.SetGoalPosition(script[select].GoalPos);
 	stageManager.Register(new StageMain(script[select].path));
