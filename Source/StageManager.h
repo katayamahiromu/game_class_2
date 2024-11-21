@@ -55,6 +55,8 @@ private:
 	std::set<Stage*>removes;
 	std::vector<Stage*>add;
 
+	Stage* goal;
+
 	//ゴールを出すためのカウント
 	int goalCount = 0;
 	//今押されてるスイッチのカウント
