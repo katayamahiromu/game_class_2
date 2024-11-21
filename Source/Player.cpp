@@ -13,10 +13,10 @@ Player& Player::Instance()
 }
 
 //コンストラクタ
-Player::Player() {
+Player::Player(DirectX::XMFLOAT3 pos) {
 	//インスタンスポインタ取得
 	instace = this;
-
+	position = pos;
 	model = std::make_unique<Model>("Data/Model/Jammo/Jammo.mdl");
 	//モデルが大きいのでスケーリング
 	scale.x = scale.y = scale.z = 0.0075f;

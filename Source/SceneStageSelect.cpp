@@ -30,22 +30,22 @@ void SceneStageSelect::Update(float elapsedTime)
 	if (gamePad.GetButtonDown() & GamePad::BTN_RIGHT)
 	{
 		++select;
-		if (select < 0) select = 0;
-		if (select > 10) select = 10;
+		if (select < 0) select = StageOne;
+		if (select > StageMax) select = StageMax - 1;
 	}
 	else if (gamePad.GetButtonDown() & GamePad::BTN_LEFT)
 	{
 		--select;
-		if (select < 0) select = 0;
-		if (select > 10) select = 10;
+		if (select < 0) select = StageOne;
+		if (select > StageMax) select = StageMax - 1;
 	}
 	// 矢印の位置
 	switch (select)
 	{
-	case 0:
+	case StageState::StageOne:
 		selectPos = { 0,600 };
 		break;
-	case 1:
+	case StageState::StageTwo:
 		selectPos = { 200,800 };
 		break;
 	}
@@ -53,8 +53,7 @@ void SceneStageSelect::Update(float elapsedTime)
 	//　エンターキーを押したらローディングを挟んでゲームシーンへ切り替え
 	if (gamePad.GetButtonDown() & GamePad::BTN_A)
 	{
-		SceneManager::instance().select = select;
-		SceneManager::instance().ChengeScene(new SceneLoading(new SceneGame()));
+		SceneManager::instance().ChengeScene(new SceneLoading(new SceneGame(select)));
 	}
 }
 

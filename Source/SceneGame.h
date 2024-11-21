@@ -9,6 +9,8 @@
 class SceneGame:public Scene
 {
 public:
+	//生成時にどのステージか決める
+	SceneGame(int StageNum) :select(StageNum) {};
 	~SceneGame() override {}
 
 	// 初期化
@@ -30,14 +32,10 @@ private:
 		const DirectX::XMFLOAT4X4& projection
 	);
 private:
-	Stage*  stage  = nullptr;
-	Player* player = nullptr;
-	CameraController* cameraController = nullptr;
-	Sprite* gauge = nullptr;
-	Sprite* back = nullptr;
+	std::unique_ptr<Player> player;
+	std::unique_ptr<CameraController>cameraController;
+	std::unique_ptr<Sprite>gauge;
+	std::unique_ptr<Sprite>back;
 
-	// スイッチの位置
-	DirectX::XMFLOAT3 switchPos;
-
-	int select = 0;
+	int select;
 };

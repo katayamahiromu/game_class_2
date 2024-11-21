@@ -3,8 +3,8 @@
 #include "Graphics/Sprite.h"
 #include "Scene.h"
 #include <wrl.h>
-#include <DirectXMath.h>
 #include "Audio/Audio.h"
+
 
 //　タイトルセレクトシーン
 class SceneStageSelect : public Scene
@@ -26,6 +26,15 @@ public:
 	void Render() override;
 
 	void DrawDebugGui();
+private:
+	//クラスの方がもしかしたらいいかも？
+	//名前のほうもあんまりよくはないかもしれない	
+	enum StageState
+	{
+		StageOne,
+		StageTwo,
+		StageMax,//ステージ数上限
+	};
 
 private:
 	std::unique_ptr<Sprite> back = nullptr;

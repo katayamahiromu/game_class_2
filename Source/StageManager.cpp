@@ -1,4 +1,5 @@
 #include"StageManager.h"
+#include"Goal.h"
 
 //更新処理
 void StageManager::Update(float elapsedTime)
@@ -29,6 +30,9 @@ void StageManager::Update(float elapsedTime)
 	removes.clear();
 	//追加リストをクリア
 	add.clear();
+
+	//ゴールを出すかの正誤
+	AppearGoal();
 }
 
 //描画処理
@@ -82,4 +86,23 @@ void StageManager::Remove(Stage*stage)
 void StageManager::RegisterAdd(Stage* stage)
 {
 	add.push_back(stage);
+}
+
+void StageManager::AppearGoal()
+{
+	if (pushCount == goalCount)
+	{
+		//既にゴールが合ったら処理しない
+		if (IsGoal)return;
+		Register(new Goal(goalPosition));
+		IsGoal = true;
+	}
+	else
+	{
+		if (IsGoal)
+		{
+			Remove(stages.at(stages.size() - 1));
+		}
+		IsGoal = false;
+	}
 }

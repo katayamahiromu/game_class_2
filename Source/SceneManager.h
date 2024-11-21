@@ -24,8 +24,10 @@ public:
 	//ƒV[ƒ“Ø‚è‘Ö‚¦
 	void ChengeScene(Scene* scene);
 
-	int select = 0;
+	int GetSelect() { return select; }
+	void SetSelect(int se) { select = se; }
 private:
+	int select = 0;
 	Scene* currentScene = nullptr;
 	Scene* nextScene = nullptr;
 };
