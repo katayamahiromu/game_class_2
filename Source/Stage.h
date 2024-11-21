@@ -24,20 +24,4 @@ public:
 
 	//レイキャスト
 	virtual bool RayCast(const DirectX::XMFLOAT3& start, const DirectX::XMFLOAT3& end, HitResult& hit) = 0;
-protected:
-	//あとで直す
-	void PlayerVsStage()
-	{
-		Player& player = Player::Instance();
-		if (Collision::IntersectSphereVsSphere(
-			position,
-			radius,
-			player.GetPosition(),
-			player.GetRadius(),
-			DirectX::XMFLOAT3(0, 0, 0)
-		))
-		{
-			SceneManager::instance().ChengeScene(new SceneTitle);
-		}
-	};
 };

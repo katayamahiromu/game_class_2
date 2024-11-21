@@ -11,7 +11,7 @@
 #include"StageMoveFloor.h"
 #include"Goal.h"
 #include"switch.h"
-#include"Script.h"
+#include"I_Love_taisei.h"
 
 
 // 初期化
@@ -22,11 +22,11 @@ void SceneGame::Initialize()
 	// プレイヤー初期化
 	player = std::make_unique<Player>(script[select].PlayerPos);
 	//ステージ初期化
-	stageManager.ClearIsGoalFlag();
 	stageManager.SetGoalCount(script[select].pushSwitchCount);
 	stageManager.SetGoalPosition(script[select].GoalPos);
 	stageManager.Register(new StageMain(script[select].path));
 	stageManager.Register(new Switch(script[select].SwitchPos));
+	stageManager.Register(new Goal(script[select].GoalPos));
 	
 	//デバック用エネミー
 	//エネミー初期化

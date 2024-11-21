@@ -4,11 +4,11 @@
 /// <summary>
 /// ステージの情報
 /// </summary>
-/// <param name="PlayerPos">プレイヤーのポジション</param>
-/// <param name="GoalPos">ゴールのポジション</param>
-/// <param name="SwitchPos">スイッチのポジション</param>
-/// <param name="pushSwitchCount">ゴールするための押すスイッチの数</param>
-/// <param name="path">使いたいステージデータ</param>
+/// <param name="PlayerPos">: プレイヤーのポジション</param>
+/// <param name="GoalPos">: ゴールのポジション</param>
+/// <param name="SwitchPos">: スイッチのポジション</param>
+/// <param name="pushSwitchCount">: ゴールするための押すスイッチの数</param>
+/// <param name="path">: 使いたいステージデータ</param>
 struct StageScript
 {
 	DirectX::XMFLOAT3 PlayerPos;

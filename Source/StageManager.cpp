@@ -8,7 +8,7 @@ void StageManager::Update(float elapsedTime)
 	for (Stage* stage : stages) {
 		stage->Update(elapsedTime);
 	}
-	if (goal)goal->Update(elapsedTime);
+
 
 	//破棄処理
 	for (Stage* stage : removes)
@@ -31,9 +31,6 @@ void StageManager::Update(float elapsedTime)
 	removes.clear();
 	//追加リストをクリア
 	add.clear();
-
-	//ゴールを出すかの正誤
-	AppearGoal();
 }
 
 //描画処理
@@ -42,7 +39,6 @@ void StageManager::Render(ID3D11DeviceContext* dc, Shader* shader)
 	for (Stage* stage : stages) {
 		stage->Render(dc, shader);
 	}
-	if (goal)goal->Render(dc,shader);
 }
 
 //ステージ登録
@@ -59,12 +55,6 @@ void StageManager::Clear()
 		delete stage;
 	}
 	stages.clear();
-
-	if (IsGoal)
-	{
-		delete goal;
-		goal = nullptr;
-	}
 }
 
 //レイキャスト
@@ -94,24 +84,4 @@ void StageManager::Remove(Stage*stage)
 void StageManager::RegisterAdd(Stage* stage)
 {
 	add.push_back(stage);
-}
-
-void StageManager::AppearGoal()
-{
-	if (pushCount == goalCount)
-	{
-		//既にゴールが合ったら処理しない
-		if (IsGoal)return;
-		goal = new Goal(goalPosition);
-		IsGoal = true;
-	}
-	else
-	{
-		if (IsGoal)
-		{
-			delete goal;
-			goal = nullptr;
-		}
-		IsGoal = false;
-	}
 }

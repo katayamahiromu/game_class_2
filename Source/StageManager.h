@@ -38,14 +38,8 @@ public:
 	//配列の追加
 	void RegisterAdd(Stage* stage);
 
-	//ゴールを出す判定を取る関数
-	void AppearGoal();
-
-	//後で消す♡ 配列を取得
-	std::vector<Stage*> GetArray() { return stages; }
-
-	void ClearIsGoalFlag() { IsGoal = false; }
 	void SetGoalCount(int count) { goalCount = count; }
+	int GetGoalCount() { return goalCount; }
 	void PushCountPlus() { pushCount++; }
 	void ClearPushCount() { pushCount = 0; }
 	int GetPushCount() { return pushCount; }
@@ -55,12 +49,9 @@ private:
 	std::set<Stage*>removes;
 	std::vector<Stage*>add;
 
-	Stage* goal;
-
 	//ゴールを出すためのカウント
 	int goalCount = 0;
 	//今押されてるスイッチのカウント
 	int pushCount = 0;
-	bool IsGoal = false;
 	DirectX::XMFLOAT3 goalPosition = {0,0,0};
 };
