@@ -148,8 +148,37 @@ void Character::UpdateVerticalMove(float elapsedTime)
 	//キャラクターのY軸方向となる法線ベクトル
 	DirectX::XMFLOAT3 normal = { 0,1,0 };
 
+	//頭から抜けないため
+	if (my > 0.0f)
+	{
+		//レイの開始位置は足元より少し上
+		DirectX::XMFLOAT3 start = { position.x,position.y + GetHeight(),position.z };
+		//レイの終点位置は移動後の位置
+		DirectX::XMFLOAT3 end = { position.x,start.y + my,position.z };
+
+		//レイキャストによる地面判定
+		HitResult hit;
+		if (StageManager::Instance().RayCast(start, end, hit))
+		{
+			//法線ベクトルを取得
+			normal = hit.normal;
+
+			//地面に接地している
+			position.x = hit.position.x;
+			position.y = hit.position.y - GetHeight();
+			position.z = hit.position.z;
+
+			//ヒット時に落下させる
+			velocity.y = 0.0f;
+		}
+		else
+		{
+			position.y += my;
+			isGround = false;
+		}
+	}
 	//落下中
-	if (my < 0.0f)
+	else if (my < 0.0f)
 	{
 		//レイの開始位置は足元より少し上
 		DirectX::XMFLOAT3 start = { position.x,position.y + stepOffset,position.z };
@@ -189,27 +218,27 @@ void Character::UpdateVerticalMove(float elapsedTime)
 		}
 	}
 	//上昇中
-	else if (my > 0.0f)
-	{
+	//else if (my > 0.0f)
+	/*{
 		position.y += my;
 		isGround = false;
-	}
+	}*/
 
 	//地面の向きに沿うようにXZ軸回転
-	{
-		//Y軸が法線ベクトル方向に向くオイラー角回転を算出する
+	//{
+	//	//Y軸が法線ベクトル方向に向くオイラー角回転を算出する
 
-		float angleX = atan2f(normal.z, normal.y);
-		float angleZ = -atan2f(normal.x, normal.y);
+	//	float angleX = atan2f(normal.z, normal.y);
+	//	float angleZ = -atan2f(normal.x, normal.y);
 
-		//線形補完で滑らかに回転する
-		if (angleX <= 1.0f && angleX >= -1.0f) {
-			angle.x = Mathf::Leap(angle.x, angleX, elapsedTime * 10.0f);
-		}
-		if (angleZ <= 1.0f && angleZ >= -1.0f) {
-			angle.z = Mathf::Leap(angle.z, angleZ, elapsedTime * 10.0f);
-		}
-	}
+	//	//線形補完で滑らかに回転する
+	//	if (angleX <= 1.0f && angleX >= -1.0f) {
+	//		angle.x = Mathf::Leap(angle.x, angleX, elapsedTime * 10.0f);
+	//	}
+	//	if (angleZ <= 1.0f && angleZ >= -1.0f) {
+	//		angle.z = Mathf::Leap(angle.z, angleZ, elapsedTime * 10.0f);
+	//	}
+	//}
 }
 
 //水平速力更新処理

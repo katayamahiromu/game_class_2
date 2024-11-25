@@ -22,17 +22,21 @@ void SceneGame::Initialize()
 	// プレイヤー初期化
 	player = std::make_unique<Player>(script[select].PlayerPos);
 	//ステージ初期化
-	stageManager.SetGoalCount(script[select].pushSwitchCount);
+	//ゴールのカウントをスイッチの数で設定
+	stageManager.SetGoalCount(script[select].SwitchPosArray.size());
 	stageManager.SetGoalPosition(script[select].GoalPos);
 	stageManager.Register(new StageMain(script[select].path));
-	stageManager.Register(new Switch(script[select].SwitchPos));
+	for (auto pos : script[select].SwitchPosArray)
+	{
+		stageManager.Register(new Switch(pos));
+	}
 	stageManager.Register(new Goal(script[select].GoalPos));
 	
-	//デバック用エネミー
-	//エネミー初期化
-	for (int i = 0; i < 1; ++i) {
+	//動くオブジェクトの設定
+	for(auto pos: script[select].ObjectPosArray)
+	{
 		EnemySlime* slime = new EnemySlime;
-		slime->SetPosition(DirectX::XMFLOAT3(i * 2.0f, 10, 5));
+		slime->SetPosition(pos);
 		slime->SetTerritory(slime->GetPosition(), 10.0f);
 		EnemeyManager::Instance().Register(slime);
 	}

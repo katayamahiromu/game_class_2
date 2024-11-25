@@ -111,7 +111,7 @@ void Player::Update(float elapsedTime) {
 		angle.x = 0;
 	}
 
-	position.z = 1.502f;
+	/*position.z = 1.502f;
 
 	if (position.y > 16.3f)
 	{
@@ -133,7 +133,7 @@ void Player::Update(float elapsedTime) {
 	{
 		position.x = -16.0f;
 		velocity.x = 0.0f;
-	}
+	}*/
 }
 
 //ˆÚ“®“ü—Íˆ—
