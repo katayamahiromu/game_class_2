@@ -173,6 +173,7 @@ void Player::DrawDebugGui() {
 			angle.z = DirectX::XMConvertToRadians(a.z);
 			//ƒXƒP[ƒ‹
 			ImGui::InputFloat3("Scale", &scale.x);
+			ImGui::InputFloat3("velocity", &velocity.x);
 
 			ColorGradingData data = EnemeyManager::Instance().GetEnemy(0)->GetModel()->GetColorGrading();
 			ImGui::SliderFloat("hueShift", &data.hueShift, 0.0f, +360.0f);

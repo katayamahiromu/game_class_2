@@ -317,7 +317,7 @@ void Character::UpdateHorizontalMove(float elapsedTime)
 	{
 		//水平移動
 		float mx = velocity.x * elapsedTime;
-		float mz = velocity.y * elapsedTime;
+		float mz = velocity.z * elapsedTime;
 
 		//レイの開始位置と終点位置
 		DirectX::XMFLOAT3 start = { position.x,position.y + stepOffset,position.z };
