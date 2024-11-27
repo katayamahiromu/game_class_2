@@ -25,12 +25,12 @@ void SceneGame::Initialize()
 	//ゴールのカウントをスイッチの数で設定
 	stageManager.SetGoalCount(script[select].SwitchPosArray.size());
 	stageManager.SetGoalPosition(script[select].GoalPos);
-	stageManager.Register(new StageMain(script[select].path));
+	stageManager.StageRegister(new StageMain(script[select].path));
 	for (auto pos : script[select].SwitchPosArray)
 	{
-		stageManager.Register(new Switch(pos));
+		stageManager.ObjectRegister(new Switch(pos));
 	}
-	stageManager.Register(new Goal(script[select].GoalPos));
+	stageManager.ObjectRegister(new Goal(script[select].GoalPos));
 	
 	//動くオブジェクトの設定
 	for(auto pos: script[select].ObjectPosArray)
@@ -38,7 +38,7 @@ void SceneGame::Initialize()
 		EnemySlime* slime = new EnemySlime;
 		slime->SetPosition(pos);
 		slime->SetTerritory(slime->GetPosition(), 10.0f);
-		EnemeyManager::Instance().Register(slime);
+		EnemeyManager::Instance().StageRegister(slime);
 	}
 
 	//カメラコントローラー初期化
@@ -258,7 +258,7 @@ void SceneGame::Render()
 //		{
 //			EnemySlime* slime = new EnemySlime;
 //			slime->SetPositon(hit.position);
-//			EnemeyManager::Instance().Register(slime);
+//			EnemeyManager::Instance().StageRegister(slime);
 //		}
 //		
 //	}

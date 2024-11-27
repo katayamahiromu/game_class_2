@@ -10,7 +10,7 @@ void EnemeyManager::Update(float elapsedTime)
 	}
     //破棄処理
     //更新処理が終わったあとに破棄リストに積まれたオブジェクトを破棄する
-    for (Enemy* enemy : removes) {
+    for (Enemy* enemy : stageRemoves) {
         //std::vectorから要素を削除する場合はイテレーターを使わなければならない
         std::vector<Enemy*>::iterator it = std::find(enemies.begin(), enemies.end(), enemy);
         if (it != enemies.end()) {
@@ -20,7 +20,7 @@ void EnemeyManager::Update(float elapsedTime)
         delete enemy;
     }
     //破棄リストをクリア
-    removes.clear();
+    stageRemoves.clear();
 	//敵同士の衝突判定
 	CollisionEnemyVsEnemy();
 }
@@ -33,14 +33,14 @@ void EnemeyManager::Render(ID3D11DeviceContext* dc, Shader* shader) {
 }
 
 //エネミー登録
-void EnemeyManager::Register(Enemy* enemy) {
+void EnemeyManager::StageRegister(Enemy* enemy) {
 	enemies.emplace_back(enemy);
 }
 
 //エネミー削除
 void EnemeyManager::Remove(Enemy* enemy){
     //破棄リストに追加
-    removes.insert(enemy);
+    stageRemoves.insert(enemy);
 }
 
 //エネミー全削除

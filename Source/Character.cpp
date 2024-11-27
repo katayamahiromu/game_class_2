@@ -158,7 +158,7 @@ void Character::UpdateVerticalMove(float elapsedTime)
 
 		//レイキャストによる地面判定
 		HitResult hit;
-		if (StageManager::Instance().RayCast(start, end, hit))
+		if (StageManager::Instance().RaycastToStage(start, end, hit))
 		{
 			//法線ベクトルを取得
 			normal = hit.normal;
@@ -187,7 +187,7 @@ void Character::UpdateVerticalMove(float elapsedTime)
 
 		//レイキャストによる地面判定
 		HitResult hit;
-		if (StageManager::Instance().RayCast(start, end, hit))
+		if (StageManager::Instance().RaycastToStage(start, end, hit))
 		{
 			//法線ベクトルを取得
 			normal = hit.normal;
@@ -325,7 +325,7 @@ void Character::UpdateHorizontalMove(float elapsedTime)
 
 		//レイキャストによる壁判定
 		HitResult hit;
-		if (StageManager::Instance().RayCast(start, end, hit))
+		if (StageManager::Instance().RaycastToStage(start, end, hit))
 		{
 			//壁までのベクトル
 			DirectX::XMVECTOR Start = DirectX::XMLoadFloat3(&hit.position);

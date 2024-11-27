@@ -190,8 +190,8 @@ DirectX::XMFLOAT3 Player::GetMoveVec() const
 {
 	 // 入力情報を取得
 	GamePad& gamePad = Input::Instance().GetGamePad();
-	float ax = gamePad.GetAxisLX() * - 1;
-	float ay = gamePad.GetAxisLY();
+	float ax = gamePad.GetAxisLX() ;
+	float ay = gamePad.GetAxisLY() * -1;
 
 	//// カメラ方向とスティックの入力値で進行方向を計算
 	//Camera& camera = Camera::Instance();

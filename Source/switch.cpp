@@ -9,7 +9,7 @@ Switch::Switch(DirectX::XMFLOAT3 Position)
 	position = Position;
 	scale.x = scale.y = scale.z = 0.01f;
 	//”O‚Ì‚½‚ß
-	UpdateTranceform();
+	UpdateTransform();
 	model->UpdateTransform(transform);
 }
 
@@ -20,7 +20,7 @@ Switch::~Switch()
 
 void Switch::Update(float elapsedTime)
 {
-	UpdateTranceform();
+	UpdateTransform();
 	model->UpdateTransform(transform);
 	SwitchVsEnemy();
 }

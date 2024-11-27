@@ -1,8 +1,8 @@
 ﻿#pragma once
 
 #include<vector>
-#include"Stage.h"
 #include<set>
+#include"Stage.h"
 
 //ステージマネージャー
 class StageManager
@@ -23,31 +23,36 @@ public:
 	//描画処理
 	void Render(ID3D11DeviceContext* dc, Shader* shader);
 
-	//ステージ登録
-	void Register(Stage* stage);
+	//レイキャスト
+	bool RaycastToStage(const DirectX::XMFLOAT3& start, const DirectX::XMFLOAT3& end, HitResult& hit);
 
-	//ステージ削除
-	void Remove(Stage* stage);
+	//ステージorオブジェクト登録
+	void StageRegister(Stage* stage);
+	void ObjectRegister(GameObject* r_object);
+
+	//ステージorオブジェクト削除
+	void StageRemove(Stage* stage);
+	void ObjectRemove(GameObject* r_object);
 
 	//ステージ全削除
 	void Clear();
 
-	//レイキャスト
-	bool RayCast(const DirectX::XMFLOAT3& start, const DirectX::XMFLOAT3& end, HitResult& hit);
-
-	//配列の追加
-	void RegisterAdd(Stage* stage);
-
-	void SetGoalCount(int count) { goalCount = count; }
-	int GetGoalCount() { return goalCount; }
+	//ボタン関係の関数共
+	int GetPushCount() { return pushCount; }
 	void PushCountPlus() { pushCount++; }
 	void ClearPushCount() { pushCount = 0; }
-	int GetPushCount() { return pushCount; }
+
+	//ゴール関係の関数共
+	int GetGoalCount() { return goalCount; }
+	void SetGoalCount(int count) { goalCount = count; }
 	void SetGoalPosition(DirectX::XMFLOAT3 pos) { goalPosition = pos; }
 private:
 	std::vector<Stage*>stages;
-	std::set<Stage*>removes;
-	std::vector<Stage*>add;
+	std::vector<GameObject*>objects;
+	std::set<Stage*>stageRemoves;
+	std::set<GameObject*>objectRemoves;
+	std::set<Stage*>stageAdd;
+	std::set<GameObject*>objectAdd;
 
 	//ゴールを出すためのカウント
 	int goalCount = 0;
