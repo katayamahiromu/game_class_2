@@ -257,7 +257,6 @@ void Sprite::Render(ID3D11DeviceContext *immediate_context,
 		float screen_width = viewport.Width;
 		float screen_height = viewport.Height;
 
-		//変更
 		float scaleSizeX = (dw * scale - dw) / 2;
 		float scaleSizeY = (dh * scale - dh) / 2;
 		// スプライトを構成する４頂点のスクリーン座標を計算する
@@ -267,7 +266,6 @@ void Sprite::Render(ID3D11DeviceContext *immediate_context,
 			DirectX::XMFLOAT2(dx - scaleSizeX,      dy + dh + scaleSizeY),	// 左下
 			DirectX::XMFLOAT2(dx + dw + scaleSizeX , dy + dh + scaleSizeY),	// 右下
 		};
-		//ここまで
 
 		// スプライトを構成する４頂点のテクスチャ座標を計算する
 		DirectX::XMFLOAT2 texcoords[] = {
