@@ -26,6 +26,7 @@ public:
 		float sx, float sy,
 		float sw, float sh,
 		float angle,
+		float scale, //追加
 		float r, float g, float b, float a) const;
 
 	// テクスチャ幅取得

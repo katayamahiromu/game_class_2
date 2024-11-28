@@ -9,16 +9,17 @@
 void SceneStageSelect::Initialize()
 {
 	//　スプライト初期化
-	back = std::make_unique<Sprite>("Data/Sprite/StageSelectBack.png");
-	yajirusi = std::make_unique<Sprite>("Data/Sprite/yazirusi.png");
+	stage = std::make_unique<Sprite>("Data/Sprite/-removebg-preview.png");
+	pin = std::make_unique<Sprite>("Data/Sprite/pin.jpg");
 }
 
 //　終了化
 void SceneStageSelect::Finalize()
 {
 	//スプライト終了化
-	back = nullptr;
-	yajirusi = nullptr;
+	//追加
+	stage = nullptr;
+	pin = nullptr;
 }
 
 // 更新処理
@@ -26,34 +27,43 @@ void SceneStageSelect::Update(float elapsedTime)
 {
 	GamePad& gamePad = Input::Instance().GetGamePad();
 
-	// 矢印の操作
-	if (gamePad.GetButtonDown() & GamePad::BTN_RIGHT)
+	if (gamePad.GetButtonDown() & GamePad::BTN_LEFT && selectNum > 0)
 	{
-		++select;
-		if (select < 0) select = StageOne;
-		if (select > StageMax) select = StageMax - 1;
+		selectNum -= 1;
 	}
-	else if (gamePad.GetButtonDown() & GamePad::BTN_LEFT)
+	if (gamePad.GetButtonDown() & GamePad::BTN_RIGHT && selectNum < 9)
 	{
-		--select;
-		if (select < 0) select = StageOne;
-		if (select > StageMax) select = StageMax - 1;
+		selectNum += 1;
 	}
-	// 矢印の位置
-	switch (select)
+	if (selectNum >= 5)
+		scrollScreenWidth = -1800;
+	else if (selectNum < 5)
+		scrollScreenWidth = 0;
+
+	for (int i = 0; i < 10; i++)
 	{
-	case StageState::StageOne:
-		selectPos = { 0,600 };
-		break;
-	case StageState::StageTwo:
-		selectPos = { 200,800 };
-		break;
+		scale[i] = 1.0f;
+		if (pinPositions[selectNum].x == pinPositions[i].x && pinPositions[selectNum].y == pinPositions[i].y)
+			scale[i] = 1.4f;
+	}
+
+	if (moveflg) {
+		charaMove += 15.0f * elapsedTime; 
+		if (charaMove >= 15.0f) {
+			moveflg = false;
+		}
+	}
+	else {
+		charaMove -= 15.0f * elapsedTime; 
+		if (charaMove <= 0.0f) {
+			moveflg = true;
+		}
 	}
 
 	//　エンターキーを押したらローディングを挟んでゲームシーンへ切り替え
 	if (gamePad.GetButtonDown() & GamePad::BTN_A)
 	{
-		SceneManager::instance().ChengeScene(new SceneLoading(new SceneGame(select)));
+		SceneManager::instance().ChengeScene(new SceneLoading(new SceneGame(selectNum)));
 	}
 }
 
@@ -76,25 +86,39 @@ void SceneStageSelect::Render()
 		float screenWidth = static_cast<float>(graphics.GetScreenWidth());
 		float screenHeight = static_cast<float>(graphics.GetScreenHeight());
 
-		float textureWidthBack = static_cast<float>(back->GetTextureWidth());
-		float textureHeightBack = static_cast<float>(back->GetTextureHeight());
+		/*float textureWidthBack = static_cast<float>(back->GetTextureWidth());
+		float textureHeightBack = static_cast<float>(back->GetTextureHeight());*/
 
-		float textureWidthYajirusi = static_cast<float>(yajirusi->GetTextureWidth());
-		float textureHeightYajirusi = static_cast<float>(yajirusi->GetTextureHeight());
+		float textureWidthPin = static_cast<float>(pin->GetTextureWidth());
+		float textureHeightPin = static_cast<float>(pin->GetTextureHeight());
 
 
 		//　スプライト描画
-		back->Render(dc,
+		/*back->Render(dc,
 			0, 0, screenWidth, screenHeight,
 			0, 0, textureWidthBack, textureHeightBack,
 			0,
-			1, 1, 1, 1);
+			1, 1, 1, 1);*/
 
-		yajirusi->Render(dc,
-			selectPos.x, selectPos.y, 100, 100 * 0.5f,
-			0, 0, textureWidthYajirusi, textureHeightYajirusi,
+		//追加
+		for (int i = 0; i < 10; i++)
+		{
+			stage->Render(dc,
+				stagePositions[i].x + scrollScreenWidth, stagePositions[i].y, 200, 60,
+				0, 0, spriteSize.x, spriteSize.y,
+				0,
+				scale[i],
+				1, 1, 1, 1
+			);
+		}
+
+		pin->Render(dc,
+			pinPositions[selectNum].x, pinPositions[selectNum].y + charaMove, 100, 100,
+			0, 0, textureWidthPin, textureHeightPin,
 			0,
-			1, 1, 1, 1);
+			1.0f,
+			1, 1, 1, 1
+		);
 	}
 
 	// 2DデバッグGUI描画
