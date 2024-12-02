@@ -100,7 +100,7 @@ void SceneStageSelect::Render()
 		float textureWidthLine = static_cast<float>(line->GetTextureWidth());
 		float textureHeightLine = static_cast<float>(line->GetTextureHeight());
 
-		/*switch (selectNum / 5)
+		switch (selectNum / 5)
 		{
 		case 0:
 			scrollScreenWidth = 0;
@@ -114,13 +114,6 @@ void SceneStageSelect::Render()
 		case 3:
 			scrollScreenWidth = -screenWidth / 6 * 5 * (selectNum / 5);
 			break;
-		}*/
-
-		if (selectNum / 5 >= 0 && selectNum / 5 <= 3) {
-			scrollScreenWidth = -screenWidth / 6 * 5 * selectNum / 5;
-		}
-		else {
-			scrollScreenWidth = 0; // 必要に応じてデフォルト値を設定
 		}
 
 		//　スプライト描画
