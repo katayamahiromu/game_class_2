@@ -54,13 +54,13 @@ void SceneTitle::Update(float elapsedTime)
 	{
 		if (scale[0] == 1.0f)
 		{
-			scale[0] = 1.2f;
+			scale[0] = 1.4f;
 			scale[1] = 1.0f;
 			finalizeflg = false;
 		}
 		else if (scale[1] == 1.0f)
 		{
-			scale[1] = 1.2f;
+			scale[1] = 1.4f;
 			scale[0] = 1.0f;
 			finalizeflg = true;
 		}
@@ -69,13 +69,13 @@ void SceneTitle::Update(float elapsedTime)
 	{
 		if (scale[0] == 1.0f)
 		{
-			scale[0] = 1.2f;
+			scale[0] = 1.4f;
 			scale[1] = 1.0f;
 			finalizeflg = false;
 		}
 		else if (scale[1] == 1.0f)
 		{
-			scale[1] = 1.2f;
+			scale[1] = 1.4f;
 			scale[0] = 1.0f;
 			finalizeflg = true;
 		}
@@ -114,6 +114,10 @@ void SceneTitle::Render()
 		float screenHeight = static_cast<float>(graphics.GetScreenHeight());
 		float textureWidth = static_cast<float>(sprite->GetTextureWidth());
 		float textureHeight = static_cast<float>(sprite->GetTextureHeight());
+		float textureWidthStart = static_cast<float>(start->GetTextureWidth());
+		float textureHeightStart = static_cast<float>(start->GetTextureHeight());
+		float textureWidthEnd = static_cast<float>(end->GetTextureWidth());
+		float textureHeightEnd = static_cast<float>(end->GetTextureHeight());
 
 		//タイトルスプライト
 		sprite->Render(dc,
@@ -124,15 +128,15 @@ void SceneTitle::Render()
 			1, 1, 1, 1
 		);
 		start->Render(dc,
-			screenWidth / 2 - spritesize.x / 2, screenHeight / 6 * 3, spritesize.x, spritesize.y,
-			0, 0, 204, 192,
+			screenWidth / 2 - spritesize.x / 2, screenHeight / 10 * 6, spritesize.x, spritesize.y,
+			0, 0, textureWidthStart, textureHeightStart,
 			0,
 			scale[0],
 			1, 1, 1, 1
 		);
 		end->Render(dc,
-			screenWidth / 2 - spritesize.x / 2, screenHeight / 6 * 4, spritesize.x, spritesize.y,
-			0, 0, 204, 192,
+			screenWidth / 2 - spritesize.x / 2, screenHeight / 10 * 8, spritesize.x, spritesize.y,
+			0, 0, textureWidthEnd, textureHeightEnd,
 			0,
 			scale[1],
 			1, 1, 1, 1

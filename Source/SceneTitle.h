@@ -29,7 +29,7 @@ private:
 	Sprite* end = nullptr;
 	std::unique_ptr<AudioSource> Cdur;
 	std::unique_ptr<SubMixVoice> test;
-	DirectX::XMFLOAT2 spritesize = { 200,100 };
-	float scale[2] = {1.1f,1.0f};
+	DirectX::XMFLOAT2 spritesize = { 300,100 };
+	float scale[2] = {1.4f,1.0f};
 	bool finalizeflg = false;
 };

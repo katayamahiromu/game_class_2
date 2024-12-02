@@ -13,6 +13,26 @@ void SceneStageSelect::Initialize()
 	pin = std::make_unique<Sprite>("Data/Sprite/pin.jpg");
 	triangle = std::make_unique<Sprite>("Data/Sprite/triangle.png");
 	line = std::make_unique<Sprite>("Data/Sprite/line.png");
+	stageNum[0] = std::make_unique<Sprite>("Data/Sprite/stageNum/1.png");
+	stageNum[1] = std::make_unique<Sprite>("Data/Sprite/stageNum/2.png");
+	stageNum[2] = std::make_unique<Sprite>("Data/Sprite/stageNum/3.png");
+	stageNum[3] = std::make_unique<Sprite>("Data/Sprite/stageNum/4.png");
+	stageNum[4] = std::make_unique<Sprite>("Data/Sprite/stageNum/5.png");
+	stageNum[5] = std::make_unique<Sprite>("Data/Sprite/stageNum/6.png");
+	stageNum[6] = std::make_unique<Sprite>("Data/Sprite/stageNum/7.png");
+	stageNum[7] = std::make_unique<Sprite>("Data/Sprite/stageNum/8.png");
+	stageNum[8] = std::make_unique<Sprite>("Data/Sprite/stageNum/9.png");
+	stageNum[9] = std::make_unique<Sprite>("Data/Sprite/stageNum/10.png");
+	stageNum[10] = std::make_unique<Sprite>("Data/Sprite/stageNum/11.png");
+	stageNum[11] = std::make_unique<Sprite>("Data/Sprite/stageNum/12.png");
+	stageNum[12] = std::make_unique<Sprite>("Data/Sprite/stageNum/13.png");
+	stageNum[13] = std::make_unique<Sprite>("Data/Sprite/stageNum/14.png");
+	stageNum[14] = std::make_unique<Sprite>("Data/Sprite/stageNum/15.png");
+	stageNum[15] = std::make_unique<Sprite>("Data/Sprite/stageNum/16.png");
+	stageNum[16] = std::make_unique<Sprite>("Data/Sprite/stageNum/17.png");
+	stageNum[17] = std::make_unique<Sprite>("Data/Sprite/stageNum/18.png");
+	stageNum[18] = std::make_unique<Sprite>("Data/Sprite/stageNum/19.png");
+	stageNum[19] = std::make_unique<Sprite>("Data/Sprite/stageNum/20.png");
 }
 
 //　終了化
@@ -29,6 +49,7 @@ void SceneStageSelect::Update(float elapsedTime)
 {
 	GamePad& gamePad = Input::Instance().GetGamePad();
 
+	//if ((gamePad.GetButtonDown() & GamePad::BTN_LEFT || gamePad.GetButton() & GamePad::BTN_LEFT) && selectNum > 0)
 	if (gamePad.GetButtonDown() & GamePad::BTN_LEFT && selectNum > 0)
 	{
 		selectNum -= 1;
@@ -83,7 +104,7 @@ void SceneStageSelect::Render()
 	// 2Dスプライト描画
 	{
 		float screenWidth = static_cast<float>(graphics.GetScreenWidth());
-		float screenHeight = static_cast<float>(graphics.GetScreenHeight());
+		float screenHeight = static_cast<float>(graphics.GetScreenHeight());		
 		float textureWidthStage = static_cast<float>(stage->GetTextureWidth());
 		float textureHeightStage = static_cast<float>(stage->GetTextureHeight());
 		float textureWidthPin = static_cast<float>(pin->GetTextureWidth());
@@ -110,7 +131,7 @@ void SceneStageSelect::Render()
 		}
 
 		//　スプライト描画
-		for (int i = 0; i < 10; i++)
+		for (int i = 0; i < maxstage; i++)
 		{
 			/*line->Render(dc,
 				linePositions[i].x + scrollScreenWidth, linePositions[i].y, 200, 60,
@@ -119,9 +140,18 @@ void SceneStageSelect::Render()
 				1.3f,
 				0, 0, 0, 1
 			);*/
+			float textureWidthNum = static_cast<float>(stageNum[i]->GetTextureWidth());
+			float textureHeightNum = static_cast<float>(stageNum[i]->GetTextureHeight());
 
+			stageNum[i]->Render(dc,
+				screenWidth / 6 * (i + 1) - 120 + scrollScreenWidth, screenHeight / 3 * ((i % 2) + 1)+20, 700, 150,
+				0, 0, textureWidthNum, textureHeightNum,
+				0,
+				1.0f,
+				1, 1, 1, 1
+			);
 			stage->Render(dc,
-				screenWidth/6*(i+1)-100 + scrollScreenWidth, screenHeight/3* ((i % 2) + 1), 200, 60,
+				screenWidth / 6 * (i + 1) - 100 + scrollScreenWidth, screenHeight / 3 * ((i % 2) + 1), 200, 60,
 				0, 0, textureWidthStage, textureHeightStage,
 				0,
 				scale[i],
@@ -137,7 +167,8 @@ void SceneStageSelect::Render()
 			1, 1, 1, 1
 		);
 
-		if (selectNum < 5)
+		//右三角
+		if (selectNum < maxstage - 5)
 			triangle->Render(dc,
 				screenWidth-100 - charaMove, 300, 100, 100,
 				0, 0, textureWidthTriangle, textureHeightTriangle,
@@ -145,7 +176,8 @@ void SceneStageSelect::Render()
 				1.0f,
 				1, 1, 1, 1
 			);
-		else if (selectNum >= 5)
+		//左三角
+		if (selectNum >=5)
 			triangle->Render(dc,
 				0 + charaMove, 300, 100, 100,
 				0, 0, textureWidthTriangle, textureHeightTriangle,
