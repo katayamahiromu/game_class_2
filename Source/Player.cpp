@@ -103,11 +103,11 @@ void Player::Update(float elapsedTime) {
 		// モード切替時に壁に埋まらないようにY座標を補正する
 		if (isXYMode)
 		{
-			DirectX::XMFLOAT3 start{ position.x, position.y + 0.2f, position.z }, end{ start.x, position.y - 0.4f, start.z };
+			DirectX::XMFLOAT3 start{ position.x, position.y + 0.2f, position.z }, end{ start.x, position.y - radius, start.z };
 			HitResult dummy;
 			if (StageManager::Instance().RaycastToStage(start, end, dummy))
 			{
-				position.y += 0.4f;
+				position.y += radius;
 			}
 		}
 
@@ -123,29 +123,6 @@ void Player::Update(float elapsedTime) {
 		angle.x = 0;
 	}
 
-	/*
-	position.z = 1.502f;
-	if (position.y > 16.3f)
-	{
-		position.y = 16.3f;
-		velocity.y = 0.0f;
-	}
-	if (position.y < 1.3f)
-	{
-		jumpCount = 0;
-		position.y = 1.3f;
-		velocity.y = 0.0f;
-	}
-	if (position.x > 16.0f)
-	{
-		position.x = 16.00f;
-		velocity.x = 0.0f;
-	}
-	if (position.x < -16.0f)
-	{
-		position.x = -16.0f;
-		velocity.x = 0.0f;
-	}*/
 }
 
 //移動入力処理
@@ -206,28 +183,6 @@ DirectX::XMFLOAT3 Player::GetMoveVec() const
 	GamePad& gamePad = Input::Instance().GetGamePad();
 	float ax = gamePad.GetAxisLX() ;
 	float ay = gamePad.GetAxisLY() ;
-
-	//// カメラ方向とスティックの入力値で進行方向を計算
-	//Camera& camera = Camera::Instance();
-	//const DirectX::XMFLOAT3& cameraRight = camera.GetRight();
-	//const DirectX::XMFLOAT3& cameraFront = camera.GetFront();
-
-	//// XY平面での移動ベクトル計算
-	//float cameraRightX = cameraRight.x;
-	//float cameraRightY = cameraRight.y;
-	//float cameraRightLength = sqrtf(cameraRightX * cameraRightX + cameraRightY * cameraRightY);
-	//if (cameraRightLength > 0.0f) {
-	//	cameraRightX /= cameraRightLength;
-	//	cameraRightY /= cameraRightLength;
-	//}
-
-	//float cameraFrontX = cameraFront.x;
-	//float cameraFrontY = cameraFront.y;
-	//float cameraFrontLength = sqrtf(cameraFrontX * cameraFrontX + cameraFrontY * cameraFrontY);
-	//if (cameraFrontLength > 0.0f) {
-	//	cameraFrontX /= cameraFrontLength;
-	//	cameraFrontY /= cameraFrontLength;
-	//}
 
 	DirectX::XMFLOAT3 vec;
 	vec.x = /*cameraFrontX * ay + cameraRightX * */ax;

@@ -153,24 +153,39 @@ void Character::UpdateVerticalMove(float elapsedTime)
 	//頭から抜けないため
 	if (my > 0.0f)
 	{
-		//レイの開始位置は足元より少し上 //ジャンプとかで頭抜けんようにするのに？？？？？
+		//レイの開始位置は足元より少し上 //ジャンプとかで頭抜けないようにするのに？？？？？
 		DirectX::XMFLOAT3 start = DirectX::XMFLOAT3(position.x, position.y + GetHeight(), position.z);
 		//レイの終点位置は移動後の位置
-		DirectX::XMFLOAT3 end = DirectX::XMFLOAT3(position.x, start.y + my, position.z);
+		DirectX::XMFLOAT3 end; // 見やすいように分けて書く
+		end = (isXYMode) ? DirectX::XMFLOAT3(position.x, position.y + radius + my, position.z) : 
+			DirectX::XMFLOAT3(position.x, start.y + my, position.z);
 
 		//レイキャストによる地面判定
 		HitResult hit;
 		if (StageManager::Instance().RaycastToStage(start, end, hit))
 		{
-			//法線ベクトルを取得
-			normal = hit.normal;
+			///壁までのベクトル
+			DirectX::XMVECTOR Start = DirectX::XMLoadFloat3(&hit.position);
+			DirectX::XMVECTOR End = DirectX::XMLoadFloat3(&end);
+			DirectX::XMVECTOR Vec = DirectX::XMVectorSubtract(End, Start);
+			//壁の法線
+			DirectX::XMVECTOR Normal = DirectX::XMLoadFloat3(&hit.normal);
 
-			//地面に接地している
-			position.x = hit.position.x;
-			position.y = hit.position.y - this->GetHeight();
-			position.z = hit.position.z;
+			//入射ベクトルを法線に射影
+			DirectX::XMVECTOR Dot = DirectX::XMVector3Dot(Vec, Normal);
 
-			//ヒット時に落下させる
+			//補正位置の計算
+			float distance = 0;
+			DirectX::XMStoreFloat(&distance,Dot);
+
+			//法線の大きさを距離に合わせる
+			DirectX::XMVECTOR R = DirectX::XMVectorSubtract(Vec, DirectX::XMVectorScale(Normal, distance));
+
+			DirectX::XMVECTOR Position = DirectX::XMLoadFloat3(&position);
+			Position = DirectX::XMVectorAdd(Position, R);
+			DirectX::XMStoreFloat3(&position, Position);
+
+			//ヒット時に落下させる //どゆこと???????
 			velocity.y = 0.0f;
 		}
 		else
@@ -185,23 +200,48 @@ void Character::UpdateVerticalMove(float elapsedTime)
 		//レイの開始位置は足元より少し上 //上昇中とコメントが同じ？？
 		DirectX::XMFLOAT3 start = { position.x, position.y + stepOffset, position.z };
 		//レイの終点位置は移動後の位置
-		DirectX::XMFLOAT3 end = { position.x, position.y + my, position.z };
+		DirectX::XMFLOAT3 end = { position.x, position.y - radius + my, position.z };
 
 		//レイキャストによる地面判定
 		HitResult hit;
 		if (StageManager::Instance().RaycastToStage(start, end, hit))
 		{
-			//法線ベクトルを取得
-			normal = hit.normal;
+			if (isXYMode)
+			{
+				//壁までのベクトル
+				DirectX::XMVECTOR Start = DirectX::XMLoadFloat3(&hit.position);
+				DirectX::XMVECTOR End = DirectX::XMLoadFloat3(&end);
+				DirectX::XMVECTOR Vec = DirectX::XMVectorSubtract(End, Start);
+				//壁の法線
+				DirectX::XMVECTOR Normal = DirectX::XMLoadFloat3(&hit.normal);
 
-			//地面に接地している
-			position = hit.position;
-			//回転
-			angle.y += hit.rotation.y;
-			//傾斜の計算
-			slopeRate = 1.0f - (hit.normal.y /
-				(hit.normal.y + sqrtf(hit.normal.x * hit.normal.x + hit.normal.z * hit.normal.z)));
+				//入射ベクトルを法線に射影
+				DirectX::XMVECTOR Dot = DirectX::XMVector3Dot(Vec, Normal);
 
+				//補正位置の計算
+				float distance = 0;
+				DirectX::XMStoreFloat(&distance, Dot);
+
+				//法線の大きさを距離に合わせる
+				DirectX::XMVECTOR R = DirectX::XMVectorSubtract(Vec, DirectX::XMVectorScale(Normal, distance));
+
+				DirectX::XMVECTOR Position = DirectX::XMLoadFloat3(&position);
+				Position = DirectX::XMVectorAdd(Position, R);
+				DirectX::XMStoreFloat3(&position, Position);
+			}
+			else
+			{
+				//法線ベクトルを取得
+				normal = hit.normal;
+
+				//地面に接地している
+				position = hit.position;
+				//回転
+				angle.y += hit.rotation.y;
+				//傾斜の計算
+				slopeRate = 1.0f - (hit.normal.y /
+					(hit.normal.y + sqrtf(hit.normal.x * hit.normal.x + hit.normal.z * hit.normal.z)));
+			}
 			//着地した
 			if (!isGround)
 			{
@@ -296,15 +336,12 @@ void Character::UpdateHorizontalMove(float elapsedTime)
 	{
 		//水平移動
 		float mx = velocity.x * elapsedTime;
-		float my = velocity.y * elapsedTime;
 
 		//レイの開始位置と終点位置
-		DirectX::XMFLOAT3 start = (isXYMode) ? DirectX::XMFLOAT3(position.x, position.y + stepOffset, position.z ) : DirectX::XMFLOAT3(position.x, position.y, position.z - stepOffset);
-		DirectX::XMFLOAT3 end = (isXYMode) ? DirectX::XMFLOAT3(position.x + mx + radius, position.y + stepOffset, position.z) : DirectX::XMFLOAT3(position.x, position.y + my + radius, position.z - stepOffset);
-
-		//todo 必要なくなったら消す
-		Graphics::Instance().GetLineRenderer()->AddVertex(start, {1,0,0,1});
-		Graphics::Instance().GetLineRenderer()->AddVertex(end, {1,0,0,1});
+		DirectX::XMFLOAT3 start = DirectX::XMFLOAT3(position.x, position.y + stepOffset, position.z);
+		DirectX::XMFLOAT3 end;  //見やすくするために分けて書くで
+		end = ( mx < 0 ) ? DirectX::XMFLOAT3(position.x + mx - radius, position.y + stepOffset, position.z) : 
+			DirectX::XMFLOAT3(position.x + mx + radius, position.y + stepOffset, position.z);
 
 		//レイキャストによる壁判定
 		HitResult hit;
@@ -335,10 +372,6 @@ void Character::UpdateHorizontalMove(float elapsedTime)
 		{
 			//移動
 			position.x += mx;
-			if (isXYMode)
-			{
-				position.y += my;
-			}
 		}
 	}
 }
