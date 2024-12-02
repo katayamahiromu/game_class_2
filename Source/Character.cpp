@@ -2,6 +2,8 @@
 #include"StageManager.h"
 #include"Mathf.h"
 
+#include"Graphics/Graphics.h"
+
 //更新行列
 void Character::UpdateTranceform() {
 	//スケール行列を作成
@@ -151,10 +153,10 @@ void Character::UpdateVerticalMove(float elapsedTime)
 	//頭から抜けないため
 	if (my > 0.0f)
 	{
-		//レイの開始位置は足元より少し上
-		DirectX::XMFLOAT3 start = { position.x,position.y + GetHeight(),position.z };
+		//レイの開始位置は足元より少し上 //ジャンプとかで頭抜けんようにするのに？？？？？
+		DirectX::XMFLOAT3 start = DirectX::XMFLOAT3(position.x, position.y + GetHeight(), position.z);
 		//レイの終点位置は移動後の位置
-		DirectX::XMFLOAT3 end = { position.x,start.y + my,position.z };
+		DirectX::XMFLOAT3 end = DirectX::XMFLOAT3(position.x, start.y + my, position.z);
 
 		//レイキャストによる地面判定
 		HitResult hit;
@@ -165,7 +167,7 @@ void Character::UpdateVerticalMove(float elapsedTime)
 
 			//地面に接地している
 			position.x = hit.position.x;
-			position.y = hit.position.y - GetHeight();
+			position.y = hit.position.y - this->GetHeight();
 			position.z = hit.position.z;
 
 			//ヒット時に落下させる
@@ -180,10 +182,10 @@ void Character::UpdateVerticalMove(float elapsedTime)
 	//落下中
 	else if (my < 0.0f)
 	{
-		//レイの開始位置は足元より少し上
-		DirectX::XMFLOAT3 start = { position.x,position.y + stepOffset,position.z };
+		//レイの開始位置は足元より少し上 //上昇中とコメントが同じ？？
+		DirectX::XMFLOAT3 start = { position.x, position.y + stepOffset, position.z };
 		//レイの終点位置は移動後の位置
-		DirectX::XMFLOAT3 end = { position.x,position.y + my,position.z };
+		DirectX::XMFLOAT3 end = { position.x, position.y + my, position.z };
 
 		//レイキャストによる地面判定
 		HitResult hit;
@@ -208,7 +210,6 @@ void Character::UpdateVerticalMove(float elapsedTime)
 			isGround = true;
 			velocity.y = 0.0f;
 
-
 		}
 		else
 		{
@@ -217,28 +218,6 @@ void Character::UpdateVerticalMove(float elapsedTime)
 			isGround = false;
 		}
 	}
-	//上昇中
-	//else if (my > 0.0f)
-	/*{
-		position.y += my;
-		isGround = false;
-	}*/
-
-	//地面の向きに沿うようにXZ軸回転
-	//{
-	//	//Y軸が法線ベクトル方向に向くオイラー角回転を算出する
-
-	//	float angleX = atan2f(normal.z, normal.y);
-	//	float angleZ = -atan2f(normal.x, normal.y);
-
-	//	//線形補完で滑らかに回転する
-	//	if (angleX <= 1.0f && angleX >= -1.0f) {
-	//		angle.x = Mathf::Leap(angle.x, angleX, elapsedTime * 10.0f);
-	//	}
-	//	if (angleZ <= 1.0f && angleZ >= -1.0f) {
-	//		angle.z = Mathf::Leap(angle.z, angleZ, elapsedTime * 10.0f);
-	//	}
-	//}
 }
 
 //水平速力更新処理
@@ -312,16 +291,20 @@ void Character::UpdateHorizontalVelocity(float elapsedFrame)
 void Character::UpdateHorizontalMove(float elapsedTime)
 {
 	//水平速力計算
-	float velocityLengthXZ = sqrtf(velocity.x * velocity.x + velocity.y * velocity.y);
-	if (velocityLengthXZ > 0.0f)
+	float velocityLengthXY = sqrtf(velocity.x * velocity.x + velocity.y * velocity.y);
+	if (velocityLengthXY > 0.0f)
 	{
 		//水平移動
 		float mx = velocity.x * elapsedTime;
-		float mz = velocity.z * elapsedTime;
+		float my = velocity.y * elapsedTime;
 
 		//レイの開始位置と終点位置
-		DirectX::XMFLOAT3 start = { position.x,position.y + stepOffset,position.z };
-		DirectX::XMFLOAT3 end = { position.x + mx + radius,position.y + stepOffset,position.z + mz + radius };
+		DirectX::XMFLOAT3 start = (isXYMode) ? DirectX::XMFLOAT3(position.x, position.y + stepOffset, position.z ) : DirectX::XMFLOAT3(position.x, position.y, position.z - stepOffset);
+		DirectX::XMFLOAT3 end = (isXYMode) ? DirectX::XMFLOAT3(position.x + mx + radius, position.y + stepOffset, position.z) : DirectX::XMFLOAT3(position.x, position.y + my + radius, position.z - stepOffset);
+
+		//todo 必要なくなったら消す
+		Graphics::Instance().GetLineRenderer()->AddVertex(start, {1,0,0,1});
+		Graphics::Instance().GetLineRenderer()->AddVertex(end, {1,0,0,1});
 
 		//レイキャストによる壁判定
 		HitResult hit;
@@ -354,9 +337,8 @@ void Character::UpdateHorizontalMove(float elapsedTime)
 			position.x += mx;
 			if (isXYMode)
 			{
-				position.y += mz;
+				position.y += my;
 			}
 		}
-
 	}
 }

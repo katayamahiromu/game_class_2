@@ -10,7 +10,7 @@
 #include"Character.h"
 
 
-//position などTransform周りがいいのでキャラクターを継承
+//position などTransform周りがいいのでキャラクターを継承 //すんじゃねぇ！
 //ステージ
 class Stage : public GameObject
 {
