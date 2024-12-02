@@ -47,7 +47,7 @@ void SceneTitle::Finalize()
 void SceneTitle::Update(float elapsedTime)
 {
 	GamePad& gamePad = Input::Instance().GetGamePad();
-
+	
 	SceneManager::instance().SetEndFlg(finalizeflg);
 
 	if (gamePad.GetButtonDown() & GamePad::BTN_DOWN)
@@ -124,14 +124,14 @@ void SceneTitle::Render()
 			1, 1, 1, 1
 		);
 		start->Render(dc,
-			800, 300, 100, 100,
+			screenWidth / 2 - spritesize.x / 2, screenHeight / 6 * 3, spritesize.x, spritesize.y,
 			0, 0, 204, 192,
 			0,
 			scale[0],
 			1, 1, 1, 1
 		);
 		end->Render(dc,
-			800, 400, 200, 200,
+			screenWidth / 2 - spritesize.x / 2, screenHeight / 6 * 4, spritesize.x, spritesize.y,
 			0, 0, 204, 192,
 			0,
 			scale[1],

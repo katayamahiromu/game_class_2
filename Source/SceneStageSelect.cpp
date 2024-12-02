@@ -37,17 +37,10 @@ void SceneStageSelect::Update(float elapsedTime)
 	{
 		selectNum += 1;
 	}
-	//if (selectNum >= 5)
-	//	//scrollScreenWidth = -1800;
-	//	scrollScreenWidth = -1000;
-	//else if (selectNum < 5)
-	//	scrollScreenWidth = 0;
 
+	//選択中のステージのサイズを大きく
 	for (int i = 0; i < 10; i++)
 	{
-		/*scale[i] = 1.0f;
-		if (pinPositions[selectNum].x == pinPositions[i].x && pinPositions[selectNum].y == pinPositions[i].y)
-			scale[i] = 1.4f;*/
 		scale[i] = 1.0f;
 		if (selectNum==i)
 			scale[i] = 1.4f;
@@ -126,13 +119,6 @@ void SceneStageSelect::Render()
 				1.3f,
 				0, 0, 0, 1
 			);*/
-			//stage->Render(dc,
-			//	stagePositions[i].x + scrollScreenWidth, stagePositions[i].y, 200, 60,//ウィンドウ/６-100でぴったり？
-			//	0, 0, textureWidthStage, textureHeightStage,
-			//	0,
-			//	scale[i],
-			//	1, 1, 1, 1
-			
 
 			stage->Render(dc,
 				screenWidth/6*(i+1)-100 + scrollScreenWidth, screenHeight/3* ((i % 2) + 1), 200, 60,
@@ -143,13 +129,6 @@ void SceneStageSelect::Render()
 			);
 		}		
 
-		/*pin->Render(dc,
-			pinPositions[selectNum].x, pinPositions[selectNum].y + charaMove, 100, 100,
-			0, 0, textureWidthPin, textureHeightPin,
-			0,
-			1.0f,
-			1, 1, 1, 1
-		);*/
 		pin->Render(dc,
 			screenWidth / 6 * ((selectNum % 5) + 1)-50, screenHeight / 3 * ((selectNum % 2) + 1) + charaMove-100, 100, 100,
 			0, 0, textureWidthPin, textureHeightPin,
