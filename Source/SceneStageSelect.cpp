@@ -11,6 +11,8 @@ void SceneStageSelect::Initialize()
 	//　スプライト初期化
 	stage = std::make_unique<Sprite>("Data/Sprite/-removebg-preview.png");
 	pin = std::make_unique<Sprite>("Data/Sprite/pin.jpg");
+	triangle = std::make_unique<Sprite>("Data/Sprite/triangle.png");
+	line = std::make_unique<Sprite>("Data/Sprite/line.png");
 }
 
 //　終了化
@@ -31,19 +33,23 @@ void SceneStageSelect::Update(float elapsedTime)
 	{
 		selectNum -= 1;
 	}
-	if (gamePad.GetButtonDown() & GamePad::BTN_RIGHT && selectNum < 9)
+	if (gamePad.GetButtonDown() & GamePad::BTN_RIGHT && selectNum < maxstage - 1)
 	{
 		selectNum += 1;
 	}
-	if (selectNum >= 5)
-		scrollScreenWidth = -1800;
-	else if (selectNum < 5)
-		scrollScreenWidth = 0;
+	//if (selectNum >= 5)
+	//	//scrollScreenWidth = -1800;
+	//	scrollScreenWidth = -1000;
+	//else if (selectNum < 5)
+	//	scrollScreenWidth = 0;
 
 	for (int i = 0; i < 10; i++)
 	{
-		scale[i] = 1.0f;
+		/*scale[i] = 1.0f;
 		if (pinPositions[selectNum].x == pinPositions[i].x && pinPositions[selectNum].y == pinPositions[i].y)
+			scale[i] = 1.4f;*/
+		scale[i] = 1.0f;
+		if (selectNum==i)
 			scale[i] = 1.4f;
 	}
 
@@ -85,40 +91,96 @@ void SceneStageSelect::Render()
 	{
 		float screenWidth = static_cast<float>(graphics.GetScreenWidth());
 		float screenHeight = static_cast<float>(graphics.GetScreenHeight());
-
-		/*float textureWidthBack = static_cast<float>(back->GetTextureWidth());
-		float textureHeightBack = static_cast<float>(back->GetTextureHeight());*/
-
+		float textureWidthStage = static_cast<float>(stage->GetTextureWidth());
+		float textureHeightStage = static_cast<float>(stage->GetTextureHeight());
 		float textureWidthPin = static_cast<float>(pin->GetTextureWidth());
 		float textureHeightPin = static_cast<float>(pin->GetTextureHeight());
+		float textureWidthTriangle = static_cast<float>(triangle->GetTextureWidth());
+		float textureHeightTriangle = static_cast<float>(triangle->GetTextureHeight());
+		float textureWidthLine = static_cast<float>(line->GetTextureWidth());
+		float textureHeightLine = static_cast<float>(line->GetTextureHeight());
 
+		/*switch (selectNum / 5)
+		{
+		case 0:
+			scrollScreenWidth = 0;
+			break;
+		case 1:
+			scrollScreenWidth = -screenWidth / 6 * 5;
+			break;
+		case 2:
+			scrollScreenWidth = -screenWidth / 6 * 5 * (selectNum / 5);
+			break;
+		case 3:
+			scrollScreenWidth = -screenWidth / 6 * 5 * (selectNum / 5);
+			break;
+		}*/
+
+		if (selectNum / 5 >= 0 && selectNum / 5 <= 3) {
+			scrollScreenWidth = -screenWidth / 6 * 5 * selectNum / 5;
+		}
+		else {
+			scrollScreenWidth = 0; // 必要に応じてデフォルト値を設定
+		}
 
 		//　スプライト描画
-		/*back->Render(dc,
-			0, 0, screenWidth, screenHeight,
-			0, 0, textureWidthBack, textureHeightBack,
-			0,
-			1, 1, 1, 1);*/
-
-		//追加
 		for (int i = 0; i < 10; i++)
 		{
+			/*line->Render(dc,
+				linePositions[i].x + scrollScreenWidth, linePositions[i].y, 200, 60,
+				0, 0, textureWidthStage, textureHeightStage,
+				angle[i],
+				1.3f,
+				0, 0, 0, 1
+			);*/
+			//stage->Render(dc,
+			//	stagePositions[i].x + scrollScreenWidth, stagePositions[i].y, 200, 60,//ウィンドウ/６-100でぴったり？
+			//	0, 0, textureWidthStage, textureHeightStage,
+			//	0,
+			//	scale[i],
+			//	1, 1, 1, 1
+			
+
 			stage->Render(dc,
-				stagePositions[i].x + scrollScreenWidth, stagePositions[i].y, 200, 60,
-				0, 0, spriteSize.x, spriteSize.y,
+				screenWidth/6*(i+1)-100 + scrollScreenWidth, screenHeight/3* ((i % 2) + 1), 200, 60,
+				0, 0, textureWidthStage, textureHeightStage,
 				0,
 				scale[i],
 				1, 1, 1, 1
 			);
-		}
+		}		
 
-		pin->Render(dc,
+		/*pin->Render(dc,
 			pinPositions[selectNum].x, pinPositions[selectNum].y + charaMove, 100, 100,
 			0, 0, textureWidthPin, textureHeightPin,
 			0,
 			1.0f,
 			1, 1, 1, 1
+		);*/
+		pin->Render(dc,
+			screenWidth / 6 * ((selectNum % 5) + 1)-50, screenHeight / 3 * ((selectNum % 2) + 1) + charaMove-100, 100, 100,
+			0, 0, textureWidthPin, textureHeightPin,
+			0,
+			1.0f,
+			1, 1, 1, 1
 		);
+
+		if (selectNum < 5)
+			triangle->Render(dc,
+				screenWidth-100 - charaMove, 300, 100, 100,
+				0, 0, textureWidthTriangle, textureHeightTriangle,
+				90,
+				1.0f,
+				1, 1, 1, 1
+			);
+		else if (selectNum >= 5)
+			triangle->Render(dc,
+				0 + charaMove, 300, 100, 100,
+				0, 0, textureWidthTriangle, textureHeightTriangle,
+				-90,
+				1.0f,
+				1, 1, 1, 1
+			);
 	}
 
 	// 2DデバッグGUI描画
