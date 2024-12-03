@@ -207,6 +207,9 @@
     <ClInclude Include="Source\I_Love_taisei.h">
       <Filter>Source\Scene</Filter>
     </ClInclude>
+    <ClInclude Include="Source\ScenePause.h">
+      <Filter>Source\Scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="External\imgui\imgui.cpp">
@@ -345,6 +348,9 @@
       <Filter>Source\Stage</Filter>
     </ClCompile>
     <ClCompile Include="Source\SceneStageSelect.cpp">
+      <Filter>Source\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ScenePause.cpp">
       <Filter>Source\Scene</Filter>
     </ClCompile>
   </ItemGroup>
