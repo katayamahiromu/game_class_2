@@ -25,11 +25,6 @@ public:
 	virtual void Render() override;
 private:
 	Sprite* sprite = nullptr;
-	Sprite* start = nullptr;
-	Sprite* end = nullptr;
 	std::unique_ptr<AudioSource> Cdur;
 	std::unique_ptr<SubMixVoice> test;
-	DirectX::XMFLOAT2 spritesize = { 300,100 };
-	float scale[2] = {1.4f,1.0f};
-	bool finalizeflg = false;
 };
