@@ -2,13 +2,14 @@
 #include"EnemyManeger.h"
 #include"Collision.h"
 #include"StageManager.h"
+#include"Goal.h"
 
-Switch::Switch(DirectX::XMFLOAT3 Position)
+Switch::Switch(/*DirectX::XMFLOAT3 Position*/)
 {
 	model = std::make_unique<Model>("Data/Model/switch/swtich.mdl");
-	position = Position;
+	//ただの設計ミスです後で直します
+	//Character::position = Position;
 	scale.x = scale.y = scale.z = 0.01f;
-	//念のため
 	UpdateTranceform();
 	model->UpdateTransform(transform);
 }
@@ -37,28 +38,40 @@ bool Switch::RayCast(const DirectX::XMFLOAT3& start, const DirectX::XMFLOAT3& en
 
 void Switch::SwitchVsEnemy()
 {
-	StageManager& stageManager = StageManager::Instance();
-	//毎フレームクリア
-	stageManager.ClearPushCount();
 	for (int i = 0;i < EnemeyManager::Instance().GetEnemyCount();++i)
 	{
 		Enemy* enemy = EnemeyManager::Instance().GetEnemy(i);
 		if (Collision::IntersectSphereVsSphere(
-			position,
-			radius,
+			Character::position,
+			Character::radius,
 			enemy->GetPosition(),
 			enemy->GetRadius(),
 			DirectX::XMFLOAT3(0,0,0)
 		))
 		{
 			//押した感を出すために毎フレーム小さくしていく
-			scale.y *= downSpeed;
-			//押されてたらカウントを上げる
-			stageManager.PushCountPlus();
+			scale.y *= 0.9;
+
+			//ゴールを出す
+			if (!IsGoal)
+			{
+				DirectX::XMFLOAT3 pos = { -16.018f, 2.229f, 1.502f };
+				Goal* goal = new Goal(pos);
+				StageManager::Instance().RegisterAdd(goal);
+				IsGoal = true;
+			}
 		}
 		else
 		{
 			scale.y = 0.01f;
+			if (IsGoal)
+			{
+				//配列を丸々取得
+				std::vector<Stage*>Array= StageManager::Instance().GetArray();
+				//配列の最後はおそらくゴールなので最後を削除
+				StageManager::Instance().Remove(Array.at(Array.size() - 1));
+				IsGoal = false;
+			}
 		}
 	}
 }

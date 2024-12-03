@@ -4,15 +4,12 @@
 #include"SceneManager.h"
 #include"Input/Input.h"
 #include"SceneLoading.h"
-#include "Framework.h"
 
 //初期化
 void SceneTitle::Initialize()
 {
 	//スプライト初期化
 	sprite = new Sprite("Data/Sprite/Title.png");
-	start = new Sprite("Data/Sprite/start.png");
-	end = new Sprite("Data/Sprite/end.png");
 	test = Audio::Instance().MakeSubMix();
 	Cdur = Audio::Instance().LoadAudioSource("Data/Audio/SE.wav");
 	Cdur->Set_Submix_voice(test->Get_Submix_Voice());
@@ -30,56 +27,12 @@ void SceneTitle::Finalize()
 		delete sprite;
 		sprite = nullptr;
 	}
-	//追加
-	if (start != nullptr)
-	{
-		delete start;
-		start = nullptr;
-	}
-	if (end != nullptr)
-	{
-		delete end;
-		end = nullptr;
-	}
 }
 
 //更新処理
 void SceneTitle::Update(float elapsedTime)
 {
 	GamePad& gamePad = Input::Instance().GetGamePad();
-	
-	SceneManager::instance().SetEndFlg(finalizeflg);
-
-	if (gamePad.GetButtonDown() & GamePad::BTN_DOWN)
-	{
-		if (scale[0] == 1.0f)
-		{
-			scale[0] = 1.4f;
-			scale[1] = 1.0f;
-			finalizeflg = false;
-		}
-		else if (scale[1] == 1.0f)
-		{
-			scale[1] = 1.4f;
-			scale[0] = 1.0f;
-			finalizeflg = true;
-		}
-	}
-	if (gamePad.GetButtonDown() & GamePad::BTN_UP)
-	{
-		if (scale[0] == 1.0f)
-		{
-			scale[0] = 1.4f;
-			scale[1] = 1.0f;
-			finalizeflg = false;
-		}
-		else if (scale[1] == 1.0f)
-		{
-			scale[1] = 1.4f;
-			scale[0] = 1.0f;
-			finalizeflg = true;
-		}
-	}
 
 	//なにかボタンを押したらゲームシーンへの切り替え
 	const GamePadButton anyButton =
@@ -88,7 +41,7 @@ void SceneTitle::Update(float elapsedTime)
 		| GamePad::BTN_X
 		| GamePad::BTN_Y
 		;
-	if (gamePad.GetButtonDown() & anyButton&& finalizeflg ==false) {
+	if (gamePad.GetButtonDown() & anyButton) {
 		SceneManager::instance().ChengeScene(new SceneLoading(new SceneStageSelect));
 		//SceneManager::instance().ChengeScene(new SceneGame);
 	}
@@ -114,31 +67,12 @@ void SceneTitle::Render()
 		float screenHeight = static_cast<float>(graphics.GetScreenHeight());
 		float textureWidth = static_cast<float>(sprite->GetTextureWidth());
 		float textureHeight = static_cast<float>(sprite->GetTextureHeight());
-		float textureWidthStart = static_cast<float>(start->GetTextureWidth());
-		float textureHeightStart = static_cast<float>(start->GetTextureHeight());
-		float textureWidthEnd = static_cast<float>(end->GetTextureWidth());
-		float textureHeightEnd = static_cast<float>(end->GetTextureHeight());
 
 		//タイトルスプライト
 		sprite->Render(dc,
 			0, 0, screenWidth, screenHeight,
 			0, 0, textureWidth, textureHeight,
 			0,
-			1,
-			1, 1, 1, 1
-		);
-		start->Render(dc,
-			screenWidth / 2 - spritesize.x / 2, screenHeight / 10 * 6, spritesize.x, spritesize.y,
-			0, 0, textureWidthStart, textureHeightStart,
-			0,
-			scale[0],
-			1, 1, 1, 1
-		);
-		end->Render(dc,
-			screenWidth / 2 - spritesize.x / 2, screenHeight / 10 * 8, spritesize.x, spritesize.y,
-			0, 0, textureWidthEnd, textureHeightEnd,
-			0,
-			scale[1],
 			1, 1, 1, 1
 		);
 	}

@@ -204,9 +204,6 @@
     <ClInclude Include="Source\SceneStageSelect.h">
       <Filter>Source\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="Source\I_Love_taisei.h">
-      <Filter>Source\Scene</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="External\imgui\imgui.cpp">

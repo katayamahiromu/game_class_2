@@ -1,5 +1,4 @@
 #include"StageManager.h"
-#include"Goal.h"
 
 //XVˆ—
 void StageManager::Update(float elapsedTime)
@@ -8,7 +7,6 @@ void StageManager::Update(float elapsedTime)
 	for (Stage* stage : stages) {
 		stage->Update(elapsedTime);
 	}
-
 
 	//”jŠüˆ—
 	for (Stage* stage : removes)
