@@ -3,8 +3,8 @@
 #include "Graphics/Sprite.h"
 #include "Scene.h"
 #include <wrl.h>
-#include <DirectXMath.h>
 #include "Audio/Audio.h"
+
 
 //　タイトルセレクトシーン
 class SceneStageSelect : public Scene
@@ -26,16 +26,35 @@ public:
 	void Render() override;
 
 	void DrawDebugGui();
+private:
+	//クラスの方がもしかしたらいいかも？
+	//名前のほうもあんまりよくはないかもしれない	
+	enum StageState
+	{
+		StageOne,
+		StageTwo,
+		StageMax,//ステージ数上限
+	};
 
 private:
-	std::unique_ptr<Sprite> back = nullptr;
-	std::unique_ptr<Sprite>  yajirusi = nullptr;
+	std::unique_ptr<Sprite> stage = nullptr;
+	std::unique_ptr<Sprite> pin = nullptr;
+	std::unique_ptr<Sprite> triangle = nullptr;
+	std::unique_ptr<Sprite> line = nullptr;
+	std::unique_ptr<Sprite> stageNum[20] = {};
+	DirectX::XMFLOAT2 spriteSize = { 110.0f,100.0f };
+	/*DirectX::XMFLOAT2 linePositions[10] = {
+	{ 250.0f,300.0f },{450.0f,300.0f},{650.0f,300.0f},{850.0f,300.0f},{1050.0f,300.0f},
+		{ 1250.0f,300.0f },{1450.0f,300.0f},{1650.0f,300.0f},{1850.0f,300.0f},{2050.0f,300.0f}
+	};*/
 
-	DirectX::XMFLOAT2 selectPos = { 0,600 };
-
-	int select = 0;
-
-	int page = 0;
-
-	int Gui;
+	float scale[20] = { 1.0f,1.0f,1.0f,1.0f,1.0f,1.0f,1.0f,1.0f,1.0f,1.0f,
+					 1.0f,1.0f,1.0f,1.0f,1.0f,1.0f,1.0f,1.0f,1.0f,1.0f };
+	float angle[20] = { 45,-45,45,-45,45,-45,45,-45,45,-45,
+					 45,-45,45,-45,45,-45,45,-45,45,-45 };
+	float scrollScreenWidth = 0.0f;
+	float charaMove = 0.0f;
+	int selectNum = 0;
+	int maxstage = 20;
+	bool moveflg=false;
 };

@@ -5,9 +5,12 @@
 #include"Player.h"
 #include"SceneManager.h"
 #include"SceneTitle.h"
+#include"Character.h"
 
+
+//position などTransform周りがいいのでキャラクターを継承
 //ステージ
-class Stage
+class Stage :public Character
 {
 public:
 	Stage(){}
@@ -21,42 +24,4 @@ public:
 
 	//レイキャスト
 	virtual bool RayCast(const DirectX::XMFLOAT3& start, const DirectX::XMFLOAT3& end, HitResult& hit) = 0;
-protected:
-	void PlayerVsStage()
-	{
-		Player& player = Player::Instance();
-		if (Collision::IntersectSphereVsSphere(
-			position,
-			radius,
-			player.GetPosition(),
-			player.GetRadius(),
-			DirectX::XMFLOAT3(0, 0, 0)
-		))
-		{
-			SceneManager::instance().ChengeScene(new SceneTitle);
-		}
-	};
-protected:
-	struct CollisionMesh
-	{
-		struct Triangle
-		{
-			DirectX::XMFLOAT3	positions[3];
-			DirectX::XMFLOAT3	normal;
-		};
-
-		struct Area
-		{
-			DirectX::BoundingBox	boundingBox;
-			std::vector<int>		triangleIndices;
-		};
-
-		std::vector<Triangle>	triangles;
-		std::vector<Area>		areas;
-	};
-
-	CollisionMesh collisionMesh;
-
-	DirectX::XMFLOAT3 position = { 0,0,0 };
-	float radius = 1.0;
 };

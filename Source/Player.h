@@ -10,7 +10,7 @@
 class Player :public Character
 {
 public:
-	Player();
+	Player(DirectX::XMFLOAT3 pos);
 	~Player() override;
 
 	//XVˆ—

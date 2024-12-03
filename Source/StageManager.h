@@ -17,7 +17,6 @@ public:
 		static StageManager instance;
 		return instance;
 	}
-
 	//更新処理
 	void Update(float elapsedTime);
 
@@ -39,10 +38,20 @@ public:
 	//配列の追加
 	void RegisterAdd(Stage* stage);
 
-	//後で消す♡ 配列を取得
-	std::vector<Stage*> GetArray() { return stages; }
+	void SetGoalCount(int count) { goalCount = count; }
+	int GetGoalCount() { return goalCount; }
+	void PushCountPlus() { pushCount++; }
+	void ClearPushCount() { pushCount = 0; }
+	int GetPushCount() { return pushCount; }
+	void SetGoalPosition(DirectX::XMFLOAT3 pos) { goalPosition = pos; }
 private:
 	std::vector<Stage*>stages;
 	std::set<Stage*>removes;
 	std::vector<Stage*>add;
+
+	//ゴールを出すためのカウント
+	int goalCount = 0;
+	//今押されてるスイッチのカウント
+	int pushCount = 0;
+	DirectX::XMFLOAT3 goalPosition = {0,0,0};
 };

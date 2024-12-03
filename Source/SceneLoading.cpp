@@ -72,6 +72,7 @@ void SceneLoading::Render()
 			positionX, positionY, textureWidth, textureHeight,
 			0, 0, textureWidth, textureHeight,
 			angle,
+			1,
 			1, 1, 1, 1
 		);
 	}
