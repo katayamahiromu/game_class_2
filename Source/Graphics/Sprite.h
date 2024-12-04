@@ -9,8 +9,9 @@ class Sprite
 {
 public:
 	Sprite();
+	Sprite(Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> shader_resource_view);
 	Sprite(const char* filename);
-	~Sprite() {}
+	~Sprite();
 
 	struct Vertex
 	{
@@ -36,6 +37,13 @@ public:
 
 	//シェーダーリソースビューの取得
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> GetShaderResourceView() { return shaderResourceView.Get(); }
+	void SetShaderResourceView(Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>& srv, int texWidth, int texHeight);
+
+	//頂点シェーダーの取得
+	Microsoft::WRL::ComPtr<ID3D11VertexShader>GetVertexShader() { return vertexShader.Get(); }
+
+	//インプットレイアウトの取得
+	Microsoft::WRL::ComPtr<ID3D11InputLayout>GetInputLayout() { return inputLayout; }
 private:
 	Microsoft::WRL::ComPtr<ID3D11VertexShader>			vertexShader;
 	Microsoft::WRL::ComPtr<ID3D11PixelShader>			pixelShader;
@@ -50,6 +58,8 @@ private:
 	Microsoft::WRL::ComPtr<ID3D11SamplerState>			samplerState;
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>	shaderResourceView;
 
+	D3D11_TEXTURE2D_DESC texture2d_desc;
 	int textureWidth = 0;
 	int textureHeight = 0;
+	bool isLoadFile = true;
 };

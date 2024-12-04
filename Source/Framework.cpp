@@ -7,6 +7,7 @@
 #include"EffectManager.h"
 #include"SceneTitle.h"
 #include"SceneManager.h"
+#include "ScenePause.h"
 
 // ‚’¼“¯ŠúŠÔŠuİ’è
 static const int syncInterval = 1;
