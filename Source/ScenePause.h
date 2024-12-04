@@ -47,6 +47,9 @@ private:
 	int section = 0;
 	float section_alpha = 0.5f;
 
+	DirectX::XMFLOAT3 RGB = { 1.0f,1.0f,1.0f };
+
+
 	//‚»‚ê‚¼‚ê‚Ì‰æ‘œ‚Ì”z’u‚Å[‚½
 	// ‚ª‚Á‚Â‚è‰¡’…‚µ‚Ü‚·
 	//pos.x dx
@@ -56,7 +59,7 @@ private:
 	DirectX::XMFLOAT4 pos[MAX_COMMAND] =
 	{
 		{45.0f, 0.0f, 1280.0f, 260.0f},
-		{285.0f, 260.0f, 800, 260.0f},
-		{285, 520.0f, 800, 260.0f}
+		{285.0f, 260.0f, 800.0f, 260.0f},
+		{285.0f, 520.0f, 800.0f, 260.0f}
 	};
 };

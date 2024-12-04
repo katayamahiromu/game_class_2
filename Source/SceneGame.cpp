@@ -102,7 +102,7 @@ void SceneGame::Initialize()
 	gameScene = std::make_unique<Sprite>(scene_shader_resource_view);
 
 	//ポーズのシーンの作成
-	pause = new ScenePause;
+	pause = std::make_unique<ScenePause>();
 	pause->Initialize();
 }
 
@@ -113,13 +113,8 @@ void SceneGame::Finalize()
 	StageManager::Instance().Clear();
 	EnemeyManager::Instance().Clear();
 
-	//ポーズの終了化
-	if (pause)
-	{
-		pause->Finalize();
-		delete pause;
-		pause = nullptr;
-	}
+	//ポーズの終了
+	pause->Finalize();
 }
 
 // 更新処理
@@ -128,12 +123,7 @@ void SceneGame::Update(float elapsedTime)
 	if (PauseFlag)
 	{
 		pause->Update(elapsedTime);
-		if (pause->GetCloseFlag())
-		{
-			PauseFlag = false;
- 			pause->ResetCloseFlag();
-			ClosePause();
-		}
+		ClosePause();
 		return;
 	}
 	StageManager::Instance().Update(elapsedTime);
@@ -258,6 +248,7 @@ void SceneGame::ClosePause()
 	{
 		PauseFlag = false;
 		pause->ResetCloseFlag();
+
 	}
 }
 
@@ -273,6 +264,12 @@ void SceneGame::DebugGui()
 		player->DrawDebugGui();
 		//EnemeyManager::Instance().GetEnemy(0)->DebugGui();
 	}
+}
+
+void SceneGame::GameSetting()
+{
+	player->SetPosition(script[select].PlayerPos);
+
 }
 
 //エネミーHPゲージ描画

@@ -24,9 +24,11 @@ void ScenePause::Update(float elapsedTime)
 
 	if (gamePad.GetButtonDown() & GamePad::BTN_START) closeFlag = true;
 
+	//à⁄ìÆ
 	if (gamePad.GetButtonDown() & GamePad::BTN_DOWN)section++;
 	else if (gamePad.GetButtonDown() & GamePad::BTN_UP)section--;
 
+	//îÕàÕêßå¿
 	if (section < CONTINNUE) section = STAGE_SELECTION;
 	else if (section > STAGE_SELECTION) section = CONTINNUE;
 }
@@ -89,6 +91,7 @@ void ScenePause::DebugGui()
 	ImGui::SetNextWindowSize(ImVec2(300, 300), ImGuiCond_FirstUseEver);
 	if (ImGui::Begin("Pause", nullptr, ImGuiTreeNodeFlags_DefaultOpen)) {
 		ImGui::SliderFloat("Alpha", &alpha, 0.0f, 1.0f);
+		//ImGui::SliderFloat3("RGB", &RGB.x, 1.0f, 10.0f);
 	}
 	ImGui::End();
 }

@@ -403,6 +403,7 @@ void Sprite::Render(ID3D11DeviceContext *immediate_context,
 	}
 }
 
+//テクスチャの幅を指定しないと大変なことになる
 void Sprite::SetShaderResourceView(Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>& srv, int texWidth, int texHeight)
 {
 	shaderResourceView = srv;

@@ -32,8 +32,11 @@ private:
 
 	//ポーズを閉じる
 	void ClosePause();
+
 	//オブジェクトの描画処理
 	void ObjectRender();
+
+	void GameSetting();
 
 	//GUI
 	void DebugGui();
@@ -55,7 +58,8 @@ private:
 	Microsoft::WRL::ComPtr<ID3D11RenderTargetView>scene_render;
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>scene_shader_resource_view;
 
-	ScenePause* pause = nullptr;
+	//シーンゲームにポーズがあるのは許してください辻合
+	std::unique_ptr<ScenePause> pause;
 	bool PauseFlag = false;
 
 	int select;
