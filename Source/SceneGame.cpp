@@ -61,7 +61,7 @@ void SceneGame::Initialize()
 
 	//ゲージスプライト
 	gauge = std::make_unique<Sprite>();
-	back = std::make_unique<Sprite>("Data/Sprite/back.png");
+	back = std::make_unique<Sprite>("Data/Sprite/back.jpg");
 
 	//カメラコントローラー更新処理
 	DirectX::XMFLOAT3 target = { 0.256f,9.133f,1.502f };
@@ -114,7 +114,7 @@ void SceneGame::Render()
 
 	back->Render(dc,
 		0, 0, 1280, 720,
-		0, 0, 900, 675, 0,
+		0, 0, 4032, 3024, 0,
 		1, 1, 1, 1);
 
 	// 3Dモデル描画
