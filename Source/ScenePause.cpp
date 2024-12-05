@@ -3,6 +3,10 @@
 #include"Input/Input.h"
 #include"SceneManager.h"
 
+//ScenePause::ScenePause()
+//{
+//
+//}
 
 void ScenePause::Initialize()
 {
