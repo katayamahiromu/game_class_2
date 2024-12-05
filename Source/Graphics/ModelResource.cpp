@@ -204,6 +204,10 @@ void ModelResource::BuildModel(ID3D11Device* device, const char* dirname)
 		// ディフューズマップテクスチャ読み込み
 		HRESULT hr = LoadTexture(device, filename, nullptr, true, material.shaderResourceView.GetAddressOf());
 		_ASSERT_EXPR(SUCCEEDED(hr), HRTrace(hr));
+
+		//法線マップ読み込み
+		hr = LoadTexture(device, filename, "_N", true, material.normal.GetAddressOf(), 0xFFFF7F7F);
+		_ASSERT_EXPR(SUCCEEDED(hr), HRTrace(hr));
 	}
 
 	for (Mesh& mesh : meshes)

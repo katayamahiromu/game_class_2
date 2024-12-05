@@ -20,7 +20,10 @@ private:
 	struct CbScene
 	{
 		DirectX::XMFLOAT4X4	viewProjection;
+		DirectX::XMFLOAT4	viewPosition;
 		DirectX::XMFLOAT4	lightDirection;
+		DirectX::XMFLOAT4	ambientColor;
+		DirectX::XMFLOAT4	dummy;
 	};
 
 	struct CbMesh

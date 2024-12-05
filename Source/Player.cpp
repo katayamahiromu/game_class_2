@@ -265,11 +265,13 @@ void Player::CollisionPlayerVsEnemies() {
 			enemy->SetPositon(outPosition);
 		}*/
 
-		if(Collision::IntersectSphereVsSphere(
+		if(Collision::IntersectCubeVsCube(
 			position,
 			radius,
+			height,
 			enemy->GetPosition(),
 			enemy->GetRadius(),
+			enemy->GetHeight(),
 			outPosition
 		))
 		{

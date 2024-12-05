@@ -14,9 +14,15 @@ struct ColorGradingData
 // レンダーコンテキスト
 struct RenderContext
 {
+	//カメラ
+	DirectX::XMFLOAT4		viewPosition;
 	DirectX::XMFLOAT4X4		view;
 	DirectX::XMFLOAT4X4		projection;
+
+	//平行光源用
 	DirectX::XMFLOAT4		lightDirection;
+	DirectX::XMFLOAT4		ambientColor;
+
 
 	ColorGradingData colorGradingData;
 };

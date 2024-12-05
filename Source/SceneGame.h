@@ -31,7 +31,7 @@ private:
 	void Pause();
 
 	//ポーズを閉じる
-	void ClosePause();
+	void ClosePauseCheck();
 
 	//オブジェクトの描画処理
 	void ObjectRender();
@@ -61,6 +61,10 @@ private:
 	//シーンゲームにポーズがあるのは許してください辻合
 	std::unique_ptr<ScenePause> pause;
 	bool PauseFlag = false;
+
+	//平行光源
+	DirectX::XMFLOAT4 ambientLightColor = { 0.2f,0.2f,0.2f,1.0f };
+	DirectX::XMFLOAT4 lightDirection = { 0.0f, -1.0f, 0.0f, 0.0f };
 
 	int select;
 };
