@@ -10,6 +10,48 @@ Sprite::Sprite()
 {
 }
 
+Sprite::Sprite(Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> shader_resource_view)
+{
+	HRESULT hr{ S_OK };
+
+	ID3D11Device* device = Graphics::Instance().GetDevice();
+	Vertex vertices[]
+	{
+		{ { -1.0, +1.0, 0 }, { 1, 1, 1, 1 }, { 0, 0 } },
+		{ { +1.0, +1.0, 0 }, { 1, 1, 1, 1 }, { 1, 0 } },
+		{ { -1.0, -1.0, 0 }, { 1, 1, 1, 1 }, { 0, 1 } },
+		{ { +1.0, -1.0, 0 }, { 1, 1, 1, 1 }, { 1, 1 } },
+	};
+
+	D3D11_BUFFER_DESC buffer_desc{};
+	buffer_desc.ByteWidth = sizeof(vertices);
+	buffer_desc.Usage = D3D11_USAGE_DYNAMIC;
+	buffer_desc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	buffer_desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	buffer_desc.MiscFlags = 0;
+	buffer_desc.StructureByteStride = 0;
+	D3D11_SUBRESOURCE_DATA subresource_data{};
+	subresource_data.pSysMem = vertices;
+	subresource_data.SysMemPitch = 0;
+	subresource_data.SysMemSlicePitch = 0;
+	hr = device->CreateBuffer(&buffer_desc, &subresource_data, vertexBuffer.GetAddressOf());
+	_ASSERT_EXPR(SUCCEEDED(hr), HRTrace(hr));
+
+	if (shader_resource_view)
+	{
+		isLoadFile = false;
+		shader_resource_view.Get()->AddRef();
+		this->shaderResourceView = shader_resource_view;
+		// 
+		Microsoft::WRL::ComPtr<ID3D11Resource> resource;
+		this->shaderResourceView->GetResource(resource.GetAddressOf());
+		Microsoft::WRL::ComPtr<ID3D11Texture2D> texture2d;
+		hr = resource.Get()->QueryInterface<ID3D11Texture2D>(texture2d.GetAddressOf());
+		_ASSERT_EXPR(SUCCEEDED(hr), HRTrace(hr));
+		texture2d->GetDesc(&texture2d_desc);
+	}
+}
+
 // コンストラクタ
 Sprite::Sprite(const char* filename)
 {
@@ -239,6 +281,12 @@ Sprite::Sprite(const char* filename)
 	}
 }
 
+Sprite::~Sprite()
+{
+	if (!isLoadFile)
+		shaderResourceView->Release();
+}
+
 // 描画実行
 void Sprite::Render(ID3D11DeviceContext *immediate_context,
 	float dx, float dy,
@@ -343,7 +391,7 @@ void Sprite::Render(ID3D11DeviceContext *immediate_context,
 		immediate_context->IASetInputLayout(inputLayout.Get());
 
 		immediate_context->RSSetState(rasterizerState.Get());
-
+		immediate_context->OMSetBlendState(blendState.Get(), nullptr, 0xFFFFFFFF);
 		immediate_context->VSSetShader(vertexShader.Get(), nullptr, 0);
 		immediate_context->PSSetShader(pixelShader.Get(), nullptr, 0);
 
@@ -355,3 +403,10 @@ void Sprite::Render(ID3D11DeviceContext *immediate_context,
 	}
 }
 
+//テクスチャの幅を指定しないと大変なことになる
+void Sprite::SetShaderResourceView(Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>& srv, int texWidth, int texHeight)
+{
+	shaderResourceView = srv;
+	textureWidth = texWidth;
+	textureHeight = texHeight;
+}

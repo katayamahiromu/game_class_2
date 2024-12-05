@@ -10,11 +10,17 @@
 class Player :public Character
 {
 public:
+	// タイトルで表示する用のコンストラクタ
+	Player();
+
 	Player(DirectX::XMFLOAT3 pos);
 	~Player() override;
 
 	//更新処理
 	void Update(float elapsedTime);
+
+	// タイトル用の更新処理(ほぼアニメーション再生だけ)
+	void TitleUpdate(float elapsedTime);
 
 	//描画処理
 	void Render(ID3D11DeviceContext* dc, Shader* shader);

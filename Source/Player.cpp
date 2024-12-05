@@ -13,6 +13,19 @@ Player& Player::Instance()
 	return *instace;
 }
 
+// タイトルで表示するようのコンストラクタ
+Player::Player()
+{
+	//インスタンスポインタ取得
+	instace = this;
+	position = {0.0f,-2.0f,0.0f};
+	model = std::make_unique<Model>("Data/Model/Jammo/Jammo.mdl");
+	//モデルが大きいのでスケーリング
+	scale.x = scale.y = scale.z = 0.02f;
+
+	model->PlayAnimation(Anime_Falling, true, 0.1f);
+}
+
 //コンストラクタ
 Player::Player(DirectX::XMFLOAT3 pos) {
 	//インスタンスポインタ取得
@@ -123,6 +136,17 @@ void Player::Update(float elapsedTime) {
 		angle.x = 0;
 	}
 
+}
+
+// タイトル用のUpdate
+void Player::TitleUpdate(float elapsedTime)
+{
+	//オブジェクト行列を更新
+	UpdateTranceform();
+	//モデルアニメーションを更新
+	model->UpdateAnimation(elapsedTime);
+	//モデル行列を更新
+	model->UpdateTransform(transform);
 }
 
 //移動入力処理

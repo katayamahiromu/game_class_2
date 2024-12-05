@@ -1,4 +1,5 @@
 #include"SceneManager.h"
+#include<utility>
 
 //XVˆ—
 void SceneManager::Update(float elapsedTime)
@@ -22,7 +23,6 @@ void SceneManager::Update(float elapsedTime)
 	{
 		currentScene->Update(elapsedTime);
 	}
-
 }
 
 //•`‰æˆ—

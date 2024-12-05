@@ -4,6 +4,7 @@
 #include"CameraController.h"
 #include"Scene.h"
 #include"Graphics/Sprite.h"
+#include"ScenePause.h"
 
 // ゲームシーン
 class SceneGame:public Scene
@@ -24,7 +25,22 @@ public:
 
 	// 描画処理
 	void Render() override;
+
 private:
+	//ポーズ
+	void Pause();
+
+	//ポーズを閉じる
+	void ClosePause();
+
+	//オブジェクトの描画処理
+	void ObjectRender();
+
+	void GameSetting();
+
+	//GUI
+	void DebugGui();
+
 	//エネミーHPゲージ描画
 	void RenderEnemyGauge(
 		ID3D11DeviceContext* dc,
@@ -36,6 +52,15 @@ private:
 	std::unique_ptr<CameraController>cameraController;
 	std::unique_ptr<Sprite>gauge;
 	std::unique_ptr<Sprite>back;
+
+	//ポーズの時に後ろに出すゲーム画面
+	std::unique_ptr<Sprite>gameScene;
+	Microsoft::WRL::ComPtr<ID3D11RenderTargetView>scene_render;
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>scene_shader_resource_view;
+
+	//シーンゲームにポーズがあるのは許してください辻合
+	std::unique_ptr<ScenePause> pause;
+	bool PauseFlag = false;
 
 	int select;
 };
