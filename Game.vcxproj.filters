@@ -347,9 +347,6 @@
     <ClCompile Include="Source\Goal.cpp">
       <Filter>Source\Stage</Filter>
     </ClCompile>
-    <ClCompile Include="Source\switch.cpp">
-      <Filter>Source\Stage</Filter>
-    </ClCompile>
     <ClCompile Include="Source\SceneStageSelect.cpp">
       <Filter>Source\Scene</Filter>
     </ClCompile>
@@ -357,6 +354,9 @@
       <Filter>Source\Scene</Filter>
     </ClCompile>
     <ClCompile Include="Source\StageObject.cpp">
+      <Filter>Source\Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\switch.cpp">
       <Filter>Source\Stage</Filter>
     </ClCompile>
   </ItemGroup>

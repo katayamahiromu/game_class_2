@@ -3,6 +3,7 @@
 #include"Input/Input.h"
 #include"Camera.h"
 #include"Graphics/Graphics.h"
+#include"StageManager.h"
 
 static Player* instace = nullptr;
 
@@ -204,6 +205,10 @@ void Player::DrawDebugGui() {
 			ImGui::SliderFloat("saturation", &data.saturation, 0.0f, +2.0f);
 			ImGui::SliderFloat("brightness", &data.brightness, 0.0f, +2.0f);
 			EnemeyManager::Instance().GetEnemy(0)->GetModel()->SetColorGrading(data);
+
+			StageManager& manager = StageManager::Instance();
+			int i = manager.GetPushCount();
+			ImGui::InputInt("push Count", &i);
 		}
 	}
 	ImGui::End();

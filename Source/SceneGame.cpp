@@ -27,16 +27,25 @@ void SceneGame::Initialize()
 	player = std::make_unique<Player>(script[select].PlayerPos);
 	//ステージ初期化
 	//ゴールのカウントをスイッチの数で設定
-	stageManager.SetGoalCount(script[select].SwitchPosArray.size());
+	stageManager.ClearPushCount();
+	stageManager.SetGoalCount(script[select].Switch_info.size());
 	stageManager.SetGoalPosition(script[select].GoalPos);
 	stageManager.Register(new StageMain(script[select].path));
-	for (auto pos : script[select].SwitchPosArray)
+	for (auto info : script[select].Switch_info)
 	{
-		stageManager.Register(new Switch(pos,0));
+		switch (info.type)
+		{
+		case CLICK:
+			stageManager.Register(new ClickSwitch(info.position));
+			break;
+		case HOLD:
+			stageManager.Register(new HoldSwitch(info.position));
+			break;
+		}
 	}
 	stageManager.Register(new Goal(script[select].GoalPos));
 
-	stageManager.Register(new ObjectStage({ 0.0f, 5.0f, 2.0f },{10.0f,1.0f,1.0f}));
+	stageManager.Register(new AppearStage({ 0.0f, 5.0f, 2.0f },{10.0f,1.0f,1.0f}));
 	
 	//動くオブジェクトの設定
 	for(auto pos: script[select].ObjectPosArray)

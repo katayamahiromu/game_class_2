@@ -23,7 +23,7 @@ void Goal::Update(float elapsedTime)
 void Goal::Render(ID3D11DeviceContext* dc, Shader* shader)
 {
 	StageManager& manger = StageManager::Instance();
-	if (manger.GetGoalCount() <= manger.GetPushCount())
+	if (manger.GetGoalCount() == manger.GetPushCount())
 	{
 		DebugRenderer* debugRenderer = Graphics::Instance().GetDebugRenderer();
 		debugRenderer->DrawSphere(position, radius, DirectX::XMFLOAT4(1, 1, 1, 1));
@@ -38,7 +38,7 @@ bool Goal::RayCast(const DirectX::XMFLOAT3& start, const DirectX::XMFLOAT3& end,
 void Goal::PlayerVsGoal()
 {
 	StageManager& manger = StageManager::Instance();
-	if (manger.GetGoalCount() <= manger.GetPushCount())
+	if (manger.GetGoalCount() == manger.GetPushCount())
 	{
 		Player& player = Player::Instance();
 		if (Collision::IntersectSphereVsSphere(

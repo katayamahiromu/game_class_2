@@ -1,7 +1,7 @@
 #include"StageObject.h"
 #include"StageManager.h"
 
-ObjectStage::ObjectStage(DirectX::XMFLOAT3 pos,DirectX::XMFLOAT3 scale)
+AppearStage::AppearStage(DirectX::XMFLOAT3 pos,DirectX::XMFLOAT3 scale)
 {
 	model = std::make_unique<Model>("Data/Model/Cube/Cube.mdl");
 	SetPosition(pos);
@@ -10,7 +10,7 @@ ObjectStage::ObjectStage(DirectX::XMFLOAT3 pos,DirectX::XMFLOAT3 scale)
 	model->UpdateTransform(transform);
 }
 
-void ObjectStage::Update(float elapsedTime)
+void AppearStage::Update(float elapsedTime)
 {
 	StageManager& manger = StageManager::Instance();
 	if (manger.GetGoalCount() == manger.GetPushCount())
@@ -19,7 +19,7 @@ void ObjectStage::Update(float elapsedTime)
 	}
 }
 
-void ObjectStage::Render(ID3D11DeviceContext* dc, Shader* shader)
+void AppearStage::Render(ID3D11DeviceContext* dc, Shader* shader)
 {
 	if (isAppear)
 	{
@@ -27,7 +27,7 @@ void ObjectStage::Render(ID3D11DeviceContext* dc, Shader* shader)
 	}
 }
 
-bool ObjectStage::RayCast(const DirectX::XMFLOAT3& start, const DirectX::XMFLOAT3& end, HitResult& hit)
+bool AppearStage::RayCast(const DirectX::XMFLOAT3& start, const DirectX::XMFLOAT3& end, HitResult& hit)
 {
 	if (isAppear)
 	{

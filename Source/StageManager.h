@@ -41,6 +41,7 @@ public:
 	void SetGoalCount(int count) { goalCount = count; }
 	int GetGoalCount() { return goalCount; }
 	void PushCountPlus() { pushCount++; }
+	void PushCountMinus() { pushCount--; }
 	void ClearPushCount() { pushCount = 0; }
 	int GetPushCount() { return pushCount; }
 	void SetGoalPosition(DirectX::XMFLOAT3 pos) { goalPosition = pos; }
