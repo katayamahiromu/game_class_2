@@ -38,5 +38,5 @@ private:
 	std::unique_ptr<AudioSource> Cdur;
 	std::unique_ptr<SubMixVoice> test;
 
-	Player* player = nullptr;
+	std::unique_ptr<Player>player;
 };

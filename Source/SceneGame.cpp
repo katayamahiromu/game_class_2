@@ -15,6 +15,7 @@
 #include "Misc.h"
 #include"ScenePause.h"
 #include"Input/Input.h"
+#include"StageObject.h"
 
 
 // 初期化
@@ -31,9 +32,11 @@ void SceneGame::Initialize()
 	stageManager.Register(new StageMain(script[select].path));
 	for (auto pos : script[select].SwitchPosArray)
 	{
-		stageManager.Register(new Switch(pos));
+		stageManager.Register(new Switch(pos,0));
 	}
 	stageManager.Register(new Goal(script[select].GoalPos));
+
+	stageManager.Register(new ObjectStage({ 0.0f, 5.0f, 2.0f },{10.0f,1.0f,1.0f}));
 	
 	//動くオブジェクトの設定
 	for(auto pos: script[select].ObjectPosArray)
@@ -104,6 +107,9 @@ void SceneGame::Initialize()
 	//ポーズのシーンの作成
 	pause = std::make_unique<ScenePause>();
 	pause->Initialize();
+
+	//UI
+	UIExplain = std::make_unique<Sprite>("Data/Sprite/UI.png");
 }
 
 // 終了化
@@ -151,7 +157,7 @@ void SceneGame::Render()
 	ID3D11RasterizerState* rs = graphics.GetRasterizerState();
 
 	// 画面クリア＆レンダーターゲット設定
-	FLOAT color[] = { 0.0f, 0.0f, 0.5f, 1.0f };	// RGBA(0.0～1.0)
+	FLOAT color[] = { 0.0f, 0.0f, 0.5f, 0.0f };	// RGBA(0.0～1.0)
 	dc->ClearRenderTargetView(rtv, color);
 	dc->ClearDepthStencilView(dsv, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 	dc->OMSetRenderTargets(1, &rtv, dsv);
@@ -180,8 +186,6 @@ void SceneGame::ObjectRender()
 	rc.viewPosition.w = 1;
 	rc.view = camera.GetView();
 	rc.projection = camera.GetProjection();
-
-
 
 	back->Render(dc,
 		0, 0, 1280, 720,
@@ -220,6 +224,10 @@ void SceneGame::ObjectRender()
 	// 2Dスプライト描画
 	{
 		//RenderEnemyGauge(dc, rc.view, rc.projection);
+		UIExplain->Render(dc,
+			1050.0f, -50.0f, 200.0f, 150.0f,
+			0.0f, 0.0f, 400.0f, 300.0f, 0.0f,
+			1.0f, 1.0f, 1.0f, 1.0f);
 	}
 }
 
@@ -255,7 +263,6 @@ void SceneGame::ClosePauseCheck()
 	{
 		PauseFlag = false;
 		pause->ResetCloseFlag();
-
 	}
 }
 
@@ -278,7 +285,6 @@ void SceneGame::DebugGui()
 void SceneGame::GameSetting()
 {
 	player->SetPosition(script[select].PlayerPos);
-
 }
 
 //エネミーHPゲージ描画

@@ -3,10 +3,11 @@
 #include"Collision.h"
 #include"StageManager.h"
 
-Switch::Switch(DirectX::XMFLOAT3 Position)
+Switch::Switch(DirectX::XMFLOAT3 Position,int t)
 {
 	model = std::make_unique<Model>("Data/Model/switch/swtich.mdl");
 	position = Position;
+	type = t;
 	scale.x = scale.y = scale.z = 0.01f;
 	//念のため
 	UpdateTranceform();
@@ -39,7 +40,7 @@ void Switch::SwitchVsEnemy()
 {
 	StageManager& stageManager = StageManager::Instance();
 	//毎フレームクリア
-	stageManager.ClearPushCount();
+	if(type == Hold) stageManager.ClearPushCount();
 	for (int i = 0;i < EnemeyManager::Instance().GetEnemyCount();++i)
 	{
 		Enemy* enemy = EnemeyManager::Instance().GetEnemy(i);

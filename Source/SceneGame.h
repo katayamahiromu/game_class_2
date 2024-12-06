@@ -52,6 +52,7 @@ private:
 	std::unique_ptr<CameraController>cameraController;
 	std::unique_ptr<Sprite>gauge;
 	std::unique_ptr<Sprite>back;
+	std::unique_ptr<Sprite>UIExplain;
 
 	//ポーズの時に後ろに出すゲーム画面
 	std::unique_ptr<Sprite>gameScene;
