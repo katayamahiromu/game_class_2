@@ -5,6 +5,7 @@
 #include"Scene.h"
 #include"Graphics/Sprite.h"
 #include"ScenePause.h"
+#include"StageObject.h"
 
 // ゲームシーン
 class SceneGame:public Scene
@@ -68,4 +69,7 @@ private:
 	DirectX::XMFLOAT4 lightDirection = { 0.0f, -1.0f, 0.0f, 0.0f };
 
 	int select;
+
+	//Debug用
+	std::vector<Cube*>cubeArray;
 };

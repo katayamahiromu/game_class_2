@@ -2,7 +2,7 @@
 #include"Player.h"
 #include"Collision.h"
 #include"SceneManager.h"
-#include"SceneTitle.h"
+#include"SceneStageSelect.h"
 #include"StageManager.h"
 
 Goal::Goal(DirectX::XMFLOAT3 Position)
@@ -49,7 +49,7 @@ void Goal::PlayerVsGoal()
 			DirectX::XMFLOAT3(0, 0, 0)
 		))
 		{
-			SceneManager::instance().ChengeScene(new SceneTitle);
+			SceneManager::instance().ChengeScene(new SceneStageSelect);
 		}
 	}
 }

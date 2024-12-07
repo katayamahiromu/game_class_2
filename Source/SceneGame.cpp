@@ -15,7 +15,6 @@
 #include "Misc.h"
 #include"ScenePause.h"
 #include"Input/Input.h"
-#include"StageObject.h"
 
 
 // 初期化
@@ -130,6 +129,13 @@ void SceneGame::Finalize()
 
 	//ポーズの終了
 	pause->Finalize();
+
+	//デバック用
+	for (auto cube : cubeArray)
+	{
+		delete cube;
+	}
+	cubeArray.clear();
 }
 
 // 更新処理
@@ -147,6 +153,12 @@ void SceneGame::Update(float elapsedTime)
 	cameraController->Update(elapsedTime);
 	//エフェクト更新処理
 	EffectManager::Instace().Update(elapsedTime);
+
+
+	for (auto cube : cubeArray)
+	{
+		cube->Update(elapsedTime);
+	}
 
 	Pause();
 }
@@ -209,6 +221,12 @@ void SceneGame::ObjectRender()
 		StageManager::Instance().Render(dc, shader);
 		player->Render(dc, shader);
 		EnemeyManager::Instance().Render(dc, shader);
+
+		for (auto cube : cubeArray)
+		{
+			cube->Render(dc,shader);
+		}
+
 		shader->End(dc);
 	}
 
@@ -277,11 +295,39 @@ void SceneGame::ClosePauseCheck()
 
 void SceneGame::DebugGui()
 {
+	StageManager& manager = StageManager::Instance();
 	ImGui::Begin("Texture");
 	ImGui::Text("scene_texture");
 	ImGui::Image(scene_shader_resource_view.Get(), { 256, 144 }, { 0, 0 }, { 1, 1 }, { 1, 1, 1, 1 });
 	ImGui::SliderFloat4("direction", &lightDirection.x, -1.0f, 1.0f);
 	ImGui::ColorEdit4("ambient color", &ambientLightColor.x);
+
+	ImGui::Separator();
+	if (ImGui::Button("Add Cube"))
+	{
+		Cube* cube = new Cube;
+		cubeArray.push_back(cube);
+	}
+
+	int index = 0;
+	for (auto cube : cubeArray)
+	{
+		char name[32];
+		::sprintf_s(name, sizeof(name), "%d", index);
+		ImGuiTreeNodeFlags node_flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick;
+
+		if (ImGui::TreeNodeEx(cube, node_flags, name))
+		{
+			ImGui::PushID(index);
+			cube->Gui();
+			ImGui::PopID();
+			ImGui::TreePop();
+		}
+		index++;
+	}
+
+
+
 	ImGui::End();
 
 	// 2DデバッグGUI描画
