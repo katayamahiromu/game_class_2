@@ -2,11 +2,7 @@
 #include"Graphics/Graphics.h"
 #include"Input/Input.h"
 #include"SceneManager.h"
-
-//ScenePause::ScenePause()
-//{
-//
-//}
+#include"SceneStageSelect.h"
 
 void ScenePause::Initialize()
 {
@@ -35,6 +31,23 @@ void ScenePause::Update(float elapsedTime)
 	//範囲制限
 	if (section < CONTINNUE) section = STAGE_SELECTION;
 	else if (section > STAGE_SELECTION) section = CONTINNUE;
+
+	//決定した時のそれぞれの行動
+	if (gamePad.GetButtonDown() & GamePad::BTN_A)
+	{
+		switch (section)
+		{
+		case CONTINNUE:
+			closeFlag = true;
+			break;
+		case INSTRUCTION:
+			//後々説明用の画像を出す
+			break;
+		case STAGE_SELECTION:
+			SceneManager::instance().ChengeScene(new SceneStageSelect);
+			break;
+		}
+	}
 }
 
 void ScenePause::Render()
@@ -46,7 +59,7 @@ void ScenePause::Render()
 	ID3D11RasterizerState* rs = graphics.GetRasterizerState();
 
 	// 画面クリア＆レンダーターゲット設定
-	FLOAT color[] = { 0.0f, 0.0f, 0.5f, 1.0f };	// RGBA(0.0～1.0)
+	FLOAT color[] = { 0.0f, 0.0f, 0.5f, 0.0f };	// RGBA(0.0～1.0)
 	dc->ClearRenderTargetView(rtv, color);
 	dc->ClearDepthStencilView(dsv, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 	dc->OMSetRenderTargets(1, &rtv, dsv);
@@ -61,29 +74,13 @@ void ScenePause::Render()
 		0, 0, 1280, 720, 0,
 		0, 0, 0, alpha);
 
-	/*command[0]->Render(dc,
-		45.0f, 0.0f, 1280.0f, 260.0f,
-		0.0f, 0.0f, command[0]->GetTextureWidth(),command[0]->GetTextureHeight(), 0.0f,
-		1.0f, 1.0f, 1.0f, 1.0f);
-
-	command[1]->Render(dc,
-		285.0f, 260.0f, 800, 260.0f,
-		0.0f, 0.0f, command[1]->GetTextureWidth(), command[1]->GetTextureHeight(), 0.0f,
-		1.0f, 1.0f, 1.0f, 0.5f);
-
-	command[2]->Render(dc,
-		285, 520.0f, 800, 260.0f,
-		0.0f, 0.0f, command[2]->GetTextureWidth(), command[2]->GetTextureHeight(), 0.0f,
-		1.0f, 1.0f, 1.0f, 0.5f);*/
-
 	for (int i = 0;i < MAX_COMMAND;++i)
 	{
-		if (section == i)section_alpha = 1.0f;
+		section == i ? section_alpha = 1.0f: section_alpha = 0.5;
 		command[i]->Render(dc,
 			pos[i].x, pos[i].y, pos[i].z, pos[i].w,
 			0.0f, 0.0f, command[i]->GetTextureWidth(), command[i]->GetTextureHeight(), 0.0f,
 			1.0f, 1.0f, 1.0f, section_alpha);
-		section_alpha = 0.5;
 	}
 
 	DebugGui();
@@ -95,7 +92,6 @@ void ScenePause::DebugGui()
 	ImGui::SetNextWindowSize(ImVec2(300, 300), ImGuiCond_FirstUseEver);
 	if (ImGui::Begin("Pause", nullptr, ImGuiTreeNodeFlags_DefaultOpen)) {
 		ImGui::SliderFloat("Alpha", &alpha, 0.0f, 1.0f);
-		//ImGui::SliderFloat3("RGB", &RGB.x, 1.0f, 10.0f);
 	}
 	ImGui::End();
 }

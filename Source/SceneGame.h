@@ -5,6 +5,7 @@
 #include"Scene.h"
 #include"Graphics/Sprite.h"
 #include"ScenePause.h"
+#include"StageObject.h"
 
 // ゲームシーン
 class SceneGame:public Scene
@@ -52,6 +53,7 @@ private:
 	std::unique_ptr<CameraController>cameraController;
 	std::unique_ptr<Sprite>gauge;
 	std::unique_ptr<Sprite>back;
+	std::unique_ptr<Sprite>UIExplain;
 
 	//ポーズの時に後ろに出すゲーム画面
 	std::unique_ptr<Sprite>gameScene;
@@ -67,4 +69,7 @@ private:
 	DirectX::XMFLOAT4 lightDirection = { 0.0f, -1.0f, 0.0f, 0.0f };
 
 	int select;
+
+	//Debug用
+	std::vector<Cube*>cubeArray;
 };

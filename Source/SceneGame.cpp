@@ -26,14 +26,25 @@ void SceneGame::Initialize()
 	player = std::make_unique<Player>(script[select].PlayerPos);
 	//ステージ初期化
 	//ゴールのカウントをスイッチの数で設定
-	stageManager.SetGoalCount(script[select].SwitchPosArray.size());
+	stageManager.ClearPushCount();
+	stageManager.SetGoalCount(script[select].Switch_info.size());
 	stageManager.SetGoalPosition(script[select].GoalPos);
 	stageManager.Register(new StageMain(script[select].path));
-	for (auto pos : script[select].SwitchPosArray)
+	for (auto info : script[select].Switch_info)
 	{
-		stageManager.Register(new Switch(pos));
+		switch (info.type)
+		{
+		case CLICK:
+			stageManager.Register(new ClickSwitch(info.position));
+			break;
+		case HOLD:
+			stageManager.Register(new HoldSwitch(info.position));
+			break;
+		}
 	}
 	stageManager.Register(new Goal(script[select].GoalPos));
+
+	stageManager.Register(new AppearStage({ 0.0f, 5.0f, 2.0f },{10.0f,1.0f,1.0f}));
 	
 	//動くオブジェクトの設定
 	for(auto pos: script[select].ObjectPosArray)
@@ -104,6 +115,9 @@ void SceneGame::Initialize()
 	//ポーズのシーンの作成
 	pause = std::make_unique<ScenePause>();
 	pause->Initialize();
+
+	//UI
+	UIExplain = std::make_unique<Sprite>("Data/Sprite/UI.png");
 }
 
 // 終了化
@@ -115,6 +129,13 @@ void SceneGame::Finalize()
 
 	//ポーズの終了
 	pause->Finalize();
+
+	//デバック用
+	for (auto cube : cubeArray)
+	{
+		delete cube;
+	}
+	cubeArray.clear();
 }
 
 // 更新処理
@@ -132,6 +153,12 @@ void SceneGame::Update(float elapsedTime)
 	cameraController->Update(elapsedTime);
 	//エフェクト更新処理
 	EffectManager::Instace().Update(elapsedTime);
+
+
+	for (auto cube : cubeArray)
+	{
+		cube->Update(elapsedTime);
+	}
 
 	Pause();
 }
@@ -151,7 +178,7 @@ void SceneGame::Render()
 	ID3D11RasterizerState* rs = graphics.GetRasterizerState();
 
 	// 画面クリア＆レンダーターゲット設定
-	FLOAT color[] = { 0.0f, 0.0f, 0.5f, 1.0f };	// RGBA(0.0～1.0)
+	FLOAT color[] = { 0.0f, 0.0f, 0.5f, 0.0f };	// RGBA(0.0～1.0)
 	dc->ClearRenderTargetView(rtv, color);
 	dc->ClearDepthStencilView(dsv, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 	dc->OMSetRenderTargets(1, &rtv, dsv);
@@ -181,8 +208,6 @@ void SceneGame::ObjectRender()
 	rc.view = camera.GetView();
 	rc.projection = camera.GetProjection();
 
-
-
 	back->Render(dc,
 		0, 0, 1280, 720,
 		0, 0, 4032, 3024, 0,
@@ -196,6 +221,12 @@ void SceneGame::ObjectRender()
 		StageManager::Instance().Render(dc, shader);
 		player->Render(dc, shader);
 		EnemeyManager::Instance().Render(dc, shader);
+
+		for (auto cube : cubeArray)
+		{
+			cube->Render(dc,shader);
+		}
+
 		shader->End(dc);
 	}
 
@@ -220,6 +251,10 @@ void SceneGame::ObjectRender()
 	// 2Dスプライト描画
 	{
 		//RenderEnemyGauge(dc, rc.view, rc.projection);
+		UIExplain->Render(dc,
+			1050.0f, -50.0f, 200.0f, 150.0f,
+			0.0f, 0.0f, 400.0f, 300.0f, 0.0f,
+			1.0f, 1.0f, 1.0f, 1.0f);
 	}
 }
 
@@ -255,17 +290,44 @@ void SceneGame::ClosePauseCheck()
 	{
 		PauseFlag = false;
 		pause->ResetCloseFlag();
-
 	}
 }
 
 void SceneGame::DebugGui()
 {
+	StageManager& manager = StageManager::Instance();
 	ImGui::Begin("Texture");
 	ImGui::Text("scene_texture");
 	ImGui::Image(scene_shader_resource_view.Get(), { 256, 144 }, { 0, 0 }, { 1, 1 }, { 1, 1, 1, 1 });
 	ImGui::SliderFloat4("direction", &lightDirection.x, -1.0f, 1.0f);
 	ImGui::ColorEdit4("ambient color", &ambientLightColor.x);
+
+	ImGui::Separator();
+	if (ImGui::Button("Add Cube"))
+	{
+		Cube* cube = new Cube;
+		cubeArray.push_back(cube);
+	}
+
+	int index = 0;
+	for (auto cube : cubeArray)
+	{
+		char name[32];
+		::sprintf_s(name, sizeof(name), "%d", index);
+		ImGuiTreeNodeFlags node_flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick;
+
+		if (ImGui::TreeNodeEx(cube, node_flags, name))
+		{
+			ImGui::PushID(index);
+			cube->Gui();
+			ImGui::PopID();
+			ImGui::TreePop();
+		}
+		index++;
+	}
+
+
+
 	ImGui::End();
 
 	// 2DデバッグGUI描画
@@ -278,7 +340,6 @@ void SceneGame::DebugGui()
 void SceneGame::GameSetting()
 {
 	player->SetPosition(script[select].PlayerPos);
-
 }
 
 //エネミーHPゲージ描画

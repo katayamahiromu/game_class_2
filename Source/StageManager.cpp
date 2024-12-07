@@ -5,7 +5,8 @@
 void StageManager::Update(float elapsedTime)
 {
 	//XVˆ—
-	for (Stage* stage : stages) {
+	for (Stage* stage : stages) 
+	{
 		stage->Update(elapsedTime);
 	}
 
@@ -36,7 +37,8 @@ void StageManager::Update(float elapsedTime)
 //•`‰æˆ—
 void StageManager::Render(ID3D11DeviceContext* dc, Shader* shader)
 {
-	for (Stage* stage : stages) {
+	for (Stage* stage : stages)
+	{
 		stage->Render(dc, shader);
 	}
 }

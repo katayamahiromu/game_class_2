@@ -24,7 +24,7 @@ void SceneTitle::Initialize()
 	test->equalizer();
 
 	// プレイヤー初期化
-	player = new Player();
+	player = std::make_unique<Player>();
 
 	// カメラ初期化
 	Graphics& graphics = Graphics::Instance();
@@ -78,10 +78,15 @@ void SceneTitle::Render()
 
 	// 描画処理
 	RenderContext rc;
+	rc.ambientColor = { -FLT_MAX,-FLT_MAX,-FLT_MAX,-FLT_MAX };
 	rc.lightDirection = { 0.0f, -1.0f, 0.0f, 0.0f };	// ライト方向（下方向）
 
 	//カメラのパラメーター設定
 	Camera& camera = Camera::Instance();
+	rc.viewPosition.x = camera.GetEye().x;
+	rc.viewPosition.y = camera.GetEye().y;
+	rc.viewPosition.z = camera.GetEye().z;
+	rc.viewPosition.w = 1;
 	rc.view = camera.GetView();
 	rc.projection = camera.GetProjection();
 
