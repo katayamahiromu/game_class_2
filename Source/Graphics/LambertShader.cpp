@@ -198,6 +198,8 @@ void LambertShader::Begin(ID3D11DeviceContext* dc, const RenderContext& rc)
 	DirectX::XMStoreFloat4x4(&cbScene.viewProjection, V * P);
 
 	cbScene.lightDirection = rc.lightDirection;
+	cbScene.ambientColor = rc.ambientColor;
+	cbScene.viewPosition = rc.viewPosition;
 	dc->UpdateSubresource(sceneConstantBuffer.Get(), 0, 0, &cbScene, 0, 0);
 }
 
@@ -247,6 +249,7 @@ void LambertShader::Draw(ID3D11DeviceContext* dc, const Model* model)
 			cbSubset.materialColor = subset.material->color;
 			dc->UpdateSubresource(subsetConstantBuffer.Get(), 0, 0, &cbSubset, 0, 0);
 			dc->PSSetShaderResources(0, 1, subset.material->shaderResourceView.GetAddressOf());
+			dc->PSSetShaderResources(1, 1, subset.material->normal.GetAddressOf());
 			dc->PSSetSamplers(0, 1, samplerState.GetAddressOf());
 			dc->DrawIndexed(subset.indexCount, subset.startIndex, 0);
 		}

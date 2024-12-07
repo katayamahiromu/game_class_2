@@ -376,6 +376,9 @@
     <None Include="HLSL\FilterFunctions.hlsli">
       <Filter>HLSL</Filter>
     </None>
+    <None Include="HLSL\Light.hlsli">
+      <Filter>HLSL</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="HLSL\DebugPS.hlsl">

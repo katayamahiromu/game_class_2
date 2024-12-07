@@ -123,7 +123,7 @@ void SceneGame::Update(float elapsedTime)
 	if (PauseFlag)
 	{
 		pause->Update(elapsedTime);
-		ClosePause();
+		ClosePauseCheck();
 		return;
 	}
 	StageManager::Instance().Update(elapsedTime);
@@ -169,12 +169,19 @@ void SceneGame::ObjectRender()
 
 	// 描画処理
 	RenderContext rc;
-	rc.lightDirection = { 0.0f, -1.0f, 0.0f, 0.0f };	// ライト方向（下方向）
+	rc.lightDirection = lightDirection;	// ライト方向（下方向）
+	rc.ambientColor = ambientLightColor;
 
 	//カメラのパラメーター設定
 	Camera& camera = Camera::Instance();
+	rc.viewPosition.x = camera.GetEye().x;
+	rc.viewPosition.y = camera.GetEye().y;
+	rc.viewPosition.z = camera.GetEye().z;
+	rc.viewPosition.w = 1;
 	rc.view = camera.GetView();
 	rc.projection = camera.GetProjection();
+
+
 
 	back->Render(dc,
 		0, 0, 1280, 720,
@@ -242,7 +249,7 @@ void SceneGame::Pause()
 	}
 }
 
-void SceneGame::ClosePause()
+void SceneGame::ClosePauseCheck()
 {
 	if (pause->GetCloseFlag())
 	{
@@ -257,6 +264,8 @@ void SceneGame::DebugGui()
 	ImGui::Begin("Texture");
 	ImGui::Text("scene_texture");
 	ImGui::Image(scene_shader_resource_view.Get(), { 256, 144 }, { 0, 0 }, { 1, 1 }, { 1, 1, 1, 1 });
+	ImGui::SliderFloat4("direction", &lightDirection.x, -1.0f, 1.0f);
+	ImGui::ColorEdit4("ambient color", &ambientLightColor.x);
 	ImGui::End();
 
 	// 2DデバッグGUI描画

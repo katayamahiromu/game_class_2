@@ -5,6 +5,9 @@
 StageMain::StageMain(char* filename)
 {
 	model = std::make_unique<Model>(filename);
+	scale.x = scale.y = scale.z = 0.01f;
+	UpdateTranceform();
+	model->UpdateTransform(transform);
 }
 
 StageMain::~StageMain() {
