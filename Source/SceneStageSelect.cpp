@@ -99,5 +99,18 @@ void SceneStageSelect::Render()
 
 	// 2DデバッグGUI描画
 	{
+		DrawDebugGui();
 	}
+}
+
+void SceneStageSelect::DrawDebugGui()
+{
+	ImGui::Begin("Select");
+	ImGui::SliderInt("Stage Number", &debug_int, 0, 30);
+	if (ImGui::Button("go game scene"))
+	{
+		SceneManager::instance().ChengeScene(new SceneLoading(new SceneGame(debug_int)));
+	}
+
+	ImGui::End();
 }
