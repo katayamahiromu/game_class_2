@@ -5,10 +5,11 @@
 AppearStage::AppearStage(DirectX::XMFLOAT3 pos,DirectX::XMFLOAT3 scale)
 {
 	model = std::make_unique<Model>("Data/Model/Cube/Cube.mdl");
-	SetPosition(pos);
-	SetScale(scale);
-	UpdateTranceform();
+	position = pos;
+	this->scale = scale;
+	UpdateTransform();
 	model->UpdateTransform(transform);
+	position.z = 1.70f;
 }
 
 void AppearStage::Update(float elapsedTime)
@@ -44,8 +45,8 @@ bool AppearStage::RayCast(const DirectX::XMFLOAT3& start, const DirectX::XMFLOAT
 Cube::Cube(DirectX::XMFLOAT3 pos,DirectX::XMFLOAT3 scale)
 {
 	model = std::make_unique<Model>("Data/Model/Cube/Cube.mdl");
-	SetPosition(pos);
-	SetScale(scale);
+	position = pos;
+	this->scale = scale;
 }
 
 Cube::~Cube()
@@ -54,7 +55,7 @@ Cube::~Cube()
 
 void Cube::Update(float elapsedTime)
 {
-	UpdateTranceform();
+	UpdateTransform();
 	model->UpdateTransform(transform);
 }
 
@@ -70,6 +71,6 @@ bool Cube::RayCast(const DirectX::XMFLOAT3& start, const DirectX::XMFLOAT3& end,
 
 void Cube::Gui()
 {
-	ImGui::SliderFloat3("position", &position.x, -16.0f, 16.0f);
+	ImGui::SliderFloat3("position", &position.x, -16.0f,16.0f);
 	ImGui::SliderFloat3("Scale", &scale.x, 1.0f, 20.0f);
 }

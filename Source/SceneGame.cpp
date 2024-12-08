@@ -27,32 +27,43 @@ void SceneGame::Initialize()
 	//ステージ初期化
 	//ゴールのカウントをスイッチの数で設定
 	stageManager.ClearPushCount();
-	stageManager.SetGoalCount(script[select].Switch_info.size());
-	stageManager.SetGoalPosition(script[select].GoalPos);
-	stageManager.Register(new StageMain(script[select].path));
+	int i = script[select].Switch_info.size();
+	stageManager.SetGoalCount(i);
+	stageManager.ObjectRegister(new Goal(script[select].GoalPos));
+	stageManager.StageRegister(new StageMain(script[select].path));
 	for (auto info : script[select].Switch_info)
 	{
 		switch (info.type)
 		{
 		case CLICK:
-			stageManager.Register(new ClickSwitch(info.position));
+			stageManager.ObjectRegister(new ClickSwitch(info.position));
 			break;
 		case HOLD:
-			stageManager.Register(new HoldSwitch(info.position));
+			stageManager.ObjectRegister(new HoldSwitch(info.position));
 			break;
 		}
 	}
-	stageManager.Register(new Goal(script[select].GoalPos));
 
-	stageManager.Register(new AppearStage({ 0.0f, 5.0f, 2.0f },{10.0f,1.0f,1.0f}));
+
+	for (auto& info : script[select].Cube_info)
+	{
+		switch (info.type)
+		{
+		case APPEAR:
+			stageManager.ObjectRegister(new AppearStage(info.position,info.scale));
+			break;
+		case DEFAULT:
+			stageManager.ObjectRegister(new Cube(info.position, info.scale));
+			break;
+		}
+	}
 	
 	//動くオブジェクトの設定
 	for(auto pos: script[select].ObjectPosArray)
 	{
 		EnemySlime* slime = new EnemySlime;
 		slime->SetPosition(pos);
-		slime->SetTerritory(slime->GetPosition(), 10.0f);
-		EnemeyManager::Instance().Register(slime);
+		EnemeyManager::Instance().StageRegister(slime);
 	}
 
 	//カメラコントローラー初期化
@@ -441,7 +452,7 @@ void SceneGame::GameSetting()
 //		{
 //			EnemySlime* slime = new EnemySlime;
 //			slime->SetPositon(hit.position);
-//			EnemeyManager::Instance().Register(slime);
+//			EnemeyManager::Instance().StageRegister(slime);
 //		}
 //		
 //	}

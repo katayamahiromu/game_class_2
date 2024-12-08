@@ -20,7 +20,7 @@ public:
 	//描画処理
 	void Render(ID3D11DeviceContext* dc, Shader* shader);
 	//エネミー登録
-	void Register(Enemy* enemy);
+	void StageRegister(Enemy* enemy);
 	//エネミー削除
 	void Remove(Enemy* enemy);
 	//エネミー全削除
@@ -35,5 +35,5 @@ public:
 	void CollisionEnemyVsEnemy();
 private:
 	std::vector<Enemy*> enemies;
-	std::set<Enemy*>removes;
+	std::set<Enemy*>stageRemoves;
 };

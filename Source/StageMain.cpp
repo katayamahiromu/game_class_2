@@ -5,8 +5,8 @@
 StageMain::StageMain(char* filename)
 {
 	model = std::make_unique<Model>(filename);
-	scale.x = scale.y = scale.z = 0.01f;
-	UpdateTranceform();
+	//scale.x = scale.y = scale.z = 0.01f;
+	UpdateTransform();
 	model->UpdateTransform(transform);
 }
 
@@ -15,7 +15,6 @@ StageMain::~StageMain() {
 }
 
 void StageMain::Update(float elapsedTime) {
-
 }
 
 void StageMain::Render(ID3D11DeviceContext* dc, Shader* shader) {

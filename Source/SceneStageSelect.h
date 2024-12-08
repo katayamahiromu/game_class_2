@@ -47,4 +47,6 @@ private:
 	int page = 0;
 
 	int Gui;
+
+	int debug_int = 0;
 };
