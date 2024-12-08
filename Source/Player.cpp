@@ -583,6 +583,6 @@ void Player::Playback(Character* character)
 	//”z—ñ‚ÌŒã‚ë‚©‚çÄ¶
 	character->SetPosition(keep_position[playback_count]);
 	playback_count++;
-	if (playback_count > MAX_KEEP_TRANSFORM) playback_count = 0;
-	if (keep_position[playback_count].x == ENOUGTH.x)playback_count = 0;
+	if (playback_count > MAX_KEEP_TRANSFORM) IsPlayback = false;
+	if (keep_position[playback_count].x == ENOUGTH.x)IsPlayback = false;
 }
