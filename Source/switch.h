@@ -5,7 +5,7 @@
 #include "Graphics/Shader.h"
 #include "Collision.h"
 
-class ClickSwitch : public Stage
+class ClickSwitch : public GameObject
 {
 public:
 	ClickSwitch(DirectX::XMFLOAT3 Position);
@@ -13,7 +13,6 @@ public:
 
 	void Update(float elapsedTime)override;
 	void Render(ID3D11DeviceContext* dc, Shader* shader)override;
-	bool RayCast(const DirectX::XMFLOAT3& start, const DirectX::XMFLOAT3& end, HitResult& hit)override;
 private:
 	//スイッチが押された時の動き
 	void OnSwitchMove();
@@ -28,7 +27,7 @@ private:
 };
 
 
-class HoldSwitch : public Stage
+class HoldSwitch : public GameObject
 {
 public:
 	HoldSwitch(DirectX::XMFLOAT3 Position);
@@ -36,7 +35,6 @@ public:
 
 	void Update(float elapsedTime);
 	void Render(ID3D11DeviceContext* dc, Shader* shader);
-	bool RayCast(const DirectX::XMFLOAT3& start, const DirectX::XMFLOAT3& end, HitResult& hit);
 private:
 	//スイッチが押された時の動き
 	void OnSwitchMove();

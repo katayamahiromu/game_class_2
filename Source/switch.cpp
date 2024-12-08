@@ -31,11 +31,6 @@ void ClickSwitch::Render(ID3D11DeviceContext* dc, Shader* shader)
 	shader->Draw(dc, model.get());
 }
 
-bool ClickSwitch::RayCast(const DirectX::XMFLOAT3& start, const DirectX::XMFLOAT3& end, HitResult& hit)
-{
-	return false;
-}
-
 void ClickSwitch::OnSwitchMove()
 {
 	if (pushFlag == true)
@@ -77,7 +72,7 @@ HoldSwitch::HoldSwitch(DirectX::XMFLOAT3 Position)
 	position = Position;
 	scale.x = scale.y = scale.z = 0.01f;
 	//”O‚Ì‚½‚ß
-	UpdateTranceform();
+	UpdateTransform();
 	model->UpdateTransform(transform);
 }
 
@@ -88,7 +83,7 @@ HoldSwitch::~HoldSwitch()
 
 void HoldSwitch::Update(float elapsedTime)
 {
-	UpdateTranceform();
+	UpdateTransform();
 	model->UpdateTransform(transform);
 	SwitchVsEnemy();
 	OnSwitchMove();
@@ -97,11 +92,6 @@ void HoldSwitch::Update(float elapsedTime)
 void HoldSwitch::Render(ID3D11DeviceContext* dc, Shader* shader)
 {
 	shader->Draw(dc, model.get());
-}
-
-bool HoldSwitch::RayCast(const DirectX::XMFLOAT3& start, const DirectX::XMFLOAT3& end, HitResult& hit)
-{
-	return false;
 }
 
 void HoldSwitch::SwitchVsEnemy()

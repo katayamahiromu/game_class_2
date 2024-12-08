@@ -29,17 +29,17 @@ void SceneGame::Initialize()
 	stageManager.ClearPushCount();
 	int i = script[select].Switch_info.size();
 	stageManager.SetGoalCount(i);
-	stageManager.Register(new Goal(script[select].GoalPos));
-	stageManager.Register(new StageMain(script[select].path));
+	stageManager.ObjectRegister(new Goal(script[select].GoalPos));
+	stageManager.StageRegister(new StageMain(script[select].path));
 	for (auto info : script[select].Switch_info)
 	{
 		switch (info.type)
 		{
 		case CLICK:
-			stageManager.Register(new ClickSwitch(info.position));
+			stageManager.ObjectRegister(new ClickSwitch(info.position));
 			break;
 		case HOLD:
-			stageManager.Register(new HoldSwitch(info.position));
+			stageManager.ObjectRegister(new HoldSwitch(info.position));
 			break;
 		}
 	}
@@ -50,11 +50,11 @@ void SceneGame::Initialize()
 		switch (info.type)
 		{
 		case APPEAR:
-			stageManager.Register(new AppearStage(info.position,info.scale));
+			stageManager.ObjectRegister(new AppearStage(info.position,info.scale));
 			break;
 		case DEFAULT:
-			stageManager.Register(new Cube(info.position, info.scale));
-			
+			stageManager.ObjectRegister(new Cube(info.position, info.scale));
+			break;
 		}
 	}
 	
@@ -63,7 +63,7 @@ void SceneGame::Initialize()
 	{
 		EnemySlime* slime = new EnemySlime;
 		slime->SetPosition(pos);
-		EnemeyManager::Instance().Register(slime);
+		EnemeyManager::Instance().StageRegister(slime);
 	}
 
 	//カメラコントローラー初期化
