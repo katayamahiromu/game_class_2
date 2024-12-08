@@ -40,7 +40,10 @@
     <Filter Include="Source\Scene">
       <UniqueIdentifier>{fdefb6ef-f4fe-42ec-9684-3da62233f55b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\Stage">
+    <Filter Include="Source\Object">
+      <UniqueIdentifier>{3fff3f0f-1187-40ae-9a4f-fe300b490326}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Object\Stage">
       <UniqueIdentifier>{d038dc3a-3f18-4b82-a8f0-04ac50562a25}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -178,16 +181,16 @@
       <Filter>Source\Scene</Filter>
     </ClInclude>
     <ClInclude Include="Source\Stage.h">
-      <Filter>Source\Stage</Filter>
+      <Filter>Source\Object\Stage</Filter>
     </ClInclude>
     <ClInclude Include="Source\StageMain.h">
-      <Filter>Source\Stage</Filter>
+      <Filter>Source\Object\Stage</Filter>
     </ClInclude>
     <ClInclude Include="Source\StageManager.h">
-      <Filter>Source\Stage</Filter>
+      <Filter>Source\Object\Stage</Filter>
     </ClInclude>
     <ClInclude Include="Source\StageMoveFloor.h">
-      <Filter>Source\Stage</Filter>
+      <Filter>Source\Object\Stage</Filter>
     </ClInclude>
     <ClInclude Include="Source\SceneTitle.h">
       <Filter>Source\Scene</Filter>
@@ -195,20 +198,20 @@
     <ClInclude Include="Source\Graphics\framebuffer.h">
       <Filter>Source\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Goal.h">
-      <Filter>Source\Stage</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\switch.h">
-      <Filter>Source\Stage</Filter>
-    </ClInclude>
     <ClInclude Include="Source\SceneStageSelect.h">
       <Filter>Source\Scene</Filter>
     </ClInclude>
     <ClInclude Include="Source\I_Love_taisei.h">
       <Filter>Source\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="Source\ScenePause.h">
-      <Filter>Source\Scene</Filter>
+    <ClInclude Include="Source\Goal.h">
+      <Filter>Source\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\switch.h">
+      <Filter>Source\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Object.h">
+      <Filter>Source\Object</Filter>
     </ClInclude>
     <ClInclude Include="Source\StageObject.h">
       <Filter>Source\Stage</Filter>
@@ -333,25 +336,28 @@
       <Filter>Source\Scene</Filter>
     </ClCompile>
     <ClCompile Include="Source\StageMain.cpp">
-      <Filter>Source\Stage</Filter>
+      <Filter>Source\Object\Stage</Filter>
     </ClCompile>
     <ClCompile Include="Source\StageManager.cpp">
-      <Filter>Source\Stage</Filter>
+      <Filter>Source\Object\Stage</Filter>
     </ClCompile>
     <ClCompile Include="Source\StageMoveFloor.cpp">
-      <Filter>Source\Stage</Filter>
+      <Filter>Source\Object\Stage</Filter>
     </ClCompile>
     <ClCompile Include="Source\Graphics\framebuffer.cpp">
       <Filter>Source\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Goal.cpp">
-      <Filter>Source\Stage</Filter>
-    </ClCompile>
     <ClCompile Include="Source\SceneStageSelect.cpp">
       <Filter>Source\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="Source\ScenePause.cpp">
-      <Filter>Source\Scene</Filter>
+    <ClCompile Include="Source\Goal.cpp">
+      <Filter>Source\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\switch.cpp">
+      <Filter>Source\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Object.cpp">
+      <Filter>Source\Object</Filter>
     </ClCompile>
     <ClCompile Include="Source\StageObject.cpp">
       <Filter>Source\Stage</Filter>

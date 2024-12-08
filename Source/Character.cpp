@@ -2,6 +2,8 @@
 #include"StageManager.h"
 #include"Mathf.h"
 
+#include"Graphics/Graphics.h"
+
 //更新行列
 void Character::UpdateTranceform() {
 	//スケール行列を作成
@@ -151,24 +153,39 @@ void Character::UpdateVerticalMove(float elapsedTime)
 	//頭から抜けないため
 	if (my > 0.0f)
 	{
-		//レイの開始位置は足元より少し上
-		DirectX::XMFLOAT3 start = { position.x,position.y + GetHeight(),position.z };
+		//レイの開始位置は足元より少し上 //ジャンプとかで頭抜けないようにするのに？？？？？
+		DirectX::XMFLOAT3 start = DirectX::XMFLOAT3(position.x, position.y + GetHeight(), position.z);
 		//レイの終点位置は移動後の位置
-		DirectX::XMFLOAT3 end = { position.x,start.y + my,position.z };
+		DirectX::XMFLOAT3 end; // 見やすいように分けて書く
+		end = (isXYMode) ? DirectX::XMFLOAT3(position.x, position.y + radius + my, position.z) : 
+			DirectX::XMFLOAT3(position.x, start.y + my, position.z);
 
 		//レイキャストによる地面判定
 		HitResult hit;
-		if (StageManager::Instance().RayCast(start, end, hit))
+		if (StageManager::Instance().RaycastToStage(start, end, hit))
 		{
-			//法線ベクトルを取得
-			normal = hit.normal;
+			///壁までのベクトル
+			DirectX::XMVECTOR Start = DirectX::XMLoadFloat3(&hit.position);
+			DirectX::XMVECTOR End = DirectX::XMLoadFloat3(&end);
+			DirectX::XMVECTOR Vec = DirectX::XMVectorSubtract(End, Start);
+			//壁の法線
+			DirectX::XMVECTOR Normal = DirectX::XMLoadFloat3(&hit.normal);
 
-			//地面に接地している
-			position.x = hit.position.x;
-			position.y = hit.position.y - GetHeight();
-			position.z = hit.position.z;
+			//入射ベクトルを法線に射影
+			DirectX::XMVECTOR Dot = DirectX::XMVector3Dot(Vec, Normal);
 
-			//ヒット時に落下させる
+			//補正位置の計算
+			float distance = 0;
+			DirectX::XMStoreFloat(&distance,Dot);
+
+			//法線の大きさを距離に合わせる
+			DirectX::XMVECTOR R = DirectX::XMVectorSubtract(Vec, DirectX::XMVectorScale(Normal, distance));
+
+			DirectX::XMVECTOR Position = DirectX::XMLoadFloat3(&position);
+			Position = DirectX::XMVectorAdd(Position, R);
+			DirectX::XMStoreFloat3(&position, Position);
+
+			//ヒット時に落下させる //どゆこと???????
 			velocity.y = 0.0f;
 		}
 		else
@@ -180,26 +197,51 @@ void Character::UpdateVerticalMove(float elapsedTime)
 	//落下中
 	else if (my < 0.0f)
 	{
-		//レイの開始位置は足元より少し上
-		DirectX::XMFLOAT3 start = { position.x,position.y + stepOffset,position.z };
+		//レイの開始位置は足元より少し上 //上昇中とコメントが同じ？？
+		DirectX::XMFLOAT3 start = { position.x, position.y + stepOffset, position.z };
 		//レイの終点位置は移動後の位置
-		DirectX::XMFLOAT3 end = { position.x,position.y + my,position.z };
+		DirectX::XMFLOAT3 end = { position.x, position.y - radius + my, position.z };
 
 		//レイキャストによる地面判定
 		HitResult hit;
-		if (StageManager::Instance().RayCast(start, end, hit))
+		if (StageManager::Instance().RaycastToStage(start, end, hit))
 		{
-			//法線ベクトルを取得
-			normal = hit.normal;
+			if (isXYMode)
+			{
+				//壁までのベクトル
+				DirectX::XMVECTOR Start = DirectX::XMLoadFloat3(&hit.position);
+				DirectX::XMVECTOR End = DirectX::XMLoadFloat3(&end);
+				DirectX::XMVECTOR Vec = DirectX::XMVectorSubtract(End, Start);
+				//壁の法線
+				DirectX::XMVECTOR Normal = DirectX::XMLoadFloat3(&hit.normal);
 
-			//地面に接地している
-			position = hit.position;
-			//回転
-			angle.y += hit.rotation.y;
-			//傾斜の計算
-			slopeRate = 1.0f - (hit.normal.y /
-				(hit.normal.y + sqrtf(hit.normal.x * hit.normal.x + hit.normal.z * hit.normal.z)));
+				//入射ベクトルを法線に射影
+				DirectX::XMVECTOR Dot = DirectX::XMVector3Dot(Vec, Normal);
 
+				//補正位置の計算
+				float distance = 0;
+				DirectX::XMStoreFloat(&distance, Dot);
+
+				//法線の大きさを距離に合わせる
+				DirectX::XMVECTOR R = DirectX::XMVectorSubtract(Vec, DirectX::XMVectorScale(Normal, distance));
+
+				DirectX::XMVECTOR Position = DirectX::XMLoadFloat3(&position);
+				Position = DirectX::XMVectorAdd(Position, R);
+				DirectX::XMStoreFloat3(&position, Position);
+			}
+			else
+			{
+				//法線ベクトルを取得
+				normal = hit.normal;
+
+				//地面に接地している
+				position = hit.position;
+				//回転
+				angle.y += hit.rotation.y;
+				//傾斜の計算
+				slopeRate = 1.0f - (hit.normal.y /
+					(hit.normal.y + sqrtf(hit.normal.x * hit.normal.x + hit.normal.z * hit.normal.z)));
+			}
 			//着地した
 			if (!isGround)
 			{
@@ -207,7 +249,6 @@ void Character::UpdateVerticalMove(float elapsedTime)
 			}
 			isGround = true;
 			velocity.y = 0.0f;
-
 
 		}
 		else
@@ -217,28 +258,6 @@ void Character::UpdateVerticalMove(float elapsedTime)
 			isGround = false;
 		}
 	}
-	//上昇中
-	//else if (my > 0.0f)
-	/*{
-		position.y += my;
-		isGround = false;
-	}*/
-
-	//地面の向きに沿うようにXZ軸回転
-	//{
-	//	//Y軸が法線ベクトル方向に向くオイラー角回転を算出する
-
-	//	float angleX = atan2f(normal.z, normal.y);
-	//	float angleZ = -atan2f(normal.x, normal.y);
-
-	//	//線形補完で滑らかに回転する
-	//	if (angleX <= 1.0f && angleX >= -1.0f) {
-	//		angle.x = Mathf::Leap(angle.x, angleX, elapsedTime * 10.0f);
-	//	}
-	//	if (angleZ <= 1.0f && angleZ >= -1.0f) {
-	//		angle.z = Mathf::Leap(angle.z, angleZ, elapsedTime * 10.0f);
-	//	}
-	//}
 }
 
 //水平速力更新処理
@@ -312,20 +331,21 @@ void Character::UpdateHorizontalVelocity(float elapsedFrame)
 void Character::UpdateHorizontalMove(float elapsedTime)
 {
 	//水平速力計算
-	float velocityLengthXZ = sqrtf(velocity.x * velocity.x + velocity.y * velocity.y);
-	if (velocityLengthXZ > 0.0f)
+	float velocityLengthXY = sqrtf(velocity.x * velocity.x + velocity.y * velocity.y);
+	if (velocityLengthXY > 0.0f)
 	{
 		//水平移動
 		float mx = velocity.x * elapsedTime;
-		float mz = velocity.z * elapsedTime;
 
 		//レイの開始位置と終点位置
-		DirectX::XMFLOAT3 start = { position.x,position.y + stepOffset,position.z };
-		DirectX::XMFLOAT3 end = { position.x + mx + radius,position.y + stepOffset,position.z + mz + radius };
+		DirectX::XMFLOAT3 start = DirectX::XMFLOAT3(position.x, position.y + stepOffset, position.z);
+		DirectX::XMFLOAT3 end;  //見やすくするために分けて書くで
+		end = ( mx < 0 ) ? DirectX::XMFLOAT3(position.x + mx - radius, position.y + stepOffset, position.z) : 
+			DirectX::XMFLOAT3(position.x + mx + radius, position.y + stepOffset, position.z);
 
 		//レイキャストによる壁判定
 		HitResult hit;
-		if (StageManager::Instance().RayCast(start, end, hit))
+		if (StageManager::Instance().RaycastToStage(start, end, hit))
 		{
 			//壁までのベクトル
 			DirectX::XMVECTOR Start = DirectX::XMLoadFloat3(&hit.position);
@@ -352,11 +372,6 @@ void Character::UpdateHorizontalMove(float elapsedTime)
 		{
 			//移動
 			position.x += mx;
-			if (isXYMode)
-			{
-				position.y += mz;
-			}
 		}
-
 	}
 }

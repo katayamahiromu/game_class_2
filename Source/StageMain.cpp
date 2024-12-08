@@ -15,7 +15,6 @@ StageMain::~StageMain() {
 }
 
 void StageMain::Update(float elapsedTime) {
-
 }
 
 void StageMain::Render(ID3D11DeviceContext* dc, Shader* shader) {

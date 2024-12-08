@@ -9,10 +9,13 @@ void StageManager::Update(float elapsedTime)
 	{
 		stage->Update(elapsedTime);
 	}
-
+	for (GameObject* object : objects)
+	{
+		object->Update(elapsedTime);
+	}
 
 	//破棄処理
-	for (Stage* stage : removes)
+	for (Stage* stage : stageRemoves)
 	{
 		std::vector<Stage*>::iterator it = std::find(stages.begin(), stages.end(), stage);
 		if (it != stages.end())
@@ -22,68 +25,95 @@ void StageManager::Update(float elapsedTime)
 		//ステージの破棄
 		delete stage;
 	}
+	for (GameObject* object : objectRemoves)
+	{
+		std::vector<GameObject*>::iterator it = std::find(objects.begin(), objects.end(), object);
+		if (it != objects.end())
+		{
+			objects.erase(it);
+		}
+		//ステージの破棄
+		delete object;
+	}
 
 	//Update内で増えた奴を登録
-	for (Stage* stage_add : add)
+	for (Stage* stage_add : stageAdd)
 	{
-		Register(stage_add);
+		StageRegister(stage_add);
 	}
+	for (GameObject* o_add : objectAdd)
+	{
+		ObjectRegister(o_add);
+	}
+
 	//破棄リストをクリア
-	removes.clear();
+	stageRemoves.clear();
+	objectRemoves.clear();
 	//追加リストをクリア
-	add.clear();
+	stageAdd.clear();
+	objectRemoves.clear();
 }
 
 //描画処理
 void StageManager::Render(ID3D11DeviceContext* dc, Shader* shader)
 {
-	for (Stage* stage : stages)
-	{
+	for (GameObject* stage : stages) {
 		stage->Render(dc, shader);
+	}
+	for (GameObject* object : objects)
+	{
+		object->Render(dc, shader);
 	}
 }
 
+//ステージとレイキャスト
+bool StageManager::RaycastToStage(const DirectX::XMFLOAT3& start, const DirectX::XMFLOAT3& end, HitResult& hit)
+{
+	for (Stage* stage : stages)
+	{
+		if (stage->RayCast(start, end, hit))
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
 //ステージ登録
-void StageManager::Register(Stage* stage)
+void StageManager::StageRegister(Stage* stage)
 {
 	stages.emplace_back(stage);
+}
+
+void StageManager::ObjectRegister(GameObject* r_object)
+{
+	objects.emplace_back(r_object);
 }
 
 //ステージ全削除
 void StageManager::Clear()
 {
-	for (Stage* stage : stages)
+	for (GameObject* stage : stages)
 	{
 		delete stage;
 	}
 	stages.clear();
+
+	for (GameObject* object : objects)
+	{
+		delete object;
+	}
+	objects.clear();
 }
 
-//レイキャスト
-bool StageManager::RayCast(const DirectX::XMFLOAT3& start, const DirectX::XMFLOAT3& end, HitResult& hit)
-{
-	bool result = false;
-	for (Stage* stage : stages)
-	{
-		if (stage->RayCast(
-			start,
-			end,
-			hit
-		)) {
-			return result = true;
-		}
-	}
-	return result;
-}
 
 //ステージ削除
-void StageManager::Remove(Stage*stage)
+void StageManager::StageRemove(Stage*stage)
 {
-	removes.insert(stage);
+	stageRemoves.insert(stage);
 }
 
-//配列の追加
-void StageManager::RegisterAdd(Stage* stage)
+void StageManager::ObjectRemove(GameObject* r_object)
 {
-	add.push_back(stage);
+	objectRemoves.insert(r_object);
 }

@@ -452,7 +452,7 @@ void SceneGame::GameSetting()
 //		{
 //			EnemySlime* slime = new EnemySlime;
 //			slime->SetPositon(hit.position);
-//			EnemeyManager::Instance().Register(slime);
+//			EnemeyManager::Instance().StageRegister(slime);
 //		}
 //		
 //	}

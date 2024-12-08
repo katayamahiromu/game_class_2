@@ -28,14 +28,7 @@ public:
 	//トルク設定
 	void SetTorque(const DirectX::XMFLOAT3& torque) { this->torque = torque; }
 private:
-	//行列更新処理
-	void UpdateTransform();
-private:
 	Model* model = nullptr;
-	DirectX::XMFLOAT3 position = { 0,0,0 };
-	DirectX::XMFLOAT3 angle = { 0,0,0 };
-	DirectX::XMFLOAT3 scale = { 1,1,1 };
-	DirectX::XMFLOAT4X4 transform = { 1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1 };
 	DirectX::XMFLOAT4X4 OldTransform = { 1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1 };
 	DirectX::XMFLOAT3 oldAngle = { 0,0,0 };
 

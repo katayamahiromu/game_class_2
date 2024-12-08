@@ -3,7 +3,7 @@
 #include"Input/Input.h"
 #include"Camera.h"
 #include"Graphics/Graphics.h"
-#include"StageManager.h"
+#include "StageManager.h"
 
 static Player* instace = nullptr;
 
@@ -109,45 +109,33 @@ void Player::Update(float elapsedTime) {
 	model->UpdateTransform(transform);
 
 	GamePad& gamePad = Input::Instance().GetGamePad();
-	if (gamePad.GetButtonDown() & GamePad::BTN_B)
+	if (InputAttack())
 	{
 		ToggleMoveMode();
+
+		// モード切替時に壁に埋まらないようにY座標を補正する
+		if (isXYMode)
+		{
+			DirectX::XMFLOAT3 start{ position.x, position.y + 0.2f, position.z }, end{ start.x, position.y - radius, start.z };
+			HitResult dummy;
+			if (StageManager::Instance().RaycastToStage(start, end, dummy))
+			{
+				position.y += radius;
+			}
+		}
 
 		hitEffect->Play(position);
 	}
 
 	if (isXYMode)
 	{
-		angle.x = DirectX::XMConvertToRadians(90);
+		angle.x = DirectX::XMConvertToRadians(-90);
 	}
 	else
 	{
 		angle.x = 0;
 	}
 
-	/*position.z = 1.502f;
-
-	if (position.y > 16.3f)
-	{
-		position.y = 16.3f;
-		velocity.y = 0.0f;
-	}
-	if (position.y < 1.3f)
-	{
-		jumpCount = 0;
-		position.y = 1.3f;
-		velocity.y = 0.0f;
-	}
-	if (position.x > 16.0f)
-	{
-		position.x = 16.00f;
-		velocity.x = 0.0f;
-	}
-	if (position.x < -16.0f)
-	{
-		position.x = -16.0f;
-		velocity.x = 0.0f;
-	}*/
 }
 
 // タイトル用のUpdate
@@ -165,6 +153,8 @@ void Player::TitleUpdate(float elapsedTime)
 bool Player::InputMove(float elapsedTime) {
 	//進行ベクトル取得
 	DirectX::XMFLOAT3 moveVec = GetMoveVec();
+	moveVec.y = isXYMode ? moveVec.y : 0; //当然2Dモードにy入力はいらんよなぁ
+
 	//移動処理
 	Move(moveVec.x, moveVec.y, moveSpeed); // XY平面で移動
 	//旋回処理
@@ -219,30 +209,8 @@ DirectX::XMFLOAT3 Player::GetMoveVec() const
 {
 	 // 入力情報を取得
 	GamePad& gamePad = Input::Instance().GetGamePad();
-	float ax = gamePad.GetAxisLX() * - 1;
-	float ay = gamePad.GetAxisLY();
-
-	//// カメラ方向とスティックの入力値で進行方向を計算
-	//Camera& camera = Camera::Instance();
-	//const DirectX::XMFLOAT3& cameraRight = camera.GetRight();
-	//const DirectX::XMFLOAT3& cameraFront = camera.GetFront();
-
-	//// XY平面での移動ベクトル計算
-	//float cameraRightX = cameraRight.x;
-	//float cameraRightY = cameraRight.y;
-	//float cameraRightLength = sqrtf(cameraRightX * cameraRightX + cameraRightY * cameraRightY);
-	//if (cameraRightLength > 0.0f) {
-	//	cameraRightX /= cameraRightLength;
-	//	cameraRightY /= cameraRightLength;
-	//}
-
-	//float cameraFrontX = cameraFront.x;
-	//float cameraFrontY = cameraFront.y;
-	//float cameraFrontLength = sqrtf(cameraFrontX * cameraFrontX + cameraFrontY * cameraFrontY);
-	//if (cameraFrontLength > 0.0f) {
-	//	cameraFrontX /= cameraFrontLength;
-	//	cameraFrontY /= cameraFrontLength;
-	//}
+	float ax = gamePad.GetAxisLX() ;
+	float ay = gamePad.GetAxisLY() ;
 
 	DirectX::XMFLOAT3 vec;
 	vec.x = /*cameraFrontX * ay + cameraRightX * */ax;

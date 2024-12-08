@@ -1,7 +1,9 @@
 #pragma once
-#include"Stage.h"
+#include "Object.h"
 #include"Graphics/Model.h"
 #include"Character.h"
+#include "Graphics/Shader.h"
+#include "Collision.h"
 
 class ClickSwitch : public Stage
 {
@@ -32,9 +34,9 @@ public:
 	HoldSwitch(DirectX::XMFLOAT3 Position);
 	~HoldSwitch()override;
 
-	void Update(float elapsedTime)override;
-	void Render(ID3D11DeviceContext* dc, Shader* shader)override;
-	bool RayCast(const DirectX::XMFLOAT3& start, const DirectX::XMFLOAT3& end, HitResult& hit)override;
+	void Update(float elapsedTime);
+	void Render(ID3D11DeviceContext* dc, Shader* shader);
+	bool RayCast(const DirectX::XMFLOAT3& start, const DirectX::XMFLOAT3& end, HitResult& hit);
 private:
 	//スイッチが押された時の動き
 	void OnSwitchMove();

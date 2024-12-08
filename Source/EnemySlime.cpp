@@ -68,15 +68,6 @@ void EnemySlime::Update(float elapsedTime)
 		//hitEffect->Play(position);
 	}
 
-	if (isXYMode)
-	{
-		angle.x = DirectX::XMConvertToRadians(90);
-	}
-	else
-	{
-		angle.x = 0;
-	}
-
 	position.z = 1.502f;
 
 	if (position.y > 16.3f)
