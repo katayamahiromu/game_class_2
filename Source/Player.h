@@ -147,7 +147,8 @@ private:
 	void Playback(Character*character);
 
 	//static const int MAX_KEEP_TRANSFORM = 720;
-	static const int MAX_KEEP_TRANSFORM = 432;
+	//static const int MAX_KEEP_TRANSFORM = 432;
+	static const int MAX_KEEP_TRANSFORM = 1440;
 	DirectX::XMFLOAT3 keep_position[MAX_KEEP_TRANSFORM];
 	//˜^‰æƒtƒ‰ƒO
 	bool IsRecording = false;
