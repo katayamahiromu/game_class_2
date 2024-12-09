@@ -19,6 +19,10 @@ void AppearStage::Update(float elapsedTime)
 	{
 		isAppear = false;
 	}
+	else
+	{
+		isAppear = true;
+	}
 }
 
 void AppearStage::Render(ID3D11DeviceContext* dc, Shader* shader)
