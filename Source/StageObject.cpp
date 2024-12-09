@@ -45,7 +45,7 @@ bool AppearStage::RayCast(const DirectX::XMFLOAT3& start, const DirectX::XMFLOAT
 	}
 }
 
-ArrivalStage::ArrivalStage(DirectX::XMFLOAT3 pos, DirectX::XMFLOAT3 scale = { 1.0f,1.0f,1.0f })
+ArrivalStage::ArrivalStage(DirectX::XMFLOAT3 pos, DirectX::XMFLOAT3 scale)
 {
 	model = std::make_unique<Model>("Data/Model/Cube/Cube.mdl");
 	position = pos;
