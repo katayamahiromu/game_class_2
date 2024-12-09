@@ -50,10 +50,10 @@ void SceneGame::Initialize()
 		switch (info.type)
 		{
 		case APPEAR:
-			stageManager.ObjectRegister(new AppearStage(info.position,info.scale));
+			stageManager.StageRegister(new AppearStage(info.position,info.scale));
 			break;
 		case DEFAULT:
-			stageManager.ObjectRegister(new Cube(info.position, info.scale));
+			stageManager.StageRegister(new Cube(info.position, info.scale));
 			break;
 		}
 	}

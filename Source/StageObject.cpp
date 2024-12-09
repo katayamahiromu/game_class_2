@@ -72,5 +72,5 @@ bool Cube::RayCast(const DirectX::XMFLOAT3& start, const DirectX::XMFLOAT3& end,
 void Cube::Gui()
 {
 	ImGui::SliderFloat3("position", &position.x, -16.0f,16.0f);
-	ImGui::SliderFloat3("Scale", &scale.x, 1.0f, 20.0f);
+	ImGui::SliderFloat3("Scale", &scale.x, 1.0f, 40.0f);
 }
