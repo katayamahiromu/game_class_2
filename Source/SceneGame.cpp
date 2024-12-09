@@ -55,6 +55,9 @@ void SceneGame::Initialize()
 		case DEFAULT:
 			stageManager.StageRegister(new Cube(info.position, info.scale));
 			break;
+		case ARRIVAl:
+			stageManager.StageRegister(new ArrivalStage(info.position, info.scale));
+			break;
 		}
 	}
 	

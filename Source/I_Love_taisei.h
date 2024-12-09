@@ -25,6 +25,7 @@ enum CUBE_TYPE
 {
 	DEFAULT,
 	APPEAR,
+	ARRIVAl,
 };
 
 /// <summary>

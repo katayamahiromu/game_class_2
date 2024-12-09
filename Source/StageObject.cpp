@@ -19,6 +19,10 @@ void AppearStage::Update(float elapsedTime)
 	{
 		isAppear = false;
 	}
+	else
+	{
+		isAppear = true;
+	}
 }
 
 void AppearStage::Render(ID3D11DeviceContext* dc, Shader* shader)
@@ -41,6 +45,48 @@ bool AppearStage::RayCast(const DirectX::XMFLOAT3& start, const DirectX::XMFLOAT
 	}
 }
 
+ArrivalStage::ArrivalStage(DirectX::XMFLOAT3 pos, DirectX::XMFLOAT3 scale = { 1.0f,1.0f,1.0f })
+{
+	model = std::make_unique<Model>("Data/Model/Cube/Cube.mdl");
+	position = pos;
+	this->scale = scale;
+	UpdateTransform();
+	model->UpdateTransform(transform);
+	position.z = 1.70f;
+}
+
+void ArrivalStage::Update(float elapsedTime)
+{
+	StageManager& manger = StageManager::Instance();
+	if (manger.GetGoalCount() == manger.GetPushCount())
+	{
+		isAppear = true;
+	}
+	else
+	{
+		isAppear = false;
+	}
+}
+
+void ArrivalStage::Render(ID3D11DeviceContext* dc, Shader* shader)
+{
+	if (isAppear)
+	{
+		shader->Draw(dc, model.get());
+	}
+}
+
+bool ArrivalStage::RayCast(const DirectX::XMFLOAT3& start, const DirectX::XMFLOAT3& end, HitResult& hit)
+{
+	if (isAppear)
+	{
+		return Collision::InterserctRayVsModel(start, end, model.get(), hit);
+	}
+	else
+	{
+		return false;
+	}
+}
 
 Cube::Cube(DirectX::XMFLOAT3 pos,DirectX::XMFLOAT3 scale)
 {
