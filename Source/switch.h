@@ -13,6 +13,7 @@ public:
 
 	void Update(float elapsedTime)override;
 	void Render(ID3D11DeviceContext* dc, Shader* shader)override;
+	void Reset()override { pushFlag = false; }
 private:
 	//スイッチが押された時の動き
 	void OnSwitchMove();
@@ -35,6 +36,7 @@ public:
 
 	void Update(float elapsedTime);
 	void Render(ID3D11DeviceContext* dc, Shader* shader);
+	void Reset()override { pushFlag = false; }
 private:
 	//スイッチが押された時の動き
 	void OnSwitchMove();

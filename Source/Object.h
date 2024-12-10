@@ -13,8 +13,8 @@ public:
 
 	virtual void Update(float elapsedTime) {};
 	virtual void Render(ID3D11DeviceContext* dc, Shader* shader) {}
-
 	
+	virtual void Reset(){}
 protected:
 	DirectX::XMFLOAT3   position = { 0,0,0 };
 	DirectX::XMFLOAT3   angle = { 0,0,0 };

@@ -138,9 +138,11 @@ private:
 	};
 private:
 	State state = State::Idle;
-private:
+public:
+	//リセットの時に記録してたものも元にに戻す為にpublic
 	//録画の準備
 	void InitRecording();
+private:
 	//録画
 	void Recording(DirectX::XMFLOAT3 position);
 	//再生
