@@ -26,7 +26,10 @@ private:
 	//ローディングスレッド
 	static void LoadingThread(SceneLoading* scene);
 private:
-	Sprite* sprite = nullptr;
+	std::unique_ptr<Sprite> kaiten = nullptr;
+	std::unique_ptr<Sprite> loading = nullptr;
+	std::unique_ptr<Sprite> back = nullptr;
+
 	float angle = 0.0f;
 	Scene* nextScene = nullptr;
 	std::thread* thread = nullptr;
