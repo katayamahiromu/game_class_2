@@ -131,6 +131,17 @@ void SceneGame::Initialize()
 
 	//UI
 	UIExplain = std::make_unique<Sprite>("Data/Sprite/UI.png");
+
+	//マスク用
+	mask = std::make_unique<Sprite>("Data/Sprite/dissolve.png");
+	effectSprite = std::make_unique<Sprite>("Data/Sprite/back.png");
+
+	effectSprite->Update(
+		0, 0, 1280, 720,
+		0, 0, effectSprite->GetTextureWidth(), effectSprite->GetTextureHeight(), 0.0f,
+		1.0f, 1.0f, 1.0f, 1.0f);
+
+	MS = std::make_unique<MaskShader>(graphics.GetDevice());
 }
 
 // 終了化
@@ -174,7 +185,7 @@ void SceneGame::Update(float elapsedTime)
 	}
 
 	Pause();
-	Reset();
+	Reset(elapsedTime);
 }
 
 // 描画処理
@@ -210,8 +221,10 @@ void SceneGame::ObjectRender()
 
 	// 描画処理
 	RenderContext rc;
+	rc.deviceContext = dc;
 	rc.lightDirection = lightDirection;	// ライト方向（下方向）
 	rc.ambientColor = ambientLightColor;
+
 
 	//カメラのパラメーター設定
 	Camera& camera = Camera::Instance();
@@ -269,6 +282,17 @@ void SceneGame::ObjectRender()
 			1050.0f, -50.0f, 200.0f, 150.0f,
 			0.0f, 0.0f, 400.0f, 300.0f, 0.0f,
 			1.0f, 1.0f, 1.0f, 1.0f);
+
+
+		//本間にごり押しです
+		//時間無かったんです許して下さい
+		rc.maskData.maskTexture = mask->GetShaderResourceView().Get();
+		rc.maskData.dissolveThreshold = dissolveThreshold;
+		rc.maskData.edgThreshold = edgThreshold;
+		rc.maskData.edgColor = edgColor;
+		MS->Begin(rc);
+		MS->Draw(rc, effectSprite.get());
+		MS->End(rc);
 	}
 }
 
@@ -370,12 +394,33 @@ void SceneGame::GameResetting()
 	}
 }
 
-void SceneGame::Reset()
+void SceneGame::Reset(float elapsedTime)
 {
 	GamePad& gamePad = Input::Instance().GetGamePad();
 	if (gamePad.GetButtonDown() & gamePad.BTN_RESET)
 	{
 		GameResetting();
+		isReset = true;
+	}
+
+	if (isReset)
+	{
+		dissolveThreshold += elapsedTime;
+		if (dissolveThreshold > 1.0)
+		{
+			dissolveThreshold = 1.0f;
+			time += elapsedTime;
+
+			if (time >= MAX_RESET_TIME)
+			{
+				time = 0.0f;
+				isReset = false;
+			}
+		}
+	}
+	else
+	{
+		dissolveThreshold = 0.0f;
 	}
 }
 

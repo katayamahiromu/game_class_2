@@ -6,6 +6,7 @@
 #include"Graphics/Sprite.h"
 #include"ScenePause.h"
 #include"StageObject.h"
+#include"Graphics/MaskShader.h"
 
 // ゲームシーン
 class SceneGame:public Scene
@@ -41,7 +42,7 @@ private:
 	void GameResetting();
 
 	//リセット
-	void Reset();
+	void Reset(float elapsedTime);
 
 	//GUI
 	void DebugGui();
@@ -52,6 +53,7 @@ private:
 		const DirectX::XMFLOAT4X4& view,
 		const DirectX::XMFLOAT4X4& projection
 	);
+
 private:
 	std::unique_ptr<Player> player;
 	std::unique_ptr<CameraController>cameraController;
@@ -69,11 +71,24 @@ private:
 	bool PauseFlag = false;
 
 	//平行光源
-	DirectX::XMFLOAT4 ambientLightColor = { 0.2f,0.2f,0.2f,1.0f };
+	DirectX::XMFLOAT4 ambientLightColor = { 1.0f,1.0f,1.0f,1.0f };
 	DirectX::XMFLOAT4 lightDirection = { 0.0f, -1.0f, 0.0f, 0.0f };
 
 	int select;
 
+	//マスク用のあれこれ
+	std::unique_ptr<Sprite>effectSprite;
+	std::unique_ptr<Sprite>mask;
+	std::unique_ptr<MaskShader>MS;
+	float dissolveThreshold = 0.0f;
+	float edgThreshold = 0.2f; //閾値
+	DirectX::XMFLOAT4 edgColor = {1,0,0,1}; //色
+
 	//Debug用
 	std::vector<Cube*>cubeArray;
+
+	//リセット関係
+	bool isReset = false;
+	float time = 0.0f;
+	const float MAX_RESET_TIME = 0.2f;
 };

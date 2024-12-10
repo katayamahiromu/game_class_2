@@ -45,6 +45,9 @@ public:
 	void CollisionNodeVsEnemies(const char* nodeName, float nodeRadius);
 	//インスタンス取得
 	static Player& Instance();
+
+	//確認用
+	void A() { model->PlayAnimation(0, true, 0.2); }
 protected:
 	//ダメージを受けた時に呼ばれる
 	void OnDamaged() override;
