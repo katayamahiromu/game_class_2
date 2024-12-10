@@ -42,6 +42,7 @@ public:
 	void PushCountPlus() { pushCount++; }
 	void PushCountMinus() { pushCount--; }
 	void ClearPushCount() { pushCount = 0; }
+	void ResetSwitch();
 
 	//ゴール関係の関数共
 	int GetGoalCount() { return goalCount; }

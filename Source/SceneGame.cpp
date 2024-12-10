@@ -95,7 +95,6 @@ void SceneGame::Initialize()
 	DirectX::XMFLOAT3 target = { 0.256f,9.133f,1.502f };
 	cameraController->SetTarget(target);
 
-
 	//シェーダーリソースビューの作成
 	ID3D11Device* device = graphics.GetDevice();
 	HRESULT hr = { S_OK };
@@ -175,6 +174,7 @@ void SceneGame::Update(float elapsedTime)
 	}
 
 	Pause();
+	Reset();
 }
 
 // 描画処理
@@ -278,6 +278,7 @@ void SceneGame::Pause()
 
 	if (gamePad.GetButtonDown() & GamePad::BTN_START)
 	{
+		//ポーズのスプライトに貼り付ける用の画像の作成
 		Graphics& graphics = Graphics::Instance();
 		ID3D11DeviceContext* dc = graphics.GetDeviceContext();
 		ID3D11RenderTargetView* rtv = scene_render.Get();
@@ -293,6 +294,7 @@ void SceneGame::Pause()
 
 		ObjectRender();
 
+		//ポーズに作成した奴を渡す
 		pause->SetShaderResourceView(scene_shader_resource_view);
 		PauseFlag = true;
 	}
@@ -351,9 +353,30 @@ void SceneGame::DebugGui()
 	}
 }
 
-void SceneGame::GameSetting()
+void SceneGame::GameResetting()
 {
 	player->SetPosition(script[select].PlayerPos);
+	player->InitRecording();
+
+	StageManager& stageManager = StageManager::Instance();
+	stageManager.ResetSwitch();
+	stageManager.ClearPushCount();
+
+	EnemeyManager& enemyManager = EnemeyManager::Instance();
+	int enemyCount = enemyManager.GetEnemyCount();
+	for (int i = 0;i < enemyCount;++i)
+	{
+		enemyManager.GetEnemy(i)->SetPosition(script[select].ObjectPosArray[i]);
+	}
+}
+
+void SceneGame::Reset()
+{
+	GamePad& gamePad = Input::Instance().GetGamePad();
+	if (gamePad.GetButtonDown() & gamePad.BTN_RESET)
+	{
+		GameResetting();
+	}
 }
 
 //エネミーHPゲージ描画

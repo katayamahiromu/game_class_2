@@ -37,7 +37,11 @@ private:
 	//オブジェクトの描画処理
 	void ObjectRender();
 
-	void GameSetting();
+	//オブジェクトの再設定
+	void GameResetting();
+
+	//リセット
+	void Reset();
 
 	//GUI
 	void DebugGui();

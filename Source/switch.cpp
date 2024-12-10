@@ -41,6 +41,10 @@ void ClickSwitch::OnSwitchMove()
 			scale.y = 0.0001f;
 		}
 	}
+	else
+	{
+		scale.y = 0.01;
+	}
 }
 
 void ClickSwitch::SwitchVsEnemy()
