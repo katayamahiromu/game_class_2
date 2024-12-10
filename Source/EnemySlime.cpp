@@ -6,10 +6,10 @@
 
 //コンストラクタ
 EnemySlime::EnemySlime() {
-	model = std::make_unique<Model>("Data/Model/Slime/Slime.mdl");
+	model = std::make_unique<Model>("Data/Model/Box/box.mdl");
 
 	//モデルが大きいのでスケーリング
-	scale.x = scale.y = scale.z = 0.01f;
+	scale.x = scale.y = scale.z = 0.05f;
 	radius = 0.5f;
 	height = 1.0f;
 
