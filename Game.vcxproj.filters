@@ -213,8 +213,10 @@
     <ClInclude Include="Source\Object.h">
       <Filter>Source\Object</Filter>
     </ClInclude>
-    <ClInclude Include="Source\StageObject.h">
-      <Filter>Source\Stage</Filter>
+    <ClInclude Include="Source\ScenePause.h" />
+    <ClInclude Include="Source\StageObject.h" />
+    <ClInclude Include="Source\Graphics\MaskShader.h">
+      <Filter>Source\Graphics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -359,11 +361,17 @@
     <ClCompile Include="Source\Object.cpp">
       <Filter>Source\Object</Filter>
     </ClCompile>
-    <ClCompile Include="Source\StageObject.cpp">
-      <Filter>Source\Stage</Filter>
-    </ClCompile>
     <ClCompile Include="Source\switch.cpp">
       <Filter>Source\Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ScenePause.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\StageObject.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Graphics\MaskShader.cpp">
+      <Filter>Source\Graphics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -389,6 +397,9 @@
       <Filter>HLSL</Filter>
     </None>
     <None Include="HLSL\Light.hlsli">
+      <Filter>HLSL</Filter>
+    </None>
+    <None Include="HLSL\Mask.hlsli">
       <Filter>HLSL</Filter>
     </None>
   </ItemGroup>
@@ -421,6 +432,12 @@
       <Filter>HLSL</Filter>
     </FxCompile>
     <FxCompile Include="HLSL\SpritePS.hlsl">
+      <Filter>HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="HLSL\MaskPS.hlsl">
+      <Filter>HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="HLSL\MaskVS.hlsl">
       <Filter>HLSL</Filter>
     </FxCompile>
   </ItemGroup>

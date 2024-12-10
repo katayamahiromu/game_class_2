@@ -88,6 +88,7 @@ void Player::Update(float elapsedTime) {
 		}
 
 		if (IsRecording) Recording(EnemeyManager::Instance().GetEnemy(0)->GetPosition());
+
 		if (GetAsyncKeyState('N') & 0x8000)
 		{
 			if (!isOk)return;

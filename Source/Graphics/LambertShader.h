@@ -3,6 +3,7 @@
 #include <memory>
 #include <wrl.h>
 #include "Graphics/Shader.h"
+#include "Graphics/Sprite.h"
 
 class LambertShader : public Shader
 {
@@ -52,4 +53,5 @@ private:
 	Microsoft::WRL::ComPtr<ID3D11DepthStencilState>	depthStencilState;
 
 	Microsoft::WRL::ComPtr<ID3D11SamplerState>		samplerState;
+	std::unique_ptr<Sprite> toontexture;//デフォルトのトゥーン用ランプテクスチャ
 };

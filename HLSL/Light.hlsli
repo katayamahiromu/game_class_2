@@ -41,3 +41,25 @@ float3 CalcPhongSpecular(float3 normal, float3 lightVector, float3 lightColor,
 	//入射光色と内積の結果、及び反射率を全て乗算して返却しましょう
 	return lightColor * d * ks;
 }
+
+//--------------------------------------------
+//	トゥーン拡散反射計算関数
+//--------------------------------------------
+// toonTexture		: トゥーン用U方向ランプテクスチャ
+// toonSamplerState	: トゥーン用サンプラーステート
+// normal			: 法線(正規化済み)
+// lightVector		: 入射ベクトル(正規化済み)
+// lightColor		: 入射光色
+// kd				: 反射率(反射の強さ)
+// 返す値			: 拡散反射色
+float3 CalcToonDiffuse(Texture2D toonTexture, SamplerState toonSamplerState, float3 normal,
+	float3 lightVector, float3 lightColor, float3 kd)
+{
+	//法線と入射ベクトルからU座標を求める
+	float u = saturate(dot(normal, -lightVector) * 0.5f + 0.5f);
+
+	//トゥーンテクスチャから色を取得する
+	float3 c = toonTexture.Sample(toonSamplerState, float2(u, 0.1f));
+
+	return lightColor * c * kd;
+}

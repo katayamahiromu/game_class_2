@@ -135,6 +135,7 @@
     <ClInclude Include="Source\Graphics\ImGuiRenderer.h" />
     <ClInclude Include="Source\Graphics\LambertShader.h" />
     <ClInclude Include="Source\Graphics\LineRenderer.h" />
+    <ClInclude Include="Source\Graphics\MaskShader.h" />
     <ClInclude Include="Source\Graphics\Model.h" />
     <ClInclude Include="Source\Graphics\ModelResource.h" />
     <ClInclude Include="Source\Graphics\RenderContext.h" />
@@ -192,6 +193,7 @@
     <ClCompile Include="Source\Graphics\ImGuiRenderer.cpp" />
     <ClCompile Include="Source\Graphics\LambertShader.cpp" />
     <ClCompile Include="Source\Graphics\LineRenderer.cpp" />
+    <ClCompile Include="Source\Graphics\MaskShader.cpp" />
     <ClCompile Include="Source\Graphics\Model.cpp" />
     <ClCompile Include="Source\Graphics\ModelResource.cpp" />
     <ClCompile Include="Source\Graphics\Sprite.cpp" />
@@ -223,6 +225,7 @@
     <None Include="HLSL\Lambert.hlsli" />
     <None Include="HLSL\Light.hlsli" />
     <None Include="HLSL\Line.hlsli" />
+    <None Include="HLSL\Mask.hlsli" />
     <None Include="HLSL\Sprite.hlsli" />
     <None Include="HLSL\test.hlsli" />
   </ItemGroup>
@@ -322,6 +325,14 @@
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Shader\%(Filename).cso</ObjectFileOutput>
       <AssemblerOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">AssemblyCode</AssemblerOutput>
       <AssemblerOutputFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Shader\%(Filename).cod</AssemblerOutputFile>
+    </FxCompile>
+    <FxCompile Include="HLSL\MaskPS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="HLSL\MaskVS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
     </FxCompile>
     <FxCompile Include="HLSL\SpritePS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>

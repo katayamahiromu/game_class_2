@@ -25,15 +25,17 @@ void SceneTitle::Initialize()
 
 	// プレイヤー初期化
 	player = std::make_unique<Player>();
-
+	player->A();
 	// カメラ初期化
 	Graphics& graphics = Graphics::Instance();
 	Camera& camera = Camera::Instance();
+
 	camera.SetLookAt(
 		DirectX::XMFLOAT3(0, 1, -10),
 		DirectX::XMFLOAT3(0, 0, 0),
 		DirectX::XMFLOAT3(0, 1, 0)
 	);
+
 	camera.SetPerspectiveFov(
 		DirectX::XMConvertToRadians(45),
 		graphics.GetScreenWidth() / graphics.GetScreenHeight(),

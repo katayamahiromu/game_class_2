@@ -21,7 +21,28 @@ public:
 	};
 
 	// 描画実行
-	void Render(ID3D11DeviceContext *dc,
+	void Render(
+		ID3D11DeviceContext *dc,
+		float dx, float dy,
+		float dw, float dh,
+		float sx, float sy,
+		float sw, float sh,
+		float angle,
+		float r, float g, float b, float a) const;
+
+	//描画実行
+	void Sprite::Render(
+		ID3D11DeviceContext*immediate_context,
+		float dx, float dy,
+		float dw, float dh,
+		float sx, float sy,
+		float sw, float sh,
+		float angle,
+		float scale,    //追加
+		float r, float g, float b, float a) const;
+
+	// バッファ更新
+	void Update(
 		float dx, float dy,
 		float dw, float dh,
 		float sx, float sy,
@@ -36,14 +57,17 @@ public:
 	int GetTextureHeight() const { return textureHeight; }
 
 	//シェーダーリソースビューの取得
-	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> GetShaderResourceView() { return shaderResourceView.Get(); }
+	const Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>& GetShaderResourceView() const { return shaderResourceView; }
 	void SetShaderResourceView(Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>& srv, int texWidth, int texHeight);
 
 	//頂点シェーダーの取得
-	Microsoft::WRL::ComPtr<ID3D11VertexShader>GetVertexShader() { return vertexShader.Get(); }
+	const Microsoft::WRL::ComPtr<ID3D11VertexShader>GetVertexShader()const { return vertexShader.Get(); }
 
 	//インプットレイアウトの取得
 	Microsoft::WRL::ComPtr<ID3D11InputLayout>GetInputLayout() { return inputLayout; }
+
+	//バッファーの取得
+	const Microsoft::WRL::ComPtr<ID3D11Buffer>& GetVertexBuffer() const { return vertexBuffer; }
 private:
 	Microsoft::WRL::ComPtr<ID3D11VertexShader>			vertexShader;
 	Microsoft::WRL::ComPtr<ID3D11PixelShader>			pixelShader;
