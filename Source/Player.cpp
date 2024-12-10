@@ -19,10 +19,9 @@ Player::Player()
 	//インスタンスポインタ取得
 	instace = this;
 	position = {0.0f,-2.0f,0.0f};
-	model = std::make_unique<Model>("Data/Model/Jammo/Jammo.mdl");
+	model = std::make_unique<Model>("Data/Model/Robbot/robot.mdl");
 	//モデルが大きいのでスケーリング
 	scale.x = scale.y = scale.z = 0.02f;
-
 	model->PlayAnimation(Anime_Falling, true, 0.1f);
 }
 
@@ -31,9 +30,10 @@ Player::Player(DirectX::XMFLOAT3 pos) {
 	//インスタンスポインタ取得
 	instace = this;
 	position = pos;
-	model = std::make_unique<Model>("Data/Model/Jammo/Jammo.mdl");
+	model = std::make_unique<Model>("Data/Model/Robbot/robot.mdl");
+	angle.y = 90.0f;
 	//モデルが大きいのでスケーリング
-	scale.x = scale.y = scale.z = 0.0075f;
+	scale.x = scale.y = scale.z = 0.02f;
 
 	//ヒットエフェクト読み込み
 	hitEffect = new Effect("Data/Effect/Hit.efk");
