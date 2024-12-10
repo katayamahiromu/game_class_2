@@ -59,5 +59,8 @@ float4 main(VS_OUT pin) : SV_TARGET
 
 	//HSV > RGBに変換
 	color.rgb = HSV2RGB(color.rgb);
+
+	//アルファ値を直で代入
+	color.a = alpha;
 	return color;
 }

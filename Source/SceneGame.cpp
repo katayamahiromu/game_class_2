@@ -135,7 +135,7 @@ void SceneGame::Initialize()
 
 	//マスク用
 	mask = std::make_unique<Sprite>("Data/Sprite/dissolve.png");
-	effectSprite = std::make_unique<Sprite>("Data/Sprite/back.png");
+	effectSprite = std::make_unique<Sprite>("Data/Sprite/RESET.png");
 
 	effectSprite->Update(
 		0, 0, 1280, 720,

@@ -31,8 +31,15 @@ void Goal::Render(ID3D11DeviceContext* dc, Shader* shader)
 	StageManager& manger = StageManager::Instance();
 	if (manger.GetGoalCount() == manger.GetPushCount())
 	{
-		DebugRenderer* debugRenderer = Graphics::Instance().GetDebugRenderer();
-		debugRenderer->DrawSphere({position.x,position.y + 1.0f,position.z}, radius, DirectX::XMFLOAT4(1, 1, 1, 1));
+		ColorGradingData data = model->GetColorGrading();
+		data.alpha = 1.0f;
+		model->SetColorGrading(data);
+	}
+	else
+	{
+		ColorGradingData data = model->GetColorGrading();
+		data.alpha = 0.5f;
+		model->SetColorGrading(data);
 	}
 	shader->Draw(dc, model.get());
 }

@@ -18,7 +18,7 @@ struct ColorGradingData
 	float hueShift = 0;// 色相調整
 	float saturation = 1;// 彩度調整
 	float brightness = 1;// 明度調整
-	float dummy = 0;
+	float alpha = 1.0f; //透明化を有効にするか否か
 };
 
 // レンダーコンテキスト

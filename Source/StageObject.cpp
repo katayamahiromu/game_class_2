@@ -29,8 +29,17 @@ void AppearStage::Render(ID3D11DeviceContext* dc, Shader* shader)
 {
 	if (isAppear)
 	{
-		shader->Draw(dc, model.get());
+		ColorGradingData data = model->GetColorGrading();
+		data.alpha = 1.0f;
+		model->SetColorGrading(data);
 	}
+	else
+	{
+		ColorGradingData data = model->GetColorGrading();
+		data.alpha = 0.5f;
+		model->SetColorGrading(data);
+	}
+	shader->Draw(dc, model.get());
 }
 
 bool AppearStage::RayCast(const DirectX::XMFLOAT3& start, const DirectX::XMFLOAT3& end, HitResult& hit)
@@ -72,8 +81,17 @@ void ArrivalStage::Render(ID3D11DeviceContext* dc, Shader* shader)
 {
 	if (isAppear)
 	{
-		shader->Draw(dc, model.get());
+		ColorGradingData data = model->GetColorGrading();
+		data.alpha = 0.5f;
+		model->SetColorGrading(data);
 	}
+	else
+	{
+		ColorGradingData data = model->GetColorGrading();
+		data.alpha = 1.0f;
+		model->SetColorGrading(data);
+	}
+	shader->Draw(dc, model.get());
 }
 
 bool ArrivalStage::RayCast(const DirectX::XMFLOAT3& start, const DirectX::XMFLOAT3& end, HitResult& hit)
