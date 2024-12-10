@@ -2,7 +2,8 @@
 #include"FilterFunctions.hlsli"
 
 Texture2D diffuseMap : register(t0);
-Texture2D normalMap : register(t1); //シャドウマップ
+Texture2D normalMap : register(t1);
+Texture2D toonTex : register(t2);
 
 SamplerState diffuseMapSamplerState : register(s0);
 
@@ -36,7 +37,7 @@ float4 main(VS_OUT pin) : SV_TARGET
 	float3 ambient = ka * ambientLightColor;
 
 	//平行光源のライティング計算
-	float3 directionalDiffuse = ClacHarfLambert(N, L, ambientLightColor.rgb, kd);
+	float3 directionalDiffuse = CalcToonDiffuse(toonTex, diffuseMapSamplerState, N, L, ambientLightColor.rgb, kd);;
 	float3 directionalSpecular = CalcPhongSpecular(N, L, ambientLightColor.rgb, E, shiness, ks);
 
 	color.rgb += color.rgb * directionalDiffuse;

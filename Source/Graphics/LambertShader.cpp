@@ -165,6 +165,11 @@ LambertShader::LambertShader(ID3D11Device* device)
 		HRESULT hr = device->CreateSamplerState(&desc, samplerState.GetAddressOf());
 		_ASSERT_EXPR(SUCCEEDED(hr), HRTrace(hr));
 	}
+
+	//toon用テクスチャの読み込み
+	{
+		toontexture = std::make_unique<Sprite>("Data/Sprite/ramp.png");
+	}
 }
 
 // 描画開始
@@ -248,8 +253,13 @@ void LambertShader::Draw(ID3D11DeviceContext* dc, const Model* model)
 			CbSubset cbSubset;
 			cbSubset.materialColor = subset.material->color;
 			dc->UpdateSubresource(subsetConstantBuffer.Get(), 0, 0, &cbSubset, 0, 0);
-			dc->PSSetShaderResources(0, 1, subset.material->shaderResourceView.GetAddressOf());
-			dc->PSSetShaderResources(1, 1, subset.material->normal.GetAddressOf());
+			ID3D11ShaderResourceView* srvs[] =
+			{
+				subset.material->shaderResourceView.Get(),
+				subset.material->normal.Get(),
+				toontexture->GetShaderResourceView().Get(),
+			};
+			dc->PSSetShaderResources(0, ARRAYSIZE(srvs), srvs);
 			dc->PSSetSamplers(0, 1, samplerState.GetAddressOf());
 			dc->DrawIndexed(subset.indexCount, subset.startIndex, 0);
 		}

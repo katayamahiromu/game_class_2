@@ -30,6 +30,17 @@ public:
 		float angle,
 		float r, float g, float b, float a) const;
 
+	//描画実行
+	void Sprite::Render(
+		ID3D11DeviceContext*immediate_context,
+		float dx, float dy,
+		float dw, float dh,
+		float sx, float sy,
+		float sw, float sh,
+		float angle,
+		float scale,    //追加
+		float r, float g, float b, float a) const;
+
 	// バッファ更新
 	void Update(
 		float dx, float dy,

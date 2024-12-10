@@ -72,7 +72,7 @@ private:
 
 	//ïΩçsåıåπ
 	DirectX::XMFLOAT4 ambientLightColor = { 1.0f,1.0f,1.0f,1.0f };
-	DirectX::XMFLOAT4 lightDirection = { 0.0f, -1.0f, 0.0f, 0.0f };
+	DirectX::XMFLOAT4 lightDirection = { -1.0f, -1.0f, -1.0f, 0.0f };
 
 	int select;
 

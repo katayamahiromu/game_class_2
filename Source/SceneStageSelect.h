@@ -35,12 +35,29 @@ private:
 		StageTwo,
 		StageMax,//ステージ数上限
 	};
-
 private:
-	std::unique_ptr<Sprite> back = nullptr;
-	std::unique_ptr<Sprite>  yajirusi = nullptr;
+	bool ChangeFlg(float elapsedTime);
 
-	DirectX::XMFLOAT2 selectPos = { 0,600 };
+	void ShiftChara(float elapsedTime);
+
+	void ChangeSize(float elapsedTime);
+private:
+	std::unique_ptr<Sprite> stage = nullptr;
+	std::unique_ptr<Sprite> pin = nullptr;
+	std::unique_ptr<Sprite> triangle = nullptr;
+	std::unique_ptr<Sprite> line = nullptr;
+	std::unique_ptr<Sprite> stageNum[20] = {};
+	DirectX::XMFLOAT2 spriteSize = { 110.0f,100.0f };
+
+	float scale[20] = { 1.0f,1.0f,1.0f,1.0f,1.0f,1.0f,1.0f,1.0f,1.0f,1.0f,
+					 1.0f,1.0f,1.0f,1.0f,1.0f,1.0f,1.0f,1.0f,1.0f,1.0f };
+	float scrollScreenWidth = 0.0f;
+	float charaMove = 0.0f;
+	int selectNum = 0;
+	int maxStage = 20;
+	bool moveFlg = false;
+	bool cooltimeFlg = false;
+	float cooltime = 0.0f;
 
 	int select = 0;
 
