@@ -22,8 +22,6 @@ void SceneGame::Initialize()
 {
 	StageManager& stageManager = StageManager::Instance();
 	
-	// プレイヤー初期化
-	player = std::make_unique<Player>(script[select].PlayerPos);
 	//ステージ初期化
 	//ゴールのカウントをスイッチの数で設定
 	stageManager.ClearPushCount();
@@ -68,6 +66,9 @@ void SceneGame::Initialize()
 		slime->SetPosition(pos);
 		EnemeyManager::Instance().StageRegister(slime);
 	}
+
+	// プレイヤー初期化
+	player = std::make_unique<Player>(script[select].PlayerPos);
 
 	//カメラコントローラー初期化
 	cameraController = std::make_unique<CameraController>();
@@ -142,6 +143,9 @@ void SceneGame::Initialize()
 		1.0f, 1.0f, 1.0f, 1.0f);
 
 	MS = std::make_unique<MaskShader>(graphics.GetDevice());
+
+	BGM = Audio::Instance().LoadAudioSource("Data/Audio/BGM/electric-threads-ai-192129.wav");
+	BGM->Play(true);
 }
 
 // 終了化

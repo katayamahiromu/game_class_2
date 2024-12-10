@@ -40,10 +40,20 @@ Player::Player(DirectX::XMFLOAT3 pos) {
 
 	//待機ステートへの遷移
 	TransitiomIdleState();
+
+	//処理順に左右されるので気をつけてください
+	//プレイヤーの生成は必ず最後にしてください
+	Model* model = EnemeyManager::Instance().GetEnemy(0)->GetModel();
+	ColorGradingData data = model->GetColorGrading();
+	data.hueShift = 328.0f;
+	model->SetColorGrading(data);
+
+	recordStart = Audio::Instance().LoadAudioSource("Data/Audio/SE/record.wav");
 }
 
 //デストラクタ
-Player::~Player() {
+Player::~Player() 
+{
 	delete hitEffect;
 }
 
@@ -85,6 +95,7 @@ void Player::Update(float elapsedTime) {
 			InitRecording();
 			IsRecording = true;
 			isOk = true;
+			recordStart->DC_Play();
 		}
 
 		if (IsRecording) Recording(EnemeyManager::Instance().GetEnemy(0)->GetPosition());
@@ -98,7 +109,17 @@ void Player::Update(float elapsedTime) {
 		}
 
 
-		if (IsPlayback)Playback(EnemeyManager::Instance().GetEnemy(0));
+		ColorGradingData data = EnemeyManager::Instance().GetEnemy(0)->GetModel()->GetColorGrading();
+		if (IsPlayback)
+		{
+			Playback(EnemeyManager::Instance().GetEnemy(0));
+			data.saturation = 0.0f;
+		}
+		else
+		{
+			data.saturation = 1.0f;
+		}
+		EnemeyManager::Instance().GetEnemy(0)->GetModel()->SetColorGrading(data);
 	}
 
 	//速力更新
@@ -142,6 +163,7 @@ void Player::Update(float elapsedTime) {
 		angle.x = 0;
 	}
 
+	BoxSpark(elapsedTime);
 }
 
 // タイトル用のUpdate
@@ -591,4 +613,22 @@ void Player::Playback(Character* character)
 	playback_count++;
 	if (playback_count > MAX_KEEP_TRANSFORM) IsPlayback = false;
 	if (keep_position[playback_count].x == ENOUGTH.x)IsPlayback = false;
+}
+
+void Player::BoxSpark(float elapsedTime)
+{
+	Model* model = EnemeyManager::Instance().GetEnemy(0)->GetModel();
+	ColorGradingData data = model->GetColorGrading();
+
+	if (isParamUp)
+	{
+		data.brightness += elapsedTime / 5.0f;
+		if (data.brightness > UP_LIMITE) isParamUp = false;
+	}
+	else
+	{
+		data.brightness -= elapsedTime / 5.0f;
+		if (data.brightness < DOWN_LIMITE) isParamUp = true;
+	}
+	model->SetColorGrading(data);
 }

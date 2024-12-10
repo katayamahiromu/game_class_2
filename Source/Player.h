@@ -5,6 +5,7 @@
 #include"EnemyManeger.h"
 #include"Collision.h"
 #include"Effect.h"
+#include"Audio/Audio.h"
 
 //プレイヤー
 class Player :public Character
@@ -46,8 +47,6 @@ public:
 	//インスタンス取得
 	static Player& Instance();
 
-	//確認用
-	void A() { model->PlayAnimation(0, true, 0.2); }
 protected:
 	//ダメージを受けた時に呼ばれる
 	void OnDamaged() override;
@@ -167,4 +166,13 @@ private:
 
 	//何も入ってない
 	DirectX::XMFLOAT3 ENOUGTH = {FLT_MAX,FLT_MAX,FLT_MAX};
+private:
+	//動かせるオブジェクトだけ光らせる
+	void BoxSpark(float elapsedTime);
+	bool isParamUp = true;
+	const float UP_LIMITE = 1.3f;
+	const float DOWN_LIMITE = 0.8f;
+private:
+	//オーディオ
+	std::unique_ptr<AudioSource>recordStart;
 };

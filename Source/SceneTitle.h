@@ -35,8 +35,9 @@ private:
 
 	std::unique_ptr<Sprite>back;
 
-	std::unique_ptr<AudioSource> Cdur;
-	std::unique_ptr<SubMixVoice> test;
-
 	std::unique_ptr<Player>player;
+
+	std::unique_ptr<AudioSource>BGM;
+	std::unique_ptr<AudioSource>decide;
+	bool chengFlag = false;
 };

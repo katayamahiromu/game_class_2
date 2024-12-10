@@ -17,15 +17,9 @@ void SceneTitle::Initialize()
 	press_bar = std::make_unique<Sprite>("Data/Sprite/pressBar.png");
 	back = std::make_unique<Sprite>("Data/Sprite/R.jpg");
 
-	test = Audio::Instance().MakeSubMix();
-	Cdur = Audio::Instance().LoadAudioSource("Data/Audio/SE.wav");
-	Cdur->Set_Submix_voice(test->Get_Submix_Voice());
-	test->SetVolum(1.0f);
-	test->equalizer();
-
 	// プレイヤー初期化
 	player = std::make_unique<Player>();
-	player->A();
+
 	// カメラ初期化
 	Graphics& graphics = Graphics::Instance();
 	Camera& camera = Camera::Instance();
@@ -42,6 +36,10 @@ void SceneTitle::Initialize()
 		0.1f,
 		1000.0f
 	);
+
+	decide = Audio::Instance().LoadAudioSource("Data/Audio/SE/decide.wav");
+	BGM = Audio::Instance().LoadAudioSource("Data/Audio/BGM/dream-painting-ai-192126.wav");
+	BGM->Play(true);
 }
 
 //終了化
@@ -57,11 +55,19 @@ void SceneTitle::Update(float elapsedTime)
 
 	GamePad& gamePad = Input::Instance().GetGamePad();
 
-	//エンターキーを押したらゲームシーンへの切り替え
-	if (gamePad.GetButtonDown() & GamePad::BTN_A) {
-		SceneManager::instance().ChengeScene(new SceneLoading(new SceneStageSelect));
-		//SceneManager::instance().ChengeScene(new SceneGame);
+	//エンターキーを押したらゲームシーンへの切り替え準備
+	if (gamePad.GetButtonDown() & GamePad::BTN_A)
+	{
+		chengFlag = true;
+		decide->Play(false);
 	}
+
+	//切り替え
+	if(chengFlag && !decide->IsPlay())
+	{
+		SceneManager::instance().ChengeScene(new SceneStageSelect);
+	}
+
 }
 
 //描画処理

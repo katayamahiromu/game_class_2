@@ -32,6 +32,12 @@ void SceneStageSelect::Initialize()
 	stageNum[17] = std::make_unique<Sprite>("Data/Sprite/stageNum/18.png");
 	stageNum[18] = std::make_unique<Sprite>("Data/Sprite/stageNum/19.png");
 	stageNum[19] = std::make_unique<Sprite>("Data/Sprite/stageNum/20.png");
+
+	BGM = Audio::Instance().LoadAudioSource("Data/Audio/BGM/gentle-wind-ai-201031.wav");
+	select_note = Audio::Instance().LoadAudioSource("Data/Audio/SE/choice.wav");
+	decide = Audio::Instance().LoadAudioSource("Data/Audio/SE/decide.wav");
+
+	BGM->Play(true);
 }
 
 //　終了化
@@ -51,11 +57,13 @@ void SceneStageSelect::Update(float elapsedTime)
 	{
 		selectNum -= 1;
 		cooltimeFlg = true;
+		select_note->DC_Play();
 	}
 	if (ax < 0 && selectNum < maxStage - 1 && ChangeFlg(elapsedTime) == false)
 	{
 		selectNum += 1;
 		cooltimeFlg = true;
+		select_note->DC_Play();
 	}
 
 	//選択中のステージのサイズを大きく
@@ -65,7 +73,9 @@ void SceneStageSelect::Update(float elapsedTime)
 	ShiftChara(elapsedTime);
 
 	//　エンターキーを押したらローディングを挟んでゲームシーンへ切り替え
-	if (gamePad.GetButtonDown() & GamePad::BTN_A)
+	if (gamePad.GetButtonDown() & GamePad::BTN_A)chengeFlag = true;
+
+	if (chengeFlag && !decide->IsPlay())
 	{
 		SceneManager::instance().ChengeScene(new SceneLoading(new SceneGame(selectNum)));
 	}

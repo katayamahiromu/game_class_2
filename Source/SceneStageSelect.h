@@ -66,4 +66,9 @@ private:
 	int Gui;
 
 	int debug_int = 0;
+
+	std::unique_ptr<AudioSource>BGM;
+	std::unique_ptr<AudioSource>select_note;
+	std::unique_ptr<AudioSource>decide;
+	bool chengeFlag = false;
 };

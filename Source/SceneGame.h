@@ -7,6 +7,7 @@
 #include"ScenePause.h"
 #include"StageObject.h"
 #include"Graphics/MaskShader.h"
+#include"Audio/Audio.h"
 
 // ゲームシーン
 class SceneGame:public Scene
@@ -91,4 +92,8 @@ private:
 	bool isReset = false;
 	float time = 0.0f;
 	const float MAX_RESET_TIME = 0.2f;
+
+	//音楽
+	std::unique_ptr<AudioSource>BGM;
+
 };
