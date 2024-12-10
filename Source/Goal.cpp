@@ -7,7 +7,11 @@
 
 Goal::Goal(DirectX::XMFLOAT3 Position)
 {
-	position = Position;
+	position.x = Position.x;
+	position.y = Position.y - 1.0f;
+	position.z = Position.z;
+	model = std::make_unique<Model>("Data/Model/Door/Door.mdl");
+	scale.x = scale.y = scale.z = 0.002f;
 }
 
 Goal::~Goal()
@@ -17,6 +21,8 @@ Goal::~Goal()
 
 void Goal::Update(float elapsedTime)
 {
+	UpdateTransform();
+	model->UpdateTransform(transform);
 	PlayerVsGoal();
 }
 
@@ -26,8 +32,9 @@ void Goal::Render(ID3D11DeviceContext* dc, Shader* shader)
 	if (manger.GetGoalCount() == manger.GetPushCount())
 	{
 		DebugRenderer* debugRenderer = Graphics::Instance().GetDebugRenderer();
-		debugRenderer->DrawSphere(position, radius, DirectX::XMFLOAT4(1, 1, 1, 1));
+		debugRenderer->DrawSphere({position.x,position.y + 1.0f,position.z}, radius, DirectX::XMFLOAT4(1, 1, 1, 1));
 	}
+	shader->Draw(dc, model.get());
 }
 
 bool Goal::RayCast(const DirectX::XMFLOAT3& start, const DirectX::XMFLOAT3& end, HitResult& hit)
@@ -42,7 +49,7 @@ void Goal::PlayerVsGoal()
 	{
 		Player& player = Player::Instance();
 		if (Collision::IntersectSphereVsSphere(
-			position,
+			{position.x,position.y + 1.0f,position.z},
 			radius,
 			player.GetPosition(),
 			player.GetRadius(),
