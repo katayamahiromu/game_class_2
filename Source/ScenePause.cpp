@@ -157,7 +157,7 @@ void ScenePause::Render()
 		}
 	}
 
-	DebugGui();
+	//DebugGui();
 }
 
 void ScenePause::DebugGui()

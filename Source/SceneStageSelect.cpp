@@ -190,7 +190,7 @@ void SceneStageSelect::Render()
 
 	// 2DデバッグGUI描画
 	{
-		DrawDebugGui();
+		//DrawDebugGui();
 	}
 }
 
