@@ -11,6 +11,9 @@ void ScenePause::Initialize()
 	command[1] = std::make_unique<Sprite>("Data/Sprite/Instructions.png");
 	command[2] = std::make_unique<Sprite>("Data/Sprite/stage selection.png");
 	back = std::make_unique<Sprite>();
+
+	select_note = Audio::Instance().LoadAudioSource("Data/Audio/SE/choice.wav");
+	decide = Audio::Instance().LoadAudioSource("Data/Audio/SE/decide.wav");
 }
 
 void ScenePause::Finalize()
@@ -25,9 +28,16 @@ void ScenePause::Update(float elapsedTime)
 	if (gamePad.GetButtonDown() & GamePad::BTN_START) closeFlag = true;
 
 	//移動
-	if (gamePad.GetButtonDown() & GamePad::BTN_DOWN)section++;
-	else if (gamePad.GetButtonDown() & GamePad::BTN_UP)section--;
-
+	if (gamePad.GetButtonDown() & GamePad::BTN_DOWN)
+	{
+		section++;
+		select_note->DC_Play();
+	}
+	else if (gamePad.GetButtonDown() & GamePad::BTN_UP)
+	{
+		section--;
+		select_note->DC_Play();
+	}
 	//範囲制限
 	if (section < CONTINNUE) section = STAGE_SELECTION;
 	else if (section > STAGE_SELECTION) section = CONTINNUE;
@@ -35,6 +45,8 @@ void ScenePause::Update(float elapsedTime)
 	//決定した時のそれぞれの行動
 	if (gamePad.GetButtonDown() & GamePad::BTN_A)
 	{
+		decide->DC_Play();
+
 		switch (section)
 		{
 		case CONTINNUE:
@@ -44,10 +56,12 @@ void ScenePause::Update(float elapsedTime)
 			//後々説明用の画像を出す
 			break;
 		case STAGE_SELECTION:
-			SceneManager::instance().ChengeScene(new SceneStageSelect);
+			chengSceneFlag = true;
 			break;
 		}
 	}
+
+	if (chengSceneFlag && !decide->IsPlay()) SceneManager::instance().ChengeScene(new SceneStageSelect);
 }
 
 void ScenePause::Render()

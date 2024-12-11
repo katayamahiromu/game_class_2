@@ -1,6 +1,7 @@
 #pragma once
 
 #include"Graphics/Sprite.h"
+#include"Audio/Audio.h"
 #include<memory>
 
 class ScenePause
@@ -43,6 +44,7 @@ private:
 	std::unique_ptr<Sprite>mask;
 	std::unique_ptr<Sprite>command[MAX_COMMAND];
 	bool closeFlag = false;
+	bool chengSceneFlag = false;
 
 	int section = 0;
 	float section_alpha = 0.5f;
@@ -62,4 +64,7 @@ private:
 		{285.0f, 260.0f, 800.0f, 260.0f},
 		{285.0f, 520.0f, 800.0f, 260.0f}
 	};
+
+	std::unique_ptr<AudioSource>select_note;
+	std::unique_ptr<AudioSource>decide;
 };

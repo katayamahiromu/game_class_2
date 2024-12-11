@@ -173,6 +173,15 @@ private:
 	const float UP_LIMITE = 1.3f;
 	const float DOWN_LIMITE = 0.8f;
 private:
-	//オーディオ
+	//SE 
 	std::unique_ptr<AudioSource>recordStart;
+	std::unique_ptr<AudioSource>foot;
+	std::unique_ptr<AudioSource>objectMove;
+	std::unique_ptr<AudioSource>XYCheneg;
+
+	//オブジェクトを動かしたか
+	bool isMoveFlag = false;
+
+	//エフェクト
+	std::unique_ptr<Effect>chengEffect;
 };
