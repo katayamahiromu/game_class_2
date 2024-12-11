@@ -10,7 +10,7 @@ void SceneStageSelect::Initialize()
 {
 	//　スプライト初期化
 	stage = std::make_unique<Sprite>("Data/Sprite/-removebg-preview.png");
-	pin = std::make_unique<Sprite>("Data/Sprite/pin.jpg");
+	pin = std::make_unique<Sprite>("Data/Sprite/pin.png");
 	triangle = std::make_unique<Sprite>("Data/Sprite/triangle.png");
 	stageNum[0] = std::make_unique<Sprite>("Data/Sprite/stageNum/1.png");
 	stageNum[1] = std::make_unique<Sprite>("Data/Sprite/stageNum/2.png");
