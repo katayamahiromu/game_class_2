@@ -60,7 +60,15 @@ private:
 	std::unique_ptr<CameraController>cameraController;
 	std::unique_ptr<Sprite>gauge;
 	std::unique_ptr<Sprite>back;
-	std::unique_ptr<Sprite>UIExplain;
+
+	std::unique_ptr<Sprite>UIMain;
+	std::unique_ptr<Sprite>UIRec;
+	std::unique_ptr<Sprite>UIRecording;
+	std::unique_ptr<Sprite>UIPlay;
+	std::unique_ptr<Sprite>UIStop;
+	std::unique_ptr<Sprite>UISideNow;
+	std::unique_ptr<Sprite>UITopNow;
+
 
 	//ポーズの時に後ろに出すゲーム画面
 	std::unique_ptr<Sprite>gameScene;
