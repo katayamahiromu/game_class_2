@@ -2,7 +2,6 @@
 #include"Player.h"
 #include"Collision.h"
 #include"SceneManager.h"
-#include"SceneStageSelect.h"
 #include"StageManager.h"
 
 Goal::Goal(DirectX::XMFLOAT3 Position)
@@ -57,13 +56,13 @@ void Goal::PlayerVsGoal()
 		Player& player = Player::Instance();
 		if (Collision::IntersectSphereVsSphere(
 			{position.x,position.y + 1.0f,position.z},
-			radius,
+			radius+3.0f,
 			player.GetPosition(),
 			player.GetRadius(),
 			DirectX::XMFLOAT3(0, 0, 0)
 		))
 		{
-			SceneManager::instance().ChengeScene(new SceneStageSelect);
+			SceneManager::instance().CanGoal();
 		}
 	}
 }

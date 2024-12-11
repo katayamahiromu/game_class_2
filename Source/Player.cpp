@@ -22,7 +22,6 @@ Player::Player()
 	model = std::make_unique<Model>("Data/Model/Robbot/robot.mdl");
 	//モデルが大きいのでスケーリング
 	scale.x = scale.y = scale.z = 0.02f;
-	//model->PlayAnimation(Anime_Falling, true, 0.1f);
 }
 
 //コンストラクタ
@@ -58,7 +57,8 @@ Player::Player(DirectX::XMFLOAT3 pos) {
 	XYCheneg = Audio::Instance().LoadAudioSource("Data/Audio/SE/choice.wav");
 	XYCheneg->Set_Volume(0.1f);
 
-	chengEffect = std::make_unique<Effect>("Data/Effect/chenge.efk");
+	//今回はアニメーションが一つしかないため直書き
+	model->PlayAnimation(0, true, 0.2f);
 }
 
 //デストラクタ
@@ -191,7 +191,7 @@ void Player::TitleUpdate(float elapsedTime)
 //移動入力処理
 bool Player::InputMove(float elapsedTime) {
 	//進行ベクトル取得
-	DirectX::XMFLOAT3 moveVec = GetMoveVec();
+	moveVec = GetMoveVec();
 	moveVec.y = isXYMode ? moveVec.y : 0; //当然2Dモードにy入力はいらんよなぁ
 
 	//足音
@@ -207,8 +207,17 @@ bool Player::InputMove(float elapsedTime) {
 }
 
 //描画処理
-void Player::Render(ID3D11DeviceContext* dc, Shader* shader) {
+void Player::Render(ID3D11DeviceContext* dc, Shader* shader)
+{
+	position.y += 0.5f;
+	UpdateTransform();
+	model->UpdateTransform(transform);
+
 	shader->Draw(dc, model.get());
+
+	position.y -= 0.5f;
+	UpdateTransform();
+	model->UpdateTransform(transform);
 }
 
 void Player::DrawDebugGui() {
@@ -284,9 +293,6 @@ void Player::DrawDebugPrimitive() {
 	}*/
 }
 
-//void Player::CollisionPlayerVsEnemies() {
-//
-//	isMoveFlag = false;
 
 void Player::CollisionPlayerVsEnemies(float elapsedTime) {
 	EnemeyManager& enemyManager = EnemeyManager::Instance();
@@ -327,17 +333,31 @@ void Player::CollisionPlayerVsEnemies(float elapsedTime) {
 				//移動後のエネミーの行列を使用して上で求めたローカル位置をワールド位置に変換する
 				DirectX::XMVECTOR CharWP = DirectX::XMVector3Transform(CharLP, DirectX::XMLoadFloat4x4(&enemy->GetTransform()));
 				DirectX::XMStoreFloat3(&this->position, CharWP);
+
+				//進行ベクトルがXY共に0.0fの時にX軸方向についていくようにする
+				if (moveVec.x == 0.0f && moveVec.y == 0.0f)
+				{
+					position.x = enemy->GetPosition().x;
+				}
+
 			}
 
 		}
 		else
 		{
+			//当たったら音も鳴らす
 			if (Collision::IntersectCubeVsCube(this->position, this->radius, this->height,
 				enemy->GetPosition(), enemy->GetRadius(), enemy->GetHeight(), outPosition
 			))
 			{
 				enemy->SetPosition(outPosition);
+				objectMove->Play(false);
 			}
+			else
+			{
+				objectMove->Stop();
+			}
+
 		}
 	}
 }
@@ -403,7 +423,7 @@ void Player::TransitiomIdleState()
 	state = State::Idle;
 
 	//待機アニメーション再生
-	//model->PlayAnimation(Anime_Idle, true,0.2f);
+	model->PlayAnimation(0, true,0.2f);
 }
 
 //待機ステート更新処理

@@ -15,7 +15,7 @@
 #include "Misc.h"
 #include"ScenePause.h"
 #include"Input/Input.h"
-
+#include"SceneClear.h"
 
 // 初期化
 void SceneGame::Initialize()
@@ -66,6 +66,8 @@ void SceneGame::Initialize()
 		slime->SetPosition(pos);
 		EnemeyManager::Instance().StageRegister(slime);
 	}
+
+	SceneManager::instance().ResetIsGoal();
 
 	// プレイヤー初期化
 	player = std::make_unique<Player>(script[select].PlayerPos);
@@ -141,11 +143,11 @@ void SceneGame::Initialize()
 
 	//マスク用
 	mask = std::make_unique<Sprite>("Data/Sprite/dissolve.png");
-	effectSprite = std::make_unique<Sprite>("Data/Sprite/RESET.png");
+	effectSprite = std::make_unique<Sprite>("Data/Sprite/GameStart.png");
 
 	effectSprite->Update(
-		0, 0, 1280, 720,
-		0, 0, effectSprite->GetTextureWidth(), effectSprite->GetTextureHeight(), 0.0f,
+		0.0f, 0.0f, 1280.0f, 720.0f,
+		0.0f, 0.0f, effectSprite->GetTextureWidth(), effectSprite->GetTextureHeight(), 0.0f,
 		1.0f, 1.0f, 1.0f, 1.0f);
 
 	MS = std::make_unique<MaskShader>(graphics.GetDevice());
@@ -196,6 +198,7 @@ void SceneGame::Update(float elapsedTime)
 
 	Pause();
 	Reset(elapsedTime);
+	GameClear();
 }
 
 // 描画処理
@@ -241,7 +244,7 @@ void SceneGame::ObjectRender()
 	rc.viewPosition.x = camera.GetEye().x;
 	rc.viewPosition.y = camera.GetEye().y;
 	rc.viewPosition.z = camera.GetEye().z;
-	rc.viewPosition.w = 1;
+	rc.viewPosition.w = 1.0f;
 	rc.view = camera.GetView();
 	rc.projection = camera.GetProjection();
 
@@ -446,6 +449,10 @@ void SceneGame::GameResetting()
 {
 	player->SetPosition(script[select].PlayerPos);
 	player->InitRecording();
+	player->SetAngle({ 0.0f,90.0f,0.0f });
+	player->ResetIsOK();
+
+	if (player->GetIsXYMode())player->ToggleMoveMode();
 
 	StageManager& stageManager = StageManager::Instance();
 	stageManager.ResetSwitch();
@@ -455,7 +462,9 @@ void SceneGame::GameResetting()
 	int enemyCount = enemyManager.GetEnemyCount();
 	for (int i = 0;i < enemyCount;++i)
 	{
-		enemyManager.GetEnemy(i)->SetPosition(script[select].ObjectPosArray[i]);
+		Enemy* enemy = enemyManager.GetEnemy(i);
+		enemy->SetPosition(script[select].ObjectPosArray[i]);
+		if (enemy->GetIsXYMode())enemy->ToggleMoveMode();
 	}
 }
 
@@ -466,6 +475,25 @@ void SceneGame::Reset(float elapsedTime)
 	{
 		GameResetting();
 		isReset = true;
+	}
+
+	if (player->GetPosition().y < -10.0)
+	{
+		GameResetting();
+		isReset = true;
+	}
+
+
+	//初回のマスク
+	if (isFirstSetting)
+	{
+		//初めだけ少し遅く
+		dissolveThreshold -= elapsedTime * 0.5f;
+		if (dissolveThreshold < 0.0f)
+		{
+			isFirstSetting = false;
+		}
+		return;
 	}
 
 	if (isReset)
@@ -486,6 +514,34 @@ void SceneGame::Reset(float elapsedTime)
 	else
 	{
 		dissolveThreshold = 0.0f;
+	}
+}
+
+void SceneGame::GameClear()
+{
+	SceneManager& manager = SceneManager::instance();
+	if (manager.GetIsGoal())
+	{
+		SceneClear* scene = new SceneClear;
+
+		//ポーズのスプライトに貼り付ける用の画像の作成
+		Graphics& graphics = Graphics::Instance();
+		ID3D11DeviceContext* dc = graphics.GetDeviceContext();
+		ID3D11RenderTargetView* rtv = scene_render.Get();
+		ID3D11DepthStencilView* dsv = graphics.GetDepthStencilView();
+		ID3D11RasterizerState* rs = graphics.GetRasterizerState();
+
+		// 画面クリア＆レンダーターゲット設定
+		FLOAT color[] = { 0.0f, 0.0f, 0.5f, 1.0f };	// RGBA(0.0～1.0)
+		dc->ClearRenderTargetView(rtv, color);
+		dc->ClearDepthStencilView(dsv, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+		dc->OMSetRenderTargets(1, &rtv, dsv);
+		dc->RSSetState(rs);
+
+		ObjectRender();
+
+		scene->SetShaderResourceView(scene_shader_resource_view);
+		manager.ChengeScene(scene);
 	}
 }
 

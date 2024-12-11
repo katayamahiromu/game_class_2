@@ -166,9 +166,14 @@ private:
 	int playback_count = 0;
 	//録画せずに再生させるのを防ぐフラグ
 	bool isOk = false;
-
+public:
+	void ResetIsOK() { isOk = false; }
+private:
 	//何も入ってない
 	DirectX::XMFLOAT3 ENOUGTH = {FLT_MAX,FLT_MAX,FLT_MAX};
+
+	//進行ベクトル
+	DirectX::XMFLOAT3 moveVec = { 0.0f,0.0f,0.0f };
 private:
 	//動かせるオブジェクトだけ光らせる
 	void BoxSpark(float elapsedTime);
