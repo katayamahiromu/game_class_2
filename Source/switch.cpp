@@ -5,7 +5,7 @@
 
 ClickSwitch::ClickSwitch(DirectX::XMFLOAT3 Position)
 {
-	model = std::make_unique<Model>("Data/Model/switch/swtich.mdl");
+	model = std::make_unique<Model>("Data/Model/switch/swtich_click.mdl");
 	position = Position;
 	scale.x = scale.y = scale.z = 0.01f;
 	//”O‚Ì‚½‚ß
@@ -41,6 +41,10 @@ void ClickSwitch::OnSwitchMove()
 			scale.y = 0.0001f;
 		}
 	}
+	else
+	{
+		scale.y = 0.01;
+	}
 }
 
 void ClickSwitch::SwitchVsEnemy()
@@ -68,7 +72,7 @@ void ClickSwitch::SwitchVsEnemy()
 HoldSwitch::HoldSwitch(DirectX::XMFLOAT3 Position)
 {
 
-	model = std::make_unique<Model>("Data/Model/switch/swtich.mdl");
+	model = std::make_unique<Model>("Data/Model/switch/swtich_hover.mdl");
 	position = Position;
 	scale.x = scale.y = scale.z = 0.01f;
 	//”O‚Ì‚½‚ß

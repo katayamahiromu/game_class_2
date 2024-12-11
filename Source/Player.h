@@ -138,23 +138,29 @@ private:
 	};
 private:
 	State state = State::Idle;
-private:
+public:
+	//リセットの時に記録してたものも元にに戻す為にpublic
 	//録画の準備
 	void InitRecording();
+private:
 	//録画
 	void Recording(DirectX::XMFLOAT3 position);
 	//再生
 	void Playback(Character*character);
 
 	//static const int MAX_KEEP_TRANSFORM = 720;
-	static const int MAX_KEEP_TRANSFORM = 432;
-	DirectX::XMFLOAT3 keep_position[MAX_KEEP_TRANSFORM]{};
+	//static const int MAX_KEEP_TRANSFORM = 432;
+	static const int MAX_KEEP_TRANSFORM = 1440;
+	DirectX::XMFLOAT3 keep_position[MAX_KEEP_TRANSFORM];
+
 	//録画フラグ
 	bool IsRecording = false;
 	//再生フラグ
 	bool IsPlayback = false;
 	//最新の情報は０に入っている
 	int playback_count = 0;
+	//録画せずに再生させるのを防ぐフラグ
+	bool isOk = false;
 
 	//何も入ってない
 	DirectX::XMFLOAT3 ENOUGTH = {FLT_MAX,FLT_MAX,FLT_MAX};

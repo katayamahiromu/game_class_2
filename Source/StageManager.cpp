@@ -117,3 +117,11 @@ void StageManager::ObjectRemove(GameObject* r_object)
 {
 	objectRemoves.insert(r_object);
 }
+
+void StageManager::ResetSwitch()
+{
+	for (auto obj : objects)
+	{
+		obj->Reset();
+	}
+}

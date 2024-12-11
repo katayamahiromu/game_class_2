@@ -19,10 +19,9 @@ Player::Player()
 	//インスタンスポインタ取得
 	instace = this;
 	position = {0.0f,-2.0f,0.0f};
-	model = std::make_unique<Model>("Data/Model/Jammo/Jammo.mdl");
+	model = std::make_unique<Model>("Data/Model/Robbot/robot.mdl");
 	//モデルが大きいのでスケーリング
 	scale.x = scale.y = scale.z = 0.02f;
-
 	model->PlayAnimation(Anime_Falling, true, 0.1f);
 }
 
@@ -31,9 +30,10 @@ Player::Player(DirectX::XMFLOAT3 pos) {
 	//インスタンスポインタ取得
 	instace = this;
 	position = pos;
-	model = std::make_unique<Model>("Data/Model/Jammo/Jammo.mdl");
+	model = std::make_unique<Model>("Data/Model/Robbot/robot.mdl");
+	angle.y = 90.0f;
 	//モデルが大きいのでスケーリング
-	scale.x = scale.y = scale.z = 0.0075f;
+	scale.x = scale.y = scale.z = 0.02f;
 
 	//ヒットエフェクト読み込み
 	hitEffect = new Effect("Data/Effect/Hit.efk");
@@ -84,14 +84,19 @@ void Player::Update(float elapsedTime) {
 		{
 			InitRecording();
 			IsRecording = true;
+			isOk = true;
 		}
 
 		if (IsRecording) Recording(EnemeyManager::Instance().GetEnemy(0)->GetPosition());
 		if (GetAsyncKeyState('N') & 0x8000)
 		{
+			if (!isOk)return;
 			IsPlayback = true;
 			IsRecording = false;
+			playback_count = 0;
 		}
+
+
 		if (IsPlayback)Playback(EnemeyManager::Instance().GetEnemy(0));
 	}
 
@@ -229,7 +234,7 @@ void Player::DrawDebugPrimitive() {
 	//projectileManager.DrawDebugPrimitive();
 
 	//攻撃衝突用の左手ノードのデバッグ球を描画
-	if (attackCollisionFlag) {
+	/*if (attackCollisionFlag) {
 		Model::Node* leftHandBone = model->FindNode("mixamorig:LeftHand");
 		debugRenderer->DrawSphere(DirectX::XMFLOAT3(
 			leftHandBone->worldTransform._41,
@@ -238,7 +243,7 @@ void Player::DrawDebugPrimitive() {
 			leftHandRadius,
 			DirectX::XMFLOAT4(1, 0, 0, 1)
 		);
-	}
+	}*/
 }
 
 void Player::CollisionPlayerVsEnemies() {
