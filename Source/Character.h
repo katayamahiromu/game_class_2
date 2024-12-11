@@ -50,7 +50,7 @@ public:
 
 
 	void ToggleMoveMode() { isXYMode = !isXYMode; } // ˆÚ“®ƒ‚[ƒh‚ÌØ‚è‘Ö‚¦
-
+	bool GetIsXYMode() { return isXYMode; }
 
 	void SetTransform(DirectX::XMFLOAT4X4 trans) { transform = trans; }
 	DirectX::XMFLOAT4X4& GetTransform() {return transform; }

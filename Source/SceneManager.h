@@ -27,10 +27,15 @@ public:
 
 	int GetSelect() { return select; }
 	void SetSelect(int se) { select = se; }
+
+	void ResetIsGoal() { isGoal = false; }
+	void CanGoal() { isGoal = true; }
+	bool GetIsGoal() { return isGoal; }
 private:
 	int select = 0;
 	Scene* currentScene = nullptr;
 	Scene* nextScene = nullptr;
 
+	bool isGoal = false;
 };
 

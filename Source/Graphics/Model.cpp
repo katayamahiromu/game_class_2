@@ -78,7 +78,7 @@ void Model::UpdateAnimation(float elapsedTime)
 	float blendRate = 1.0f;
 	if (animationBlendSeconds > animationBlendTime)
 	{
-		animationBlendTime += elapsedTime;
+		animationBlendTime += elapsedTime * 0.1f;
 		blendRate = animationBlendTime / animationBlendSeconds;
 		blendRate *= blendRate;
 	}
@@ -147,7 +147,7 @@ void Model::UpdateAnimation(float elapsedTime)
 	}
 
 	//ŽžŠÔŒo‰ß
-	currentAnimationSeconds += elapsedTime;
+	currentAnimationSeconds += elapsedTime * 0.5f;
 
 	//Ä¶ŽžŠÔ‚ªI’[ŽžŠÔ‚ð’´‚¦‚½‚ç
 	if (currentAnimationSeconds >= animation.secondsLength)

@@ -45,6 +45,9 @@ private:
 	//リセット
 	void Reset(float elapsedTime);
 
+	//クリア判定
+	void GameClear();
+
 	//GUI
 	void DebugGui();
 
@@ -69,6 +72,8 @@ private:
 	std::unique_ptr<Sprite>UISideNow;
 	std::unique_ptr<Sprite>UITopNow;
 
+	std::unique_ptr<Sprite>gameStartSprite;
+
 
 	//ポーズの時に後ろに出すゲーム画面
 	std::unique_ptr<Sprite>gameScene;
@@ -89,7 +94,9 @@ private:
 	std::unique_ptr<Sprite>effectSprite;
 	std::unique_ptr<Sprite>mask;
 	std::unique_ptr<MaskShader>MS;
-	float dissolveThreshold = 0.0f;
+
+	//リセット用
+	float dissolveThreshold = 1.0f;
 	float edgThreshold = 0.2f; //閾値
 	DirectX::XMFLOAT4 edgColor = {1,0,0,1}; //色
 
@@ -100,6 +107,9 @@ private:
 	bool isReset = false;
 	float time = 0.0f;
 	const float MAX_RESET_TIME = 0.2f;
+
+	//初回だけは1.0から始める為
+	bool isFirstSetting = true;
 
 	//音楽
 	std::unique_ptr<AudioSource>BGM;
