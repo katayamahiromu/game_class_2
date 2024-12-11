@@ -5,7 +5,7 @@
 #include"Graphics/Graphics.h"
 
 //更新行列
-void Character::UpdateTranceform() {
+void Character::UpdateTransform() {
 	//スケール行列を作成
 	DirectX::XMMATRIX S = DirectX::XMMatrixScaling(scale.x, scale.y, scale.z);
 	//回転行列を作成

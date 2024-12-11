@@ -34,7 +34,7 @@ public:
 	//デバッグプリミティブ描画
 	void DrawDebugPrimitive();
 	//プレイヤーとエネミーとの衝突判定
-	void CollisionPlayerVsEnemies();
+	void CollisionPlayerVsEnemies(float elapsedTime);
 	//ジャンプ入力処理
 	bool InputJump();
 	//着地した時に呼ばれる

@@ -105,9 +105,9 @@ void Player::Update(float elapsedTime) {
 	//無敵時間更新
 	UpdateInvinciblTImer(elapsedTime);
 	//プレイヤーと敵との衝突判定
-	if (!IsPlayback) CollisionPlayerVsEnemies();
+	CollisionPlayerVsEnemies(elapsedTime);
 	//オブジェクト行列を更新
-	UpdateTranceform();
+	UpdateTransform();
 	//モデルアニメーションを更新
 	model->UpdateAnimation(elapsedTime);
 	//モデル行列を更新
@@ -147,7 +147,7 @@ void Player::Update(float elapsedTime) {
 void Player::TitleUpdate(float elapsedTime)
 {
 	//オブジェクト行列を更新
-	UpdateTranceform();
+	UpdateTransform();
 	//モデルアニメーションを更新
 	model->UpdateAnimation(elapsedTime);
 	//モデル行列を更新
@@ -246,79 +246,56 @@ void Player::DrawDebugPrimitive() {
 	}*/
 }
 
-void Player::CollisionPlayerVsEnemies() {
+void Player::CollisionPlayerVsEnemies(float elapsedTime) {
 	EnemeyManager& enemyManager = EnemeyManager::Instance();
+
 	//全ての敵と総当たりで衝突処理
 	int enemyCount = enemyManager.GetEnemyCount();
-	for (int i = 0;i < enemyCount;++i) {
+	for (int i = 0;i < enemyCount;++i) 
+	{
 		Enemy* enemy = enemyManager.GetEnemy(i);
 		DirectX::XMFLOAT3 outPosition;
 
-		//衝突判定
-		/*if (Collision::IntersectCylinderVsCylinder(
-			position,
-			radius,
-			height,
-			enemy->GetPosition(),
-			enemy->GetRadius(),
-			enemy->GetHeight(),
-			outPosition
-		)) {
-			enemy->SetPositon(outPosition);
-		}*/
-
-		if(Collision::IntersectCubeVsCube(
-			position,
-			radius,
-			height,
-			enemy->GetPosition(),
-			enemy->GetRadius(),
-			enemy->GetHeight(),
-			outPosition
-		))
+		//再生中にエネミーはプレイヤーを押し出し、そうでなければプレイヤーが敵を押し出す
+		if (this->IsPlayback)
 		{
-			//最後のあがきの途中
-			////（enemyが）ずれた方向にレイキャストし、壁なら止まる
-			//DirectX::XMVECTOR Diff = DirectX::XMVectorSubtract(DirectX::XMLoadFloat3(&outPosition), DirectX::XMLoadFloat3(&enemy->GetPosition()));
-			//DirectX::XMFLOAT3 diff(Diff.m128_f32);
-			//DirectX::XMFLOAT3 start = { enemy->GetPosition().x, enemy->GetPosition().y + enemy->GetRadius(), enemy->GetPosition().z};
-			//
-			////レイの終点位置は移動後の位置
-			//DirectX::XMFLOAT3 end = { 
-			//(diff.x > 0) ? enemy->GetPosition().x + diff.x : enemy->GetPosition().x,
-			//(diff.y > 0) ? enemy->GetPosition().y + diff.y : enemy->GetPosition().y,
-			//(diff.z > 0) ? enemy->GetPosition().y + diff.y : enemy->GetPosition().y,
-			//};
+			/*if (Collision::IntersectCubeVsCube(enemy->GetPosition(), enemy->GetRadius(), enemy->GetHeight(),
+				this->position, this->radius, this->height, outPosition
+			))
+			{
+				const float offset = 0.1f;
+				this->position.y = outPosition.y + offset;
+			}*/
 
-			////レイキャストによる地面判定
-			//HitResult hit;
-			//if (StageManager::Instance().RaycastToStage(start, end, hit))
-			//{
-			//	if (isXYMode)
-			//	{
-			//		//壁までのベクトル
-			//		DirectX::XMVECTOR Start = DirectX::XMLoadFloat3(&hit.position);
-			//		DirectX::XMVECTOR End = DirectX::XMLoadFloat3(&end);
-			//		DirectX::XMVECTOR Vec = DirectX::XMVectorSubtract(End, Start);
-			//		//壁の法線
-			//		DirectX::XMVECTOR Normal = DirectX::XMLoadFloat3(&hit.normal);
+			//プレイヤーとエネミーでレイキャスト
+			DirectX::XMFLOAT3 start = { this->position.x, this->position.y + stepOffset, this->position.z };
+			DirectX::XMFLOAT3 end = { this->position.x, this->position.y + this->velocity.y * elapsedTime, this->position.z };
+			HitResult hitResult{};
+			if (Collision::InterserctRayVsModel(start, end, enemy->GetModel(), hitResult))
+			{
+				velocity.y = 0;
+				position = hitResult.position;
+				//ヒットした位置をエネミーのローカル空間に変換する
+				DirectX::XMMATRIX FloorIM = DirectX::XMMatrixInverse(nullptr, DirectX::XMLoadFloat4x4(&enemy->GetTransform()));
+				DirectX::XMVECTOR CharLP = DirectX::XMVector3Transform(DirectX::XMLoadFloat3(&this->position), FloorIM);
 
-			//		//入射ベクトルを法線に射影
-			//		DirectX::XMVECTOR Dot = DirectX::XMVector3Dot(Vec, Normal);
+				//エネミーのワールド行列を更新する
+				enemy->UpdateTransform();
 
-			//		//補正位置の計算
-			//		float distance = 0;
-			//		DirectX::XMStoreFloat(&distance, Dot);
+				//移動後のエネミーの行列を使用して上で求めたローカル位置をワールド位置に変換する
+				DirectX::XMVECTOR CharWP = DirectX::XMVector3Transform(CharLP, DirectX::XMLoadFloat4x4(&enemy->GetTransform()));
+				DirectX::XMStoreFloat3(&this->position, CharWP);
+			}
 
-			//		//法線の大きさを距離に合わせる
-			//		DirectX::XMVECTOR R = DirectX::XMVectorSubtract(Vec, DirectX::XMVectorScale(Normal, distance));
-
-			//		DirectX::XMVECTOR Position = DirectX::XMLoadFloat3(&position);
-			//		Position = DirectX::XMVectorAdd(Position, R);
-			//		DirectX::XMStoreFloat3(&position, Position);
-			//	}
+		}
+		else
+		{
+			if (Collision::IntersectCubeVsCube(this->position, this->radius, this->height,
+				enemy->GetPosition(), enemy->GetRadius(), enemy->GetHeight(), outPosition
+			))
+			{
 				enemy->SetPosition(outPosition);
-			
+			}
 		}
 	}
 }
@@ -567,6 +544,7 @@ void Player::UpdateDamageState(float elapsedTime)
 	}
 }
 
+
 //死亡ステートへ遷移
 void Player::TransitionDeathState()
 {
@@ -609,6 +587,7 @@ void Player::UpdateReviveState(float elapsedTime)
 		TransitiomIdleState();
 	}
 }
+
 
 void Player::InitRecording()
 {

@@ -9,7 +9,7 @@ class Character
 public:
 	Character() {}
 	virtual ~Character() {}
-	void UpdateTranceform();
+	void UpdateTransform();
 
 	//ˆÊ’uî•ñæ“¾
 	const DirectX::XMFLOAT3& GetPosition() const { return position; }
