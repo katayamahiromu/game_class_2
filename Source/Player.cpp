@@ -49,6 +49,14 @@ Player::Player(DirectX::XMFLOAT3 pos) {
 	model->SetColorGrading(data);
 
 	recordStart = Audio::Instance().LoadAudioSource("Data/Audio/SE/record.wav");
+	foot = Audio::Instance().LoadAudioSource("Data/Audio/SE/foot.wav");
+	foot->Set_Volume(0.45f);
+	objectMove = Audio::Instance().LoadAudioSource("Data/Audio/SE/object_move.wav");
+	objectMove->Set_Volume(0.45f);
+	XYCheneg = Audio::Instance().LoadAudioSource("Data/Audio/SE/choice.wav");
+	XYCheneg->Set_Volume(0.1f);
+
+	chengEffect = std::make_unique<Effect>("Data/Effect/chenge.efk");
 }
 
 //デストラクタ
@@ -139,6 +147,7 @@ void Player::Update(float elapsedTime) {
 	if (InputAttack())
 	{
 		ToggleMoveMode();
+		XYCheneg->DC_Play();
 
 		// モード切替時に壁に埋まらないようにY座標を補正する
 		if (isXYMode)
@@ -182,6 +191,10 @@ bool Player::InputMove(float elapsedTime) {
 	//進行ベクトル取得
 	DirectX::XMFLOAT3 moveVec = GetMoveVec();
 	moveVec.y = isXYMode ? moveVec.y : 0; //当然2Dモードにy入力はいらんよなぁ
+
+	//足音
+	(moveVec.x != 0.0f || moveVec.y != 0.0f)? foot->Play(false): foot->Stop();
+	
 
 	//移動処理
 	Move(moveVec.x, moveVec.y, moveSpeed); // XY平面で移動
@@ -270,6 +283,9 @@ void Player::DrawDebugPrimitive() {
 }
 
 void Player::CollisionPlayerVsEnemies() {
+
+	isMoveFlag = false;
+
 	EnemeyManager& enemyManager = EnemeyManager::Instance();
 	//全ての敵と総当たりで衝突処理
 	int enemyCount = enemyManager.GetEnemyCount();
@@ -301,7 +317,11 @@ void Player::CollisionPlayerVsEnemies() {
 		))
 		{
 			enemy->SetPosition(outPosition);
+			isMoveFlag = true;
 		}
+
+		isMoveFlag ? objectMove->Play(false) : objectMove->Stop();
+		
 	};
 }
 
