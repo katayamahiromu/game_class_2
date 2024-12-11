@@ -160,7 +160,7 @@ void Player::Update(float elapsedTime) {
 			}
 		}
 
-		hitEffect->Play(position);
+		//hitEffect->Play(position);
 	}
 
 	if (isXYMode)
