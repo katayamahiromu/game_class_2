@@ -7,6 +7,7 @@
 void ScenePause::Initialize()
 {
 	mask = std::make_unique<Sprite>();
+	oasobi = std::make_unique<Sprite>("Data/Sprite/OASOBI.png");
 	command[0] = std::make_unique<Sprite>("Data/Sprite/continue.png");
 	command[1] = std::make_unique<Sprite>("Data/Sprite/Instructions.png");
 	command[2] = std::make_unique<Sprite>("Data/Sprite/stage selection.png");
@@ -82,6 +83,12 @@ void ScenePause::Render()
 		0, 0, 1280, 720,
 		0, 0, 1280, 720, 0,
 		1.0f, 1.0f, 1.0f, 1.0f);
+
+	oasobi->Render(dc,
+		0, 0, 1280, 187,
+		0, 0, 1280, 187, 0,
+		1.0f, 1.0f, 1.0f, 1.0f
+		);
 
 	mask->Render(dc,
 		0, 0, 1280, 720,

@@ -41,6 +41,7 @@ private:
 	static const int MAX_COMMAND = 3;
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>gameSrv;
 	std::unique_ptr<Sprite>back;
+	std::unique_ptr<Sprite>oasobi;
 	std::unique_ptr<Sprite>mask;
 	std::unique_ptr<Sprite>command[MAX_COMMAND];
 	bool closeFlag = false;

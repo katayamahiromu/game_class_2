@@ -331,11 +331,22 @@ void SceneGame::ObjectRender()
 		}
 
 		// XYƒ‚[ƒh‚ªtrue‚Ì‚Æ‚«‚ÍUITopNow,false‚Ì‚Æ‚«‚ÍUISideNow•`‰æ
-		UISideNow->Render(dc,
-			0.0f, 0.0f, 1280.0f, 145.0f,
-			0.0f, 0.0f, 1280.0f, 160.0f, 0.0f,
-			1.0f, 1.0f, 1.0f, 1.0f
-		);
+		if (player->IsXYMode())
+		{
+			UITopNow->Render(dc,
+				0.0f, 0.0f, 1280.0f, 145.0f,
+				0.0f, 0.0f, 1280.0f, 160.0f, 0.0f,
+				1.0f, 1.0f, 1.0f, 1.0f
+			);
+		}
+		else
+		{
+			UISideNow->Render(dc,
+				0.0f, 0.0f, 1280.0f, 145.0f,
+				0.0f, 0.0f, 1280.0f, 160.0f, 0.0f,
+				1.0f, 1.0f, 1.0f, 1.0f
+			);
+		}
 
 
 		//–{ŠÔ‚É‚²‚è‰Ÿ‚µ‚Å‚·

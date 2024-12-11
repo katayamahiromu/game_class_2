@@ -62,47 +62,47 @@ private:
 	//待機ステート更新処理
 	void UpdateIdelState(float elapsedTime);
 
-	//移動ステートへ遷移
-	void TransitionMoveState();
+	////移動ステートへ遷移
+	//void TransitionMoveState();
 
-	//移動ステート更新処理
-	void UpdateMoveState(float elapseTime);
+	////移動ステート更新処理
+	//void UpdateMoveState(float elapseTime);
 
-	//ジャンプステートへ遷移
-	void TransitionJumpState();
+	////ジャンプステートへ遷移
+	//void TransitionJumpState();
 
-	//ジャンプステート更新処理
-	void UpdateJumpState(float elapsedTime);
+	////ジャンプステート更新処理
+	//void UpdateJumpState(float elapsedTime);
 
-	//着地ステートへ遷移
-	void TransitionLandState();
+	////着地ステートへ遷移
+	//void TransitionLandState();
 
-	//着地ステート更新処理
-	void UpdateLandState(float elapsedTime);
+	////着地ステート更新処理
+	//void UpdateLandState(float elapsedTime);
 
-	//攻撃ステートへ遷移
-	void TransitionAttackState();
+	////攻撃ステートへ遷移
+	//void TransitionAttackState();
 
-	//攻撃ステート更新処理
-	void UpdateAttackState(float elapsedTime);
+	////攻撃ステート更新処理
+	//void UpdateAttackState(float elapsedTime);
 
-	//ダメージステートへ遷移
-	void TransitionDamageState();
+	////ダメージステートへ遷移
+	//void TransitionDamageState();
 
-	//ダメージステート更新処理
-	void UpdateDamageState(float elapsedTime);
+	////ダメージステート更新処理
+	//void UpdateDamageState(float elapsedTime);
 
-	//死亡ステートへ遷移
-	void TransitionDeathState();
+	////死亡ステートへ遷移
+	//void TransitionDeathState();
 
-	//死亡ステート更新処理
-	void UpdateDeathState(float elapsedTime);
+	////死亡ステート更新処理
+	//void UpdateDeathState(float elapsedTime);
 
-	//復活ステートへ遷移
-	void TransitionReviveState();
+	////復活ステートへ遷移
+	//void TransitionReviveState();
 
-	//復活ステート更新処理
-	void UpdateReviveState(float elapsedTime);
+	////復活ステート更新処理
+	//void UpdateReviveState(float elapsedTime);
 private:
 	float moveSpeed = 5.0f;
 	float turnSpeed = DirectX::XMConvertToRadians(720);

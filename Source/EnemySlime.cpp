@@ -11,7 +11,7 @@ EnemySlime::EnemySlime() {
 	//モデルが大きいのでスケーリング
 	scale.x = scale.y = scale.z = 0.05f;
 	radius = 0.5f;
-	height = 1.0f;
+	height = 0.5f;
 
 	//徘徊ステートへ遷移
 	TransitionWanderState();
