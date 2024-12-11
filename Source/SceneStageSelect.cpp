@@ -27,17 +27,14 @@ void SceneStageSelect::Initialize()
 	stageNum[12] = std::make_unique<Sprite>("Data/Sprite/stageNum/13.png");
 	stageNum[13] = std::make_unique<Sprite>("Data/Sprite/stageNum/14.png");
 	stageNum[14] = std::make_unique<Sprite>("Data/Sprite/stageNum/15.png");
-	stageNum[15] = std::make_unique<Sprite>("Data/Sprite/stageNum/16.png");
-	stageNum[16] = std::make_unique<Sprite>("Data/Sprite/stageNum/17.png");
-	stageNum[17] = std::make_unique<Sprite>("Data/Sprite/stageNum/18.png");
-	stageNum[18] = std::make_unique<Sprite>("Data/Sprite/stageNum/19.png");
-	stageNum[19] = std::make_unique<Sprite>("Data/Sprite/stageNum/20.png");
 
 	BGM = Audio::Instance().LoadAudioSource("Data/Audio/BGM/gentle-wind-ai-201031.wav");
 	select_note = Audio::Instance().LoadAudioSource("Data/Audio/SE/choice.wav");
 	decide = Audio::Instance().LoadAudioSource("Data/Audio/SE/decide.wav");
 
 	BGM->Play(true);
+
+	back = std::make_unique<Sprite>("Data/Sprite/Teppan.png");
 }
 
 //　終了化
@@ -65,10 +62,15 @@ void SceneStageSelect::Update(float elapsedTime)
 		cooltimeFlg = true;
 		select_note->DC_Play();
 	}
+	else if (ax == 0)
+	{
+		cooltimeFlg = false;
+		cooltime = 0.0f;
+	}
 
 	if (gamePad.GetButtonDown() & GamePad::GamePad::BTN_START)
 	{
-
+		SceneManager::instance().ChengeScene(new SceneTitle);
 	}
 
 	//選択中のステージのサイズを大きく
@@ -133,6 +135,11 @@ void SceneStageSelect::Render()
 			break;
 		}
 
+		back->Render(dc,
+			0.0f, 0.0f, 1280.0f, 720.0f,
+			0.0f, 0.0f, back->GetTextureWidth(), back->GetTextureHeight(), 0.0f,
+			1.0f, 1.0f, 1.0f, 1.0f);
+
 		//　スプライト描画
 		for (int i = 0; i < maxStage; i++)
 		{
@@ -145,6 +152,7 @@ void SceneStageSelect::Render()
 				0,
 				1, 1, 1, 1
 			);
+
 			stage->Render(dc,
 				screenWidth / 6 * (i + 1) - 100 + scrollScreenWidth, screenHeight / 3 * ((i % 2) + 1), 200, 60,
 				0, 0, textureWidthStage, textureHeightStage,

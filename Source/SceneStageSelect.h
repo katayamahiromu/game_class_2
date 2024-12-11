@@ -46,15 +46,15 @@ private:
 	std::unique_ptr<Sprite> pin = nullptr;
 	std::unique_ptr<Sprite> triangle = nullptr;
 	std::unique_ptr<Sprite> line = nullptr;
-	std::unique_ptr<Sprite> stageNum[20] = {};
+	std::unique_ptr<Sprite> stageNum[15] = {};
 	DirectX::XMFLOAT2 spriteSize = { 110.0f,100.0f };
 
-	float scale[20] = { 1.0f,1.0f,1.0f,1.0f,1.0f,1.0f,1.0f,1.0f,1.0f,1.0f,
-					 1.0f,1.0f,1.0f,1.0f,1.0f,1.0f,1.0f,1.0f,1.0f,1.0f };
+	float scale[15] = { 1.0f,1.0f,1.0f,1.0f,1.0f,1.0f,1.0f,1.0f,1.0f,1.0f,
+					 1.0f,1.0f,1.0f,1.0f,1.0f};
 	float scrollScreenWidth = 0.0f;
 	float charaMove = 0.0f;
 	int selectNum = 0;
-	int maxStage = 20;
+	int maxStage = 15;
 	bool moveFlg = false;
 	bool cooltimeFlg = false;
 	float cooltime = 0.0f;
@@ -70,5 +70,6 @@ private:
 	std::unique_ptr<AudioSource>BGM;
 	std::unique_ptr<AudioSource>select_note;
 	std::unique_ptr<AudioSource>decide;
+	std::unique_ptr<Sprite>back;
 	bool chengeFlag = false;
 };

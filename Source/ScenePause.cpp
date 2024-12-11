@@ -13,8 +13,12 @@ void ScenePause::Initialize()
 	command[2] = std::make_unique<Sprite>("Data/Sprite/stage selection.png");
 	back = std::make_unique<Sprite>();
 
+
 	select_note = Audio::Instance().LoadAudioSource("Data/Audio/SE/choice.wav");
 	decide = Audio::Instance().LoadAudioSource("Data/Audio/SE/decide.wav");
+
+	ExplainSprite1 = std::make_unique<Sprite>("Data/Sprite/1.png");
+	ExplainSprite2 = std::make_unique<Sprite>("Data/Sprite/2_1.png");
 }
 
 void ScenePause::Finalize()
@@ -26,15 +30,26 @@ void ScenePause::Update(float elapsedTime)
 {
 	GamePad& gamePad = Input::Instance().GetGamePad();
 
-	if (gamePad.GetButtonDown() & GamePad::BTN_START) closeFlag = true;
+	if (gamePad.GetButtonDown() & GamePad::BTN_START)
+	{
+		//説明画面を開いて無かったら
+		if (isExplain)
+		{
+			isExplain = false;
+		}
+		else
+		{
+			closeFlag = true;
+		}
+	}
 
 	//移動
-	if (gamePad.GetButtonDown() & GamePad::BTN_DOWN)
+	if (gamePad.GetButtonDown() & GamePad::B_S)
 	{
 		section++;
 		select_note->DC_Play();
 	}
-	else if (gamePad.GetButtonDown() & GamePad::BTN_UP)
+	else if (gamePad.GetButtonDown() & GamePad::B_W)
 	{
 		section--;
 		select_note->DC_Play();
@@ -55,6 +70,7 @@ void ScenePause::Update(float elapsedTime)
 			break;
 		case INSTRUCTION:
 			//後々説明用の画像を出す
+			isExplain = true;
 			break;
 		case STAGE_SELECTION:
 			chengSceneFlag = true;
@@ -63,6 +79,21 @@ void ScenePause::Update(float elapsedTime)
 	}
 
 	if (chengSceneFlag && !decide->IsPlay()) SceneManager::instance().ChengeScene(new SceneStageSelect);
+
+	if (isExplain)
+	{
+		if (gamePad.GetButtonDown() & GamePad::B_A)
+		{
+			select_note->DC_Play();
+			EXCount = 1;
+		}
+		if (gamePad.GetButtonDown() & GamePad::B_D)
+		{
+			select_note->DC_Play();
+			EXCount = 2;
+		}
+
+	}
 }
 
 void ScenePause::Render()
@@ -95,6 +126,7 @@ void ScenePause::Render()
 		0, 0, 1280, 720, 0,
 		0, 0, 0, alpha);
 
+
 	for (int i = 0;i < MAX_COMMAND;++i)
 	{
 		section == i ? section_alpha = 1.0f: section_alpha = 0.5;
@@ -102,6 +134,27 @@ void ScenePause::Render()
 			pos[i].x, pos[i].y, pos[i].z, pos[i].w,
 			0.0f, 0.0f, command[i]->GetTextureWidth(), command[i]->GetTextureHeight(), 0.0f,
 			1.0f, 1.0f, 1.0f, section_alpha);
+	}
+
+	if (isExplain)
+	{
+		switch (EXCount)
+		{
+		case 1:
+			ExplainSprite1->Render(dc,
+				100.0f, 50.0f, 1180.0f, 670.0f,
+				0.0f, 0.0f, ExplainSprite1->GetTextureWidth(), ExplainSprite1->GetTextureHeight(),
+				0.0f,
+				1.0f, 1.0f, 1.0f, 1.0f);
+			break;
+		case 2:
+			ExplainSprite2->Render(dc,
+				100.0f, 50.0f, 1180.0f, 670.0f,
+				0.0f, 0.0f, ExplainSprite2->GetTextureWidth(), ExplainSprite2->GetTextureHeight(),
+				0.0f,
+				1.0f, 1.0f, 1.0f, 1.0f);
+			break;
+		}
 	}
 
 	DebugGui();
