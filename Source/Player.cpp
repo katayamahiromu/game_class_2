@@ -135,9 +135,9 @@ void Player::Update(float elapsedTime) {
 	//無敵時間更新
 	UpdateInvinciblTImer(elapsedTime);
 	//プレイヤーと敵との衝突判定
-	if (!IsPlayback) CollisionPlayerVsEnemies();
+	CollisionPlayerVsEnemies(elapsedTime);
 	//オブジェクト行列を更新
-	UpdateTranceform();
+	UpdateTransform();
 	//モデルアニメーションを更新
 	model->UpdateAnimation(elapsedTime);
 	//モデル行列を更新
@@ -179,7 +179,7 @@ void Player::Update(float elapsedTime) {
 void Player::TitleUpdate(float elapsedTime)
 {
 	//オブジェクト行列を更新
-	UpdateTranceform();
+	UpdateTransform();
 	//モデルアニメーションを更新
 	model->UpdateAnimation(elapsedTime);
 	//モデル行列を更新
@@ -286,43 +286,58 @@ void Player::CollisionPlayerVsEnemies() {
 
 	isMoveFlag = false;
 
+void Player::CollisionPlayerVsEnemies(float elapsedTime) {
 	EnemeyManager& enemyManager = EnemeyManager::Instance();
+
 	//全ての敵と総当たりで衝突処理
 	int enemyCount = enemyManager.GetEnemyCount();
-	for (int i = 0;i < enemyCount;++i) {
+	for (int i = 0;i < enemyCount;++i) 
+	{
 		Enemy* enemy = enemyManager.GetEnemy(i);
 		DirectX::XMFLOAT3 outPosition;
 
-		//衝突判定
-		/*if (Collision::IntersectCylinderVsCylinder(
-			position,
-			radius,
-			height,
-			enemy->GetPosition(),
-			enemy->GetRadius(),
-			enemy->GetHeight(),
-			outPosition
-		)) {
-			enemy->SetPositon(outPosition);
-		}*/
-
-		if(Collision::IntersectCubeVsCube(
-			position,
-			radius,
-			height,
-			enemy->GetPosition(),
-			enemy->GetRadius(),
-			enemy->GetHeight(),
-			outPosition
-		))
+		//再生中にエネミーはプレイヤーを押し出し、そうでなければプレイヤーが敵を押し出す
+		if (this->IsPlayback)
 		{
-			enemy->SetPosition(outPosition);
-			isMoveFlag = true;
-		}
+			/*if (Collision::IntersectCubeVsCube(enemy->GetPosition(), enemy->GetRadius(), enemy->GetHeight(),
+				this->position, this->radius, this->height, outPosition
+			))
+			{
+				const float offset = 0.1f;
+				this->position.y = outPosition.y + offset;
+			}*/
 
-		isMoveFlag ? objectMove->Play(false) : objectMove->Stop();
-		
-	};
+			//プレイヤーとエネミーでレイキャスト
+			DirectX::XMFLOAT3 start = { this->position.x, this->position.y + stepOffset, this->position.z };
+			DirectX::XMFLOAT3 end = { this->position.x, this->position.y + this->velocity.y * elapsedTime, this->position.z };
+			HitResult hitResult{};
+			if (Collision::InterserctRayVsModel(start, end, enemy->GetModel(), hitResult))
+			{
+				velocity.y = 0;
+				position = hitResult.position;
+				//ヒットした位置をエネミーのローカル空間に変換する
+				DirectX::XMMATRIX FloorIM = DirectX::XMMatrixInverse(nullptr, DirectX::XMLoadFloat4x4(&enemy->GetTransform()));
+				DirectX::XMVECTOR CharLP = DirectX::XMVector3Transform(DirectX::XMLoadFloat3(&this->position), FloorIM);
+
+				//エネミーのワールド行列を更新する
+				enemy->UpdateTransform();
+
+				//移動後のエネミーの行列を使用して上で求めたローカル位置をワールド位置に変換する
+				DirectX::XMVECTOR CharWP = DirectX::XMVector3Transform(CharLP, DirectX::XMLoadFloat4x4(&enemy->GetTransform()));
+				DirectX::XMStoreFloat3(&this->position, CharWP);
+			}
+
+		}
+		else
+		{
+			if (Collision::IntersectCubeVsCube(this->position, this->radius, this->height,
+				enemy->GetPosition(), enemy->GetRadius(), enemy->GetHeight(), outPosition
+			))
+			{
+				enemy->SetPosition(outPosition);
+			}
+		}
+	}
 }
 
 //ジャンプ入力処理
@@ -569,6 +584,7 @@ void Player::UpdateDamageState(float elapsedTime)
 	}
 }
 
+
 //死亡ステートへ遷移
 void Player::TransitionDeathState()
 {
@@ -611,6 +627,7 @@ void Player::UpdateReviveState(float elapsedTime)
 		TransitiomIdleState();
 	}
 }
+
 
 void Player::InitRecording()
 {
