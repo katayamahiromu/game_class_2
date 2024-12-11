@@ -27,11 +27,6 @@ void SceneStageSelect::Initialize()
 	stageNum[12] = std::make_unique<Sprite>("Data/Sprite/stageNum/13.png");
 	stageNum[13] = std::make_unique<Sprite>("Data/Sprite/stageNum/14.png");
 	stageNum[14] = std::make_unique<Sprite>("Data/Sprite/stageNum/15.png");
-	stageNum[15] = std::make_unique<Sprite>("Data/Sprite/stageNum/16.png");
-	stageNum[16] = std::make_unique<Sprite>("Data/Sprite/stageNum/17.png");
-	stageNum[17] = std::make_unique<Sprite>("Data/Sprite/stageNum/18.png");
-	stageNum[18] = std::make_unique<Sprite>("Data/Sprite/stageNum/19.png");
-	stageNum[19] = std::make_unique<Sprite>("Data/Sprite/stageNum/20.png");
 
 	BGM = Audio::Instance().LoadAudioSource("Data/Audio/BGM/gentle-wind-ai-201031.wav");
 	select_note = Audio::Instance().LoadAudioSource("Data/Audio/SE/choice.wav");
@@ -65,10 +60,15 @@ void SceneStageSelect::Update(float elapsedTime)
 		cooltimeFlg = true;
 		select_note->DC_Play();
 	}
+	else if (ax == 0)
+	{
+		cooltimeFlg = false;
+		cooltime = 0.0f;
+	}
 
 	if (gamePad.GetButtonDown() & GamePad::GamePad::BTN_START)
 	{
-
+		SceneManager::instance().ChengeScene(new SceneTitle);
 	}
 
 	//選択中のステージのサイズを大きく

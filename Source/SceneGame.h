@@ -46,7 +46,7 @@ private:
 	void Reset(float elapsedTime);
 
 	//クリア判定
-	void GameClear();
+	void GameClear(float elapsedTime);
 
 	//GUI
 	void DebugGui();
@@ -114,4 +114,9 @@ private:
 	//音楽
 	std::unique_ptr<AudioSource>BGM;
 
+	//クリア周り
+	bool isClear = false;
+	float clearTime = 0.0f;
+	std::unique_ptr<Sprite>clearSprite;
+	std::unique_ptr<AudioSource>ClearBGM;
 };

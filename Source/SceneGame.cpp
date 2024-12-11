@@ -15,7 +15,7 @@
 #include "Misc.h"
 #include"ScenePause.h"
 #include"Input/Input.h"
-#include"SceneClear.h"
+#include"SceneStageSelect.h"
 
 // 初期化
 void SceneGame::Initialize()
@@ -154,6 +154,12 @@ void SceneGame::Initialize()
 
 	BGM = Audio::Instance().LoadAudioSource("Data/Audio/BGM/electric-threads-ai-192129.wav");
 	BGM->Play(true);
+
+	//クリア周り
+	clearSprite = std::make_unique<Sprite>("Data/Sprite/STAGECLEAR.png");
+	isClear = false;
+	clearTime = 0.0f;
+	ClearBGM = Audio::Instance().LoadAudioSource("Data/Audio/BGM/ClearSong.wav");
 }
 
 // 終了化
@@ -177,6 +183,10 @@ void SceneGame::Finalize()
 // 更新処理
 void SceneGame::Update(float elapsedTime)
 {
+	GameClear(elapsedTime);
+	//クリアしたらUpdate不可
+	if (isClear)return;
+
 	if (PauseFlag)
 	{
 		pause->Update(elapsedTime);
@@ -198,7 +208,6 @@ void SceneGame::Update(float elapsedTime)
 
 	Pause();
 	Reset(elapsedTime);
-	GameClear();
 }
 
 // 描画処理
@@ -224,7 +233,7 @@ void SceneGame::Render()
 
 	ObjectRender();
 
-	DebugGui();
+	//DebugGui();
 }
 
 void SceneGame::ObjectRender()
@@ -306,6 +315,14 @@ void SceneGame::ObjectRender()
 		MS->Begin(rc);
 		MS->Draw(rc, effectSprite.get());
 		MS->End(rc);
+
+		if (isClear)
+		{
+			clearSprite->Render(dc,
+				150.0f, 200.0f, 1000.0f, 300.0f,
+				0.0f, 0.0f, 1800.0f, 380.0f, 0.0f,
+				1.0f, 1.0f, 1.0f, 1.0f);
+		}
 	}
 }
 
@@ -385,7 +402,7 @@ void SceneGame::DebugGui()
 
 	// 2DデバッグGUI描画
 	{
-		player->DrawDebugGui();
+		//player->DrawDebugGui();
 		//EnemeyManager::Instance().GetEnemy(0)->DebugGui();
 	}
 }
@@ -462,31 +479,25 @@ void SceneGame::Reset(float elapsedTime)
 	}
 }
 
-void SceneGame::GameClear()
+void SceneGame::GameClear(float elapsedTime)
 {
 	SceneManager& manager = SceneManager::instance();
 	if (manager.GetIsGoal())
 	{
-		SceneClear* scene = new SceneClear;
+		if (!isClear)
+		{
+			isClear = true;
+			BGM->Stop();
+			ClearBGM->Play(false);
+		}
+	}
 
-		//ポーズのスプライトに貼り付ける用の画像の作成
-		Graphics& graphics = Graphics::Instance();
-		ID3D11DeviceContext* dc = graphics.GetDeviceContext();
-		ID3D11RenderTargetView* rtv = scene_render.Get();
-		ID3D11DepthStencilView* dsv = graphics.GetDepthStencilView();
-		ID3D11RasterizerState* rs = graphics.GetRasterizerState();
-
-		// 画面クリア＆レンダーターゲット設定
-		FLOAT color[] = { 0.0f, 0.0f, 0.5f, 1.0f };	// RGBA(0.0～1.0)
-		dc->ClearRenderTargetView(rtv, color);
-		dc->ClearDepthStencilView(dsv, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
-		dc->OMSetRenderTargets(1, &rtv, dsv);
-		dc->RSSetState(rs);
-
-		ObjectRender();
-
-		scene->SetShaderResourceView(scene_shader_resource_view);
-		manager.ChengeScene(scene);
+	if (isClear)
+	{
+		if (!ClearBGM->IsPlay())
+		{
+			manager.ChengeScene(new SceneStageSelect);
+		}
 	}
 }
 
