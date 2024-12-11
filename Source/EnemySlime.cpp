@@ -57,7 +57,7 @@ void EnemySlime::Update(float elapsedTime)
 	//無敵時間の更新
 	UpdateInvinciblTImer(elapsedTime);
 	//オブジェクト行列を更新
-	UpdateTranceform();
+	UpdateTransform();
 	model->UpdateTransform(transform);
 
 	GamePad& gamePad = Input::Instance().GetGamePad();
@@ -90,6 +90,7 @@ void EnemySlime::Update(float elapsedTime)
 		position.x = -16.004f;
 		velocity.x = 0.0f;
 	}
+
 }
 
 //描画処理
@@ -468,6 +469,8 @@ void EnemySlime::DebugGui()
 	ImGui::SetNextWindowSize(ImVec2(300, 300), ImGuiCond_FirstUseEver);
 	if (ImGui::Begin("ENEMY", nullptr, ImGuiTreeNodeFlags_DefaultOpen)) {
 		//トランスフォーム
+		ImGui::DragFloat("enemy_position", &position.x, 0.05f);
+
 		if (ImGui::CollapsingHeader("ColorGrading", ImGuiTreeNodeFlags_DefaultOpen))
 		{
 			ColorGradingData data = GetModel()->GetColorGrading();

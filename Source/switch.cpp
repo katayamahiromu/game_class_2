@@ -35,7 +35,7 @@ void ClickSwitch::OnSwitchMove()
 {
 	if (pushFlag == true)
 	{
-		scale.y *= 0.9;
+		scale.y *= 0.9f;
 		if (scale.y < 0.0001f)
 		{
 			scale.y = 0.0001f;
@@ -131,7 +131,7 @@ void HoldSwitch::OnSwitchMove()
 {
 	if (pushFlag == true)
 	{
-		scale.y *= 0.9;
+		scale.y *= 0.9f;
 		if (scale.y < 0.0001f)
 		{
 			scale.y = 0.0001f;
@@ -139,6 +139,6 @@ void HoldSwitch::OnSwitchMove()
 	}
 	else
 	{
-		scale.y = 0.01;
+		scale.y = 0.01f;
 	}
 }

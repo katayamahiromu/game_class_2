@@ -5,7 +5,7 @@
 #include"Graphics/Graphics.h"
 
 //更新行列
-void Character::UpdateTranceform() {
+void Character::UpdateTransform() {
 	//スケール行列を作成
 	DirectX::XMMATRIX S = DirectX::XMMatrixScaling(scale.x, scale.y, scale.z);
 	//回転行列を作成
@@ -154,11 +154,9 @@ void Character::UpdateVerticalMove(float elapsedTime)
 	if (my > 0.0f)
 	{
 		//レイの開始位置は足元より少し上 //ジャンプとかで頭抜けないようにするのに？？？？？
-		DirectX::XMFLOAT3 start = DirectX::XMFLOAT3(position.x, position.y + GetHeight(), position.z);
+		DirectX::XMFLOAT3 start = { position.x, position.y + radius, position.z };
 		//レイの終点位置は移動後の位置
-		DirectX::XMFLOAT3 end; // 見やすいように分けて書く
-		end = (isXYMode) ? DirectX::XMFLOAT3(position.x, position.y + radius + my, position.z) : 
-			DirectX::XMFLOAT3(position.x, start.y + my, position.z);
+		DirectX::XMFLOAT3 end = { position.x, position.y + radius + my, position.z };
 
 		//レイキャストによる地面判定
 		HitResult hit;
@@ -338,10 +336,10 @@ void Character::UpdateHorizontalMove(float elapsedTime)
 		float mx = velocity.x * elapsedTime;
 
 		//レイの開始位置と終点位置
-		DirectX::XMFLOAT3 start = DirectX::XMFLOAT3(position.x, position.y + stepOffset, position.z);
+		DirectX::XMFLOAT3 start = DirectX::XMFLOAT3(position.x, (isXYMode) ? position.y : position.y + stepOffset, position.z);
 		DirectX::XMFLOAT3 end;  //見やすくするために分けて書くで
-		end = ( mx < 0 ) ? DirectX::XMFLOAT3(position.x + mx - radius, position.y + stepOffset, position.z) : 
-			DirectX::XMFLOAT3(position.x + mx + radius, position.y + stepOffset, position.z);
+		end = ( mx < 0 ) ? DirectX::XMFLOAT3(position.x + mx - radius, (isXYMode) ? position.y : position.y + stepOffset, position.z) : 
+			DirectX::XMFLOAT3(position.x + mx + radius, (isXYMode) ? position.y: position.y + stepOffset, position.z);
 
 		//レイキャストによる壁判定
 		HitResult hit;

@@ -66,6 +66,11 @@ void SceneStageSelect::Update(float elapsedTime)
 		select_note->DC_Play();
 	}
 
+	if (gamePad.GetButtonDown() & GamePad::GamePad::BTN_START)
+	{
+
+	}
+
 	//選択中のステージのサイズを大きく
 	ChangeSize(elapsedTime);
 
@@ -78,6 +83,11 @@ void SceneStageSelect::Update(float elapsedTime)
 	if (chengeFlag && !decide->IsPlay())
 	{
 		SceneManager::instance().ChengeScene(new SceneLoading(new SceneGame(selectNum)));
+	}
+
+	if (gamePad.GetButtonDown() & GamePad::GamePad::BTN_START)
+	{
+		SceneManager::instance().ChengeScene(new SceneTitle);
 	}
 }
 
