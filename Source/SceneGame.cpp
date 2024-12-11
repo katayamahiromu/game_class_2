@@ -93,7 +93,7 @@ void SceneGame::Initialize()
 	back = std::make_unique<Sprite>("Data/Sprite/back.jpg");
 
 	//カメラコントローラー更新処理
-	DirectX::XMFLOAT3 target = { 0.256f,9.133f,1.502f };
+	DirectX::XMFLOAT3 target = { 0.04f,11.133f,1.502f };
 	cameraController->SetTarget(target);
 
 	//シェーダーリソースビューの作成
@@ -287,11 +287,55 @@ void SceneGame::ObjectRender()
 
 	// 2Dスプライト描画
 	{
-		//RenderEnemyGauge(dc, rc.view, rc.projection);
+		
+		//UI不動の下地描画
 		UIMain->Render(dc,
-			1050.0f, -50.0f, 200.0f, 150.0f,
-			0.0f, 0.0f, 400.0f, 300.0f, 0.0f,
+			0.0f, 0.0f, 1280.0f, 145.0f,
+			0.0f, 0.0f, 1280.0f, 160.0f, 0.0f,
 			1.0f, 1.0f, 1.0f, 1.0f);
+
+		// 逆再生使用時はUIPlay,普段はUIStop描画
+		if (player->IsPlayback())
+		{
+			UIPlay->Render(dc,
+				0.0f, 0.0f, 1280.0f, 145.0f,
+				0.0f, 0.0f, 1280.0f, 160.0f, 0.0f,
+				1.0f, 1.0f, 1.0f, 1.0f
+			);
+		}
+		else
+		{
+			UIStop->Render(dc,
+				0.0f, 0.0f, 1280.0f, 145.0f,
+				0.0f, 0.0f, 1280.0f, 160.0f, 0.0f,
+				1.0f, 1.0f, 1.0f, 1.0f
+			);
+		}
+
+		// レコーディング使用時はUIRecording,普段はUIRec描画
+		if (player->IsRecording())
+		{
+			UIRecording->Render(dc,
+				0.0f, 0.0f, 1280.0f, 145.0f,
+				0.0f, 0.0f, 1280.0f, 160.0f, 0.0f,
+				1.0f, 1.0f, 1.0f, 1.0f
+			);
+		}
+		else
+		{
+			UIRec->Render(dc,
+				0.0f, 0.0f, 1280.0f, 145.0f,
+				0.0f, 0.0f, 1280.0f, 160.0f, 0.0f,
+				1.0f, 1.0f, 1.0f, 1.0f
+			);
+		}
+
+		// XYモードがtrueのときはUITopNow,falseのときはUISideNow描画
+		UISideNow->Render(dc,
+			0.0f, 0.0f, 1280.0f, 145.0f,
+			0.0f, 0.0f, 1280.0f, 160.0f, 0.0f,
+			1.0f, 1.0f, 1.0f, 1.0f
+		);
 
 
 		//本間にごり押しです

@@ -47,6 +47,9 @@ public:
 	//インスタンス取得
 	static Player& Instance();
 
+	bool IsRecording() const { return isRecording; }
+	bool IsPlayback() const { return isPlayback; }
+
 protected:
 	//ダメージを受けた時に呼ばれる
 	void OnDamaged() override;
@@ -156,9 +159,9 @@ private:
 	DirectX::XMFLOAT3 keep_position[MAX_KEEP_TRANSFORM];
 
 	//録画フラグ
-	bool IsRecording = false;
+	bool isRecording = false;
 	//再生フラグ
-	bool IsPlayback = false;
+	bool isPlayback = false;
 	//最新の情報は０に入っている
 	int playback_count = 0;
 	//録画せずに再生させるのを防ぐフラグ

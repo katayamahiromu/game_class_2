@@ -101,24 +101,24 @@ void Player::Update(float elapsedTime) {
 		if (GetAsyncKeyState('M') & 0x8000)
 		{
 			InitRecording();
-			IsRecording = true;
+			isRecording = true;
 			isOk = true;
 			recordStart->DC_Play();
 		}
 
-		if (IsRecording) Recording(EnemeyManager::Instance().GetEnemy(0)->GetPosition());
+		if (isRecording) Recording(EnemeyManager::Instance().GetEnemy(0)->GetPosition());
 
 		if (GetAsyncKeyState('N') & 0x8000)
 		{
 			if (!isOk)return;
-			IsPlayback = true;
-			IsRecording = false;
+			isPlayback = true;
+			isRecording = false;
 			playback_count = 0;
 		}
 
 
 		ColorGradingData data = EnemeyManager::Instance().GetEnemy(0)->GetModel()->GetColorGrading();
-		if (IsPlayback)
+		if (isPlayback)
 		{
 			Playback(EnemeyManager::Instance().GetEnemy(0));
 			data.saturation = 0.0f;
@@ -135,7 +135,7 @@ void Player::Update(float elapsedTime) {
 	//無敵時間更新
 	UpdateInvinciblTImer(elapsedTime);
 	//プレイヤーと敵との衝突判定
-	if (!IsPlayback) CollisionPlayerVsEnemies();
+	if (!isPlayback) CollisionPlayerVsEnemies();
 	//オブジェクト行列を更新
 	UpdateTranceform();
 	//モデルアニメーションを更新
@@ -631,8 +631,8 @@ void Player::Playback(Character* character)
 	//配列の後ろから再生
 	character->SetPosition(keep_position[playback_count]);
 	playback_count++;
-	if (playback_count > MAX_KEEP_TRANSFORM) IsPlayback = false;
-	if (keep_position[playback_count].x == ENOUGTH.x)IsPlayback = false;
+	if (playback_count > MAX_KEEP_TRANSFORM) isPlayback = false;
+	if (keep_position[playback_count].x == ENOUGTH.x)isPlayback = false;
 }
 
 void Player::BoxSpark(float elapsedTime)
