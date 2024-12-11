@@ -334,7 +334,7 @@ void SceneGame::ObjectRender()
 		}
 
 		// XYƒ‚[ƒh‚ªtrue‚Ì‚Æ‚«‚ÍUITopNow,false‚Ì‚Æ‚«‚ÍUISideNow•`‰æ
-		if (player->IsXYMode())
+		if (player->GetIsXYMode())
 		{
 			UITopNow->Render(dc,
 				0.0f, 0.0f, 1280.0f, 145.0f,

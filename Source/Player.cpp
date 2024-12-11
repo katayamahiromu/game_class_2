@@ -277,7 +277,7 @@ void Player::DrawDebugPrimitive() {
 	////衝突判定用のデバッグ球を描画
 	//debugRenderer->DrawSphere(position, radius, DirectX::XMFLOAT4(0, 0, 0, 1));
 	//衝突用判定用のデバッグ円柱を描画
-	debugRenderer->DrawCylinder(position, radius, height, DirectX::XMFLOAT4(0, 0, 0, 1));
+	//debugRenderer->DrawCylinder(position, radius, height, DirectX::XMFLOAT4(0, 0, 0, 1));
 	//projectileManager.DrawDebugPrimitive();
 
 	//攻撃衝突用の左手ノードのデバッグ球を描画

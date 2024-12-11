@@ -121,16 +121,16 @@ void EnemySlime::DrawDebugPrimitive()
 	DebugRenderer* debugRenderer = Graphics::Instance().GetDebugRenderer();
 
 	//縄張り範囲をデバッグ円柱描画
-	debugRenderer->DrawCylinder(territoryOrigin, territoryRange, 1.0f, DirectX::XMFLOAT4(0, 1, 0, 0));
+	//debugRenderer->DrawCylinder(territoryOrigin, territoryRange, 1.0f, DirectX::XMFLOAT4(0, 1, 0, 0));
 
-	//ターゲット位置をデバック球描画
-	debugRenderer->DrawSphere(targetPosition, radius, DirectX::XMFLOAT4(1, 1, 0, 1));
+	////ターゲット位置をデバック球描画
+	//debugRenderer->DrawSphere(targetPosition, radius, DirectX::XMFLOAT4(1, 1, 0, 1));
 
-	//索敵範囲をデバッグ円柱描画
-	debugRenderer->DrawCylinder(position, searchRange, 1.0f, DirectX::XMFLOAT4(0, 0, 1, 1));
+	////索敵範囲をデバッグ円柱描画
+	//debugRenderer->DrawCylinder(position, searchRange, 1.0f, DirectX::XMFLOAT4(0, 0, 1, 1));
 
-	//攻撃範囲をデバッグ範囲を円柱描画
-	debugRenderer->DrawCylinder(position, attackRange, 1.0f, DirectX::XMFLOAT4(1, 0, 0, 1));
+	////攻撃範囲をデバッグ範囲を円柱描画
+	//debugRenderer->DrawCylinder(position, attackRange, 1.0f, DirectX::XMFLOAT4(1, 0, 0, 1));
 }
 
 //縄張り設定
