@@ -70,5 +70,6 @@ private:
 	std::unique_ptr<AudioSource>BGM;
 	std::unique_ptr<AudioSource>select_note;
 	std::unique_ptr<AudioSource>decide;
+	std::unique_ptr<Sprite>back;
 	bool chengeFlag = false;
 };

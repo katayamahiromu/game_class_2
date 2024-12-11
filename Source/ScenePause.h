@@ -45,6 +45,7 @@ private:
 	std::unique_ptr<Sprite>command[MAX_COMMAND];
 	bool closeFlag = false;
 	bool chengSceneFlag = false;
+	bool isExplain = false;
 
 	int section = 0;
 	float section_alpha = 0.5f;
@@ -67,4 +68,9 @@ private:
 
 	std::unique_ptr<AudioSource>select_note;
 	std::unique_ptr<AudioSource>decide;
+
+
+	std::unique_ptr<Sprite>ExplainSprite1;
+	std::unique_ptr<Sprite>ExplainSprite2;
+	int EXCount = 1;
 };

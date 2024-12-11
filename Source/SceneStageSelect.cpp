@@ -33,6 +33,8 @@ void SceneStageSelect::Initialize()
 	decide = Audio::Instance().LoadAudioSource("Data/Audio/SE/decide.wav");
 
 	BGM->Play(true);
+
+	back = std::make_unique<Sprite>("Data/Sprite/Teppan.png");
 }
 
 //　終了化
@@ -133,6 +135,11 @@ void SceneStageSelect::Render()
 			break;
 		}
 
+		back->Render(dc,
+			0.0f, 0.0f, 1280.0f, 720.0f,
+			0.0f, 0.0f, back->GetTextureWidth(), back->GetTextureHeight(), 0.0f,
+			1.0f, 1.0f, 1.0f, 1.0f);
+
 		//　スプライト描画
 		for (int i = 0; i < maxStage; i++)
 		{
@@ -145,6 +152,7 @@ void SceneStageSelect::Render()
 				0,
 				1, 1, 1, 1
 			);
+
 			stage->Render(dc,
 				screenWidth / 6 * (i + 1) - 100 + scrollScreenWidth, screenHeight / 3 * ((i % 2) + 1), 200, 60,
 				0, 0, textureWidthStage, textureHeightStage,
