@@ -66,12 +66,12 @@ protected:
 		0,0,1,0,
 		0,0,0,1
 	};
-	float radius  =  0.5;
+	float radius  =  0.3f;
 	float gravity = -1.0f;
 	DirectX::XMFLOAT3 velocity = { 0,0,0 };
 	//着地したときに呼ばれる
 	virtual void OnLanding() {};
-	float height  =  2.0f;
+	float height  =  1.0f;
 
 	//ダメージを受けた時に呼ばれる
 	virtual void OnDamaged(){}

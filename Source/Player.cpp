@@ -272,9 +272,50 @@ void Player::CollisionPlayerVsEnemies() {
 			outPosition
 		))
 		{
-			enemy->SetPosition(outPosition);
+			//最後のあがきの途中
+			////（enemyが）ずれた方向にレイキャストし、壁なら止まる
+			//DirectX::XMVECTOR Diff = DirectX::XMVectorSubtract(DirectX::XMLoadFloat3(&outPosition), DirectX::XMLoadFloat3(&enemy->GetPosition()));
+			//DirectX::XMFLOAT3 diff(Diff.m128_f32);
+			//DirectX::XMFLOAT3 start = { enemy->GetPosition().x, enemy->GetPosition().y + enemy->GetRadius(), enemy->GetPosition().z};
+			//
+			////レイの終点位置は移動後の位置
+			//DirectX::XMFLOAT3 end = { 
+			//(diff.x > 0) ? enemy->GetPosition().x + diff.x : enemy->GetPosition().x,
+			//(diff.y > 0) ? enemy->GetPosition().y + diff.y : enemy->GetPosition().y,
+			//(diff.z > 0) ? enemy->GetPosition().y + diff.y : enemy->GetPosition().y,
+			//};
+
+			////レイキャストによる地面判定
+			//HitResult hit;
+			//if (StageManager::Instance().RaycastToStage(start, end, hit))
+			//{
+			//	if (isXYMode)
+			//	{
+			//		//壁までのベクトル
+			//		DirectX::XMVECTOR Start = DirectX::XMLoadFloat3(&hit.position);
+			//		DirectX::XMVECTOR End = DirectX::XMLoadFloat3(&end);
+			//		DirectX::XMVECTOR Vec = DirectX::XMVectorSubtract(End, Start);
+			//		//壁の法線
+			//		DirectX::XMVECTOR Normal = DirectX::XMLoadFloat3(&hit.normal);
+
+			//		//入射ベクトルを法線に射影
+			//		DirectX::XMVECTOR Dot = DirectX::XMVector3Dot(Vec, Normal);
+
+			//		//補正位置の計算
+			//		float distance = 0;
+			//		DirectX::XMStoreFloat(&distance, Dot);
+
+			//		//法線の大きさを距離に合わせる
+			//		DirectX::XMVECTOR R = DirectX::XMVectorSubtract(Vec, DirectX::XMVectorScale(Normal, distance));
+
+			//		DirectX::XMVECTOR Position = DirectX::XMLoadFloat3(&position);
+			//		Position = DirectX::XMVectorAdd(Position, R);
+			//		DirectX::XMStoreFloat3(&position, Position);
+			//	}
+				enemy->SetPosition(outPosition);
+			
 		}
-	};
+	}
 }
 
 //ジャンプ入力処理

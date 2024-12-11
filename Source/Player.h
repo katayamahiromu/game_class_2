@@ -148,7 +148,7 @@ private:
 
 	//static const int MAX_KEEP_TRANSFORM = 720;
 	static const int MAX_KEEP_TRANSFORM = 432;
-	DirectX::XMFLOAT3 keep_position[MAX_KEEP_TRANSFORM];
+	DirectX::XMFLOAT3 keep_position[MAX_KEEP_TRANSFORM]{};
 	//録画フラグ
 	bool IsRecording = false;
 	//再生フラグ

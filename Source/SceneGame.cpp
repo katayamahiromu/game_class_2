@@ -27,7 +27,7 @@ void SceneGame::Initialize()
 	//ステージ初期化
 	//ゴールのカウントをスイッチの数で設定
 	stageManager.ClearPushCount();
-	int i = script[select].Switch_info.size();
+	int i = static_cast<int>(script[select].Switch_info.size());
 	stageManager.SetGoalCount(i);
 	stageManager.ObjectRegister(new Goal(script[select].GoalPos));
 	stageManager.StageRegister(new StageMain(script[select].path));
@@ -98,8 +98,8 @@ void SceneGame::Initialize()
 	HRESULT hr = { S_OK };
 	Microsoft::WRL::ComPtr<ID3D11Texture2D> buffer{};
 	D3D11_TEXTURE2D_DESC texture2d_desc{};
-	texture2d_desc.Width = graphics.GetScreenWidth();
-	texture2d_desc.Height = graphics.GetScreenHeight();
+	texture2d_desc.Width = static_cast<UINT>(graphics.GetScreenWidth());
+	texture2d_desc.Height = static_cast<UINT>(graphics.GetScreenHeight());
 	texture2d_desc.MipLevels = 1;
 	texture2d_desc.ArraySize = 1;
 	texture2d_desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
