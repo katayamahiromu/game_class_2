@@ -131,7 +131,13 @@ void SceneGame::Initialize()
 	pause->Initialize();
 
 	//UI
-	UIExplain = std::make_unique<Sprite>("Data/Sprite/UI.png");
+	UIMain = std::make_unique<Sprite>("Data/Sprite/UI/UIMain.png");
+	UIRec = std::make_unique<Sprite>("Data/Sprite/UI/UIREC.png");
+	UIRecording = std::make_unique<Sprite>("Data/Sprite/UI/UIRECing.png");
+	UIPlay = std::make_unique<Sprite>("Data/Sprite/UI/UISaisei.png");
+	UIStop = std::make_unique<Sprite>("Data/Sprite/UI/UITeisi.png");
+	UISideNow = std::make_unique<Sprite>("Data/Sprite/UI/UISideNow.png");
+	UITopNow = std::make_unique<Sprite>("Data/Sprite/UI/UITopNow.png");
 
 	//マスク用
 	mask = std::make_unique<Sprite>("Data/Sprite/dissolve.png");
@@ -282,7 +288,7 @@ void SceneGame::ObjectRender()
 	// 2Dスプライト描画
 	{
 		//RenderEnemyGauge(dc, rc.view, rc.projection);
-		UIExplain->Render(dc,
+		UIMain->Render(dc,
 			1050.0f, -50.0f, 200.0f, 150.0f,
 			0.0f, 0.0f, 400.0f, 300.0f, 0.0f,
 			1.0f, 1.0f, 1.0f, 1.0f);
